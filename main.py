@@ -7,6 +7,7 @@ from testing import IS_TESTING
 if __name__ == "__main__":
     # Initialize Tk GUI in main thread
     root = tk.Tk()
+    Controller(root)
 
     # Start Tk GUI in main thread
     root.mainloop()
