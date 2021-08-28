@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-import AppParameters as app_params
-
 
 class InterfaceFrame(ttk.LabelFrame):
     def __init__(self, parent, *args, **kwargs):
@@ -13,12 +11,11 @@ class InterfaceFrame(ttk.LabelFrame):
             self.parent,
             style="info.inverse.TLabelframe",
             text="Select Interface",
-            width=app_params.APP_WIDTH / 2,
-            height=app_params.APP_HEIGHT / 2,  # todo: remove this later
             *args, **kwargs
         )
         self.pack(
             side=tk.TOP,
+            anchor=tk.NW,
             padx=8,
             pady=8,
             fill=tk.BOTH,
@@ -28,8 +25,8 @@ class InterfaceFrame(ttk.LabelFrame):
         # Create container to put inside interface frame
         self.interface_frame_container = tk.Frame(self)
         self.interface_frame_container.pack(
-            padx=8,
-            pady=8
+            padx=5,
+            pady=5
         )
 
         # Create text instructions above dropdown
@@ -39,8 +36,8 @@ class InterfaceFrame(ttk.LabelFrame):
         )
         self.interface_label.pack(
             side=tk.TOP,
-            padx=8,
-            pady=8
+            padx=5,
+            pady=5
         )
 
         # Create dropdown menu to select interface type
@@ -52,8 +49,8 @@ class InterfaceFrame(ttk.LabelFrame):
         )
         self.interface_dropdown.pack(
             side=tk.BOTTOM,
-            padx=8,
-            pady=8
+            padx=5,
+            pady=5
         )
 
         # List of interfaces available for selection

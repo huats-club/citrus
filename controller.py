@@ -6,7 +6,7 @@ from view.start.StartPage import StartPage
 
 class Controller(tk.Frame):
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+        super().__init__(parent)
         self.parent = parent
         self.parent.resizable(width=False, height=False)    # Don't allow resizing
         self.parent.title(app_params.APP_TITLE)
@@ -24,3 +24,4 @@ class Controller(tk.Frame):
     # Function to execute when start button pressed
     def onStartButtonPress(self):
         print("Start page's start button pressed")
+        print(self.start.project_frame.getSelection())
