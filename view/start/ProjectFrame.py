@@ -59,12 +59,13 @@ class ProjectFrame(ttk.LabelFrame):
             pady=5
         )
 
+        # Container to store filepath choosing part
         self.filepath_container = tk.Frame(
             self.project_frame_container
         )
         self.filepath_container.pack()
 
-        # Filepath entry
+        # Filepath entry display
         self.filepath_text = tk.StringVar()
         self.filepath_entry = ttk.Entry(
             self.filepath_container,
@@ -76,6 +77,7 @@ class ProjectFrame(ttk.LabelFrame):
             padx=(25, 10),
             side=tk.LEFT
         )
+        # Button to invoke dialog to select file to open
         self.filepath_entry_button = ttk.Button(
             self.filepath_container,
             style="primary.Outline.TButton",
