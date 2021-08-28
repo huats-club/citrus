@@ -13,7 +13,10 @@ class StartPage(tk.Frame):
 
         # Main container
         self.container = tk.Frame(self.parent)
-        self.container.pack(padx=10, pady=10)
+        self.container.pack(
+            padx=10,
+            pady=10
+        )
 
         # Introduction label
         self.introduction_label_container = tk.Frame(self.container)
@@ -23,7 +26,10 @@ class StartPage(tk.Frame):
             fill=tk.BOTH
         )
         welcome_fontStyle = tkFont.Font(
-            family="TkDefaultFont", size=18, weight="bold")
+            family="TkDefaultFont",
+            size=18,
+            weight="bold"
+        )
         self.introduction_label = ttk.Label(
             self.introduction_label_container,
             text="Welcome to " + app_params.APP_TITLE,
@@ -37,6 +43,23 @@ class StartPage(tk.Frame):
             expand=True
         )
 
+        # Select Interface panel
+        self.interface_container = tk.Frame(self.container)
+        self.interface_container.pack(side=tk.TOP)
+
+        self.interface_frame = ttk.LabelFrame(
+            self.interface_container,
+            # style="info.TLabelframe",
+            text="Select Interface",
+            width=app_params.APP_WIDTH / 2,
+            height=app_params.APP_HEIGHT / 2  # todo: remove this later
+        )
+        self.interface_frame.pack(
+            side=tk.TOP,
+            padx=8,
+            pady=8
+        )
+
         # Load project panel
         self.project_container = tk.Frame(self.container)
         self.project_container.pack(side=tk.TOP)
@@ -48,17 +71,8 @@ class StartPage(tk.Frame):
             width=app_params.APP_WIDTH / 2,
             height=app_params.APP_HEIGHT / 2  # todo: remove this later
         )
-        self.project_frame.pack(side=tk.TOP)
-
-        # Select Interface panel
-        self.interface_container = tk.Frame(self.container)
-        self.interface_container.pack(side=tk.TOP)
-
-        self.interface_frame = ttk.LabelFrame(
-            self.interface_container,
-            # style="info.TLabelframe",
-            text="Select interface",
-            width=app_params.APP_WIDTH / 2,
-            height=app_params.APP_HEIGHT / 2  # todo: remove this later
+        self.project_frame.pack(
+            side=tk.BOTTOM,
+            padx=8,
+            pady=8
         )
-        self.interface_frame.pack(side=tk.TOP)
