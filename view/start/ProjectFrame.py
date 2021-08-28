@@ -65,9 +65,11 @@ class ProjectFrame(ttk.LabelFrame):
         self.filepath_container.pack()
 
         # Filepath entry
-        self.filepath_entry = tk.Entry(
+        self.filepath_text = tk.StringVar()
+        self.filepath_entry = ttk.Entry(
             self.filepath_container,
             width=50,
+            textvariable=self.filepath_text,
             state="readonly"
         )
         self.filepath_entry.pack(
@@ -95,5 +97,5 @@ class ProjectFrame(ttk.LabelFrame):
         self.filepath_entry_button.configure(state="disabled")
 
     def getfile(self):
-        name = tkfd.askopenfile()
-        print(name)
+        path = tkfd.askopenfile()
+        self.filepath_text.set(path.name)
