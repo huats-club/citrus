@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     # Initialize Tk GUI in main thread
     root = tk.Tk()
-    style = Style(theme='sandstone')  # https://ttkbootstrap.readthedocs.io/en/latest/themes.html
+    style = Style(theme=app_params.APP_THEME)  # https://ttkbootstrap.readthedocs.io/en/latest/themes.html
     Controller(root)
 
     # Start Tk GUI in main thread
