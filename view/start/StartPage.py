@@ -3,6 +3,8 @@ import tkinter.font as tkFont
 from tkinter import ttk
 
 import AppParameters as app_params
+from view.start.InterfaceFrame import InterfaceFrame
+from view.start.ProjectFrame import ProjectFrame
 
 
 class StartPage(tk.Frame):
@@ -45,34 +47,18 @@ class StartPage(tk.Frame):
 
         # Select Interface panel
         self.interface_container = tk.Frame(self.container)
-        self.interface_container.pack(side=tk.TOP)
-
-        self.interface_frame = ttk.LabelFrame(
-            self.interface_container,
-            # style="info.TLabelframe",
-            text="Select Interface",
-            width=app_params.APP_WIDTH / 2,
-            height=app_params.APP_HEIGHT / 2  # todo: remove this later
-        )
-        self.interface_frame.pack(
+        self.interface_container.pack(
             side=tk.TOP,
-            padx=8,
-            pady=8
+            fill=tk.BOTH,
+            expand=True  # ensures that the panel file out the the parent
         )
+        self.interface_frame = InterfaceFrame(self.interface_container)
 
         # Load project panel
         self.project_container = tk.Frame(self.container)
-        self.project_container.pack(side=tk.TOP)
-
-        self.project_frame = ttk.LabelFrame(
-            self.project_container,
-            # style="info.TLabelframe",
-            text="Project Workspace",
-            width=app_params.APP_WIDTH / 2,
-            height=app_params.APP_HEIGHT / 2  # todo: remove this later
+        self.project_container.pack(
+            side=tk.TOP,
+            fill=tk.BOTH,
+            expand=True  # ensures that the panel file out the the parent
         )
-        self.project_frame.pack(
-            side=tk.BOTTOM,
-            padx=8,
-            pady=8
-        )
+        self.project_frame = ProjectFrame(self.project_container)
