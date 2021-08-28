@@ -4,7 +4,7 @@ import tkinter as tk
 from ttkbootstrap import Style
 
 import AppParameters as app_params
-from Controller import Controller
+from controller import Controller
 
 # Start running GUI
 if __name__ == "__main__":
