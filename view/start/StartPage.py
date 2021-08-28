@@ -62,3 +62,14 @@ class StartPage(tk.Frame):
             expand=True  # ensures that the panel file out the the parent
         )
         self.project_frame = ProjectFrame(self.project_container)
+
+        # Start app button
+        self.start_button = ttk.Button(
+            self.container,
+            style="info.Outline.TButton",
+            text="Start",
+            command=self.controller.onStartButtonPress
+        )
+        self.start_button.pack(
+            side=tk.BOTTOM
+        )

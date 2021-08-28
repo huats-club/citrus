@@ -20,3 +20,7 @@ class Controller(tk.Frame):
     # Function to create start (landing) page
     def make_start_page(self):
         self.start = StartPage(self.container, self)
+
+    # Function to execute when start button pressed
+    def onStartButtonPress(self):
+        print("Start page's start button pressed")
