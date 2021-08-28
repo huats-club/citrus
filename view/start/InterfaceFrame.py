@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+import AppParameters as app_params
+
 
 class InterfaceFrame(ttk.LabelFrame):
     def __init__(self, parent, *args, **kwargs):
@@ -54,4 +56,7 @@ class InterfaceFrame(ttk.LabelFrame):
         )
 
         # List of interfaces available for selection
-        self.interface_dropdown['values'] = ('WiFi chip', 'LimeSDR')
+        self.interface_dropdown['values'] = app_params.INTERFACE_LIST
+
+    def getInterfaceSelected(self):
+        return self.interface_dropdown_selection.get()

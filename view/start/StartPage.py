@@ -63,13 +63,50 @@ class StartPage(tk.Frame):
         )
         self.project_frame = ProjectFrame(self.project_container)
 
+        # Bottom most container
+        self.bottom = tk.Frame(
+            self.container
+        )
+        self.bottom.pack(
+            padx=10,
+            pady=5,
+            side=tk.BOTTOM,
+            fill=tk.BOTH,
+            expand=True
+        )
+
+        # Label for error messages
+        self.error_text = tk.StringVar()
+        self.error_message_label = ttk.Label(
+            self.bottom,
+            style="danger.TLabel",
+            textvariable=self.error_text
+        )
+        self.error_message_label.pack(
+            side=tk.LEFT
+        )
+
         # Start app button
         self.start_button = ttk.Button(
-            self.container,
+            self.bottom,
             style="primary.Outline.TButton",
             text="Start",
             command=self.controller.onStartButtonPress
         )
         self.start_button.pack(
-            side=tk.BOTTOM
+            anchor=tk.NW,
+            side=tk.RIGHT
         )
+
+    def getInterface(self):
+        return self.interface_frame.getInterfaceSelected()
+
+    def getProjectSetting(self):
+        return self.project_frame.getSelection()
+
+    def displayErrorMessage(self):
+        self.error_text.set("Error! Configurations incomplete.")
+        self.error_message_label.after(5000, self.clearErrorMessage)
+
+    def clearErrorMessage(self):
+        self.error_text.set("")
