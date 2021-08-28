@@ -66,7 +66,7 @@ class StartPage(tk.Frame):
         # Start app button
         self.start_button = ttk.Button(
             self.container,
-            style="info.Outline.TButton",
+            style="primary.Outline.TButton",
             text="Start",
             command=self.controller.onStartButtonPress
         )
