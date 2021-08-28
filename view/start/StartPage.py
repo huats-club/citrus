@@ -5,7 +5,7 @@ from tkinter import ttk
 import AppParameters as app_params
 
 
-class Landing(tk.Frame):
+class StartPage(tk.Frame):
     def __init__(self, parent, controller, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent

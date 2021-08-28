@@ -1,7 +1,7 @@
 import tkinter as tk
 
 import AppParameters as app_params
-from view.start.landing import Landing
+from view.start.StartPage import StartPage
 
 
 class Controller(tk.Frame):
@@ -15,8 +15,8 @@ class Controller(tk.Frame):
         # Put all pages into container
         self.container = tk.Frame(self.parent)
         self.container.pack()
-        self.make_landing_page()
+        self.make_start_page()
 
     # Function to create start (landing) page
-    def make_landing_page(self):
-        self.landing = Landing(self.container, self)
+    def make_start_page(self):
+        self.start = StartPage(self.container, self)
