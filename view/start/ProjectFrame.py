@@ -81,7 +81,7 @@ class ProjectFrame(ttk.LabelFrame):
             style="primary.Outline.TButton",
             text="Select file",
             state="disabled",
-            command=self.getfile
+            command=self.getFilepathFromRadioOption
         )
         self.filepath_entry_button.pack(
             side=tk.RIGHT
@@ -95,7 +95,8 @@ class ProjectFrame(ttk.LabelFrame):
 
     def disableLoadingConfig(self):
         self.filepath_entry_button.configure(state="disabled")
+        self.filepath_text.set("")
 
-    def getfile(self):
-        path = tkfd.askopenfile()
-        self.filepath_text.set(path.name)
+    def getFilepathFromRadioOption(self):
+        self.path = tkfd.askopenfile()
+        self.filepath_text.set(self.path.name)
