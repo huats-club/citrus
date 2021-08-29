@@ -2,8 +2,8 @@ from AppUtil import resource_path
 
 ### Main App parameters ###
 WORKSPACE_FOLDER = 'workspace'
-APP_HEIGHT = 300
-APP_WIDTH = 900
+APP_HEIGHT = 600
+APP_WIDTH = 1200
 APP_TITLE = "Citrus"
 APP_ICO_PATH = resource_path("assets/seedling.ico")
 APP_THEME = 'sandstone'
@@ -17,3 +17,12 @@ INTERFACE_LIST = (INTERFACE_WIFI, INTERFACE_SDR)
 MODE_SPECTRUM_ANALYZER = "Spectrum Mode"
 MODE_RECORDING = "Recording Mode"
 MODE_COVERAGE = "Coverage Mode"
+
+SPECTRUM_PLOT_TITLE = "Spectrum Analyzer"
+SPECTRUM_PLOT_LEGEND_X = "Frequency"
+SPECTRUM_PLOT_LEGEND_Y = "Signal Strength"
+SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X = "M"
+SPECTRUM_PLOT_UNITS_PREFIX_KILO_X = "K"
+SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X = "G"
+SPECTRUM_PLOT_UNITS_POSTFIX_X = "Hz"
+SPECTRUM_PLOT_UNITSD_Y = "Signal Strength"
