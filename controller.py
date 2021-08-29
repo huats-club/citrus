@@ -1,6 +1,8 @@
 import tkinter as tk
+from tkinter import ttk
 
 import AppParameters as app_params
+from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
 
@@ -36,6 +38,15 @@ class Controller(tk.Frame):
             self.currentInterface = self.start.getInterface()
             self.currentProjectSetting = self.start.getProjectSetting()
 
+            # Wipe out current window
+            self.container.destroy()
+
+            # Add notebook to original
+            self.make_main_page()
+
         else:  # invalid
             self.start.displayErrorMessage()
             return
+
+    def make_main_page(self):
+        self.main_page = MainPage(self.parent, self)  # parent of main page is root

@@ -9,8 +9,8 @@ from view.start.ProjectFrame import ProjectFrame
 
 class StartPage(tk.Frame):
     def __init__(self, parent, controller, *args, **kwargs):
-        tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        super().__init__(self.parent, *args, **kwargs)
         self.controller = controller
 
         # Main container
