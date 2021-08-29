@@ -11,6 +11,8 @@ class FrequencyPane(ttk.LabelFrame):
 
         # Current units state
         self.units_state = units_state
+        self.units_text = tk.StringVar()
+        self.units_text.set(units_state+app_params.SPECTRUM_PLOT_UNITS_POSTFIX_X)
 
         super().__init__(
             self.parent,
@@ -24,9 +26,6 @@ class FrequencyPane(ttk.LabelFrame):
             anchor=tk.NW,
             fill=tk.BOTH
         )
-
-        self.units_text = tk.StringVar()
-        self.units_text.set(units_state+app_params.SPECTRUM_PLOT_UNITS_POSTFIX_X)
 
         # Create panel for input of start/stop freq
         self.panel_container = ttk.Frame(self)
