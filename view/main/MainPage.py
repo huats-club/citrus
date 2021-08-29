@@ -24,31 +24,31 @@ class MainPage(ttk.Notebook):
         )
         self.spectrum_page.pack()
 
-        # Add tab 2
-        self.tab2 = ttk.Frame(
+        # Add recording tab
+        self.recording_page = ttk.Frame(
             self,
             width=app_params.APP_WIDTH,
             height=app_params.APP_HEIGHT
         )
-        self.tab2.pack()
+        self.recording_page.pack()
 
-        # Add tab 2
-        self.tab3 = ttk.Frame(
+        # Add coverage tab
+        self.coverage_page = ttk.Frame(
             self,
             width=app_params.APP_WIDTH,
             height=app_params.APP_HEIGHT
         )
-        self.tab3.pack()
+        self.coverage_page.pack()
 
         self.add(
             self.spectrum_page,
             text="Spectrum Mode"
         )
         self.add(
-            self.tab2,
-            text="One"
+            self.recording_page,
+            text="Recording Mode"
         )
         self.add(
-            self.tab3,
-            text="One"
+            self.coverage_page,
+            text="Coverage Mode"
         )
