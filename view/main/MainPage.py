@@ -42,13 +42,13 @@ class MainPage(ttk.Notebook):
 
         self.add(
             self.spectrum_page,
-            text="Spectrum Mode"
+            text=app_params.MODE_SPECTRUM_ANALYZER
         )
         self.add(
             self.recording_page,
-            text="Recording Mode"
+            text=app_params.MODE_RECORDING
         )
         self.add(
             self.coverage_page,
-            text="Coverage Mode"
+            text=app_params.MODE_COVERAGE
         )
