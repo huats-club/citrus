@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 
 import AppParameters as app_params
 from view.main.MainPage import MainPage
