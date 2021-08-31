@@ -102,5 +102,8 @@ class ProjectFrame(ttk.LabelFrame):
         self.filepath_text.set("")
 
     def getFilepathFromRadioOption(self):
-        (self.path, *_) = tkfd.askopenfilenames()
-        self.filepath_text.set(self.path)
+        try:
+            (self.path, *_) = tkfd.askopenfilenames()
+            self.filepath_text.set(self.path)
+        except ValueError:
+            self.filepath_text.set("")
