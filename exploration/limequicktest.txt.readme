@@ -1,0 +1,23 @@
+For loopback test (TX_1 -> LNA_H):
+
+Run LimeQuickTest to check
+
+```
+[ RF Loopback Test ]
+->Configure LMS
+->Run Tests (TX_2 -> LNA_W):
+  CH0 (SXR=1000.0MHz, SXT=1005.0MHz): Result:(-19.3 dBFS, 5.00 MHz) - PASSED
+->Run Tests (TX_1 -> LNA_H):
+  CH0 (SXR=2100.0MHz, SXT=2105.0MHz): Result:(-19.8 dBFS, 5.00 MHz) - PASSED
+->RF Loopback Test PASSED
+
+=> Board tests PASSED <=
+
+Elapsed time: 6.52 seconds
+```
+
+If the result shows weaker than -19.8 dBFS, then will fail.
+Try to adjust antenna but i think it is immaterial.
+
+If pass should see blinking yellow lights.
+If fail should see red orange blinking lights.
