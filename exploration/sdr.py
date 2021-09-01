@@ -24,7 +24,7 @@ for freqRange in freqs:
 # apply settings
 bandwidth = 10
 sdr.setSampleRate(SOAPY_SDR_RX, 0, 1e6)
-sdr.setFrequency(SOAPY_SDR_RX, 0, 740.3e6)
+sdr.setFrequency(SOAPY_SDR_RX, 0, 740.3 * (10**6))
 sdr.setAntenna(SOAPY_SDR_RX, 0, 'Auto')
 sdr.setGainMode(SOAPY_SDR_RX, 0, automatic=True)
 sdr.setBandwidth(SOAPY_SDR_RX, 0, bandwidth*(10 ** 6))
