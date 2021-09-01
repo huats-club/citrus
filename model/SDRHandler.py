@@ -15,11 +15,13 @@ class SDRHandler:
         if not IS_TESTING:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
-                target=process_spectrum, daemon=True, args=(pipe, center_freq, self.stop_pipe_process,))
+                target=process_spectrum, daemon=True,
+                args=(pipe, center_freq, self.stop_pipe_process,))
         else:
             # Define mock process
             self.process_spectrum_analyzer = Process(
-                target=process_test, daemon=True, args=(pipe, center_freq, self.stop_pipe_process,))
+                target=process_test, daemon=True,
+                args=(pipe, center_freq, self.stop_pipe_process,))
 
         self.process_spectrum_analyzer.start()
 
