@@ -1,2 +1,4 @@
 *pycache*
 build/*
+*.xlsx
+*.csv
