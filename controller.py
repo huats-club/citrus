@@ -1,6 +1,8 @@
 import tkinter as tk
+from multiprocessing import Pipe, Process
 
 import AppParameters as app_params
+from AppUtil import testing
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
@@ -13,6 +15,11 @@ class Controller(tk.Frame):
         self.parent.title(app_params.APP_TITLE)
         self.parent.iconbitmap(app_params.APP_ICO_PATH)
 
+        # Create pipes for process
+        pipe_process, pipe_gui = Pipe(True)
+        self.pipe_process = pipe_process
+        self.pipe_gui = pipe_gui
+
         # Current session setting
         self.currentInterface = ""
         self.currentProjectSetting = ""
@@ -21,6 +28,9 @@ class Controller(tk.Frame):
         self.container = tk.Frame(self.parent)
         self.container.pack()
         self.make_start_page()
+
+        self.p = Process(target=testing, daemon=True, args=(self.pipe_process,))  # Testing
+        self.p.start()
 
     # Function to create start (landing) page
     def make_start_page(self):
@@ -41,11 +51,11 @@ class Controller(tk.Frame):
             self.container.destroy()
 
             # Add notebook to original
-            self.make_main_page()
+            self.make_main_page(self.pipe_gui)
 
         else:  # invalid
             self.start.displayErrorMessage()
             return
 
-    def make_main_page(self):
-        self.main_page = MainPage(self.parent, self)  # parent of main page is root
+    def make_main_page(self, data_pipe):
+        self.main_page = MainPage(self.parent, self, data_pipe)  # parent of main page is root

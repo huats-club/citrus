@@ -6,9 +6,10 @@ from view.main.Spectrum import SpectrumPage
 
 
 class MainPage(ttk.Notebook):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, data_pipe, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.pipe = data_pipe
         super().__init__(
             self.parent,
             style="primary.TNotebook",
@@ -34,6 +35,7 @@ class MainPage(ttk.Notebook):
         self.spectrum_page = SpectrumPage(
             self,
             self.controller,
+            self.pipe,
             width=app_params.APP_WIDTH,
             height=app_params.APP_HEIGHT
         )

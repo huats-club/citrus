@@ -1,3 +1,4 @@
+import multiprocessing
 import tkinter as tk
 from tkinter import ttk
 
@@ -7,9 +8,10 @@ from view.main.SpectrumPlot import SpectrumPlot
 
 
 class SpectrumPage(ttk.Frame):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, pipe, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.pipe = pipe
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
             padx=10,
@@ -53,6 +55,21 @@ class SpectrumPage(ttk.Frame):
 
         # Create settings pane container
         self.spectrum_setting_container = FrequencyPane(self.container, self.controller)
+
+        # Start to retrieve data to plot
+        self.parent.after(1000, self.getProcess)
+
+    def getProcess(self):
+        print("hello")
+
+        if self.pipe.poll(timeout=0):
+            data = self.pipe.recv()
+            print(data)
+
+            # do plot
+            self.spectrum_plot.doPlot(data)
+
+        self.parent.after(5000, self.getProcess)
 
 
 class SpectrumSettingPane(tk.Frame):

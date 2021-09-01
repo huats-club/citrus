@@ -1,3 +1,4 @@
+import multiprocessing
 import os
 import tkinter as tk
 
@@ -8,6 +9,8 @@ from controller import Controller
 
 # Start running GUI
 if __name__ == "__main__":
+    # To fix the multiple tkinter window spawning problem
+    multiprocessing.freeze_support()
 
     # Check folder path for user data
     if not os.path.exists(app_params.WORKSPACE_FOLDER):

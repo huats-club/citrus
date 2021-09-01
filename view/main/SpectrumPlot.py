@@ -4,6 +4,7 @@ from tkinter import ttk
 import AppParameters as app_params
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 
@@ -42,16 +43,18 @@ class SpectrumPlot(ttk.Frame):
         self.ax = self.figure.add_subplot(111)
         self.ax.grid(color='#2A3459')  # bluish dark grey, but slightly lighter than background
 
-        # Change later to line plot + with mock data
-        self.plot = tkmatplotlib.FigureCanvasTkAgg(
+        # Change later to line plot+ with mock data
+        self.canvas = tkmatplotlib.FigureCanvasTkAgg(
             self.figure,
             self
         )
-        self.plot.get_tk_widget().pack(
+        self.canvas.get_tk_widget().pack(
             side=tk.TOP,
             fill=tk.BOTH,
             expand=True  # ensures that the panel fill out the the parent
         )
+
+        self.ax.set_autoscaley_on(True)
 
         self.ax.set_xlabel(
             app_params.SPECTRUM_PLOT_LEGEND_X
@@ -60,24 +63,27 @@ class SpectrumPlot(ttk.Frame):
             app_params.SPECTRUM_PLOT_LEGEND_Y
         )
 
-    def doPlot(self, dataframe):
+    def doPlot(self, data):
 
-        # df = pd.DataFrame({'A': [1, 3, 9, 5, 2, 1, 1]})
+        self.figure.clear()
+        self.ax = self.figure.add_subplot(111)
+        self.ax.grid(color='#2A3459')  # bluish dark grey, but slightly lighter than background
+
+        self.canvas.draw_idle()
+        self.ax.set_xlabel(
+            app_params.SPECTRUM_PLOT_LEGEND_X
+        )
+        self.ax.set_ylabel(
+            app_params.SPECTRUM_PLOT_LEGEND_Y
+        )
+
+        self.setYAxisBound(-35, -25)
+        df = pd.DataFrame(data, columns=['power'])
+
+        self.ax.plot(df['power'], linewidth=1)
 
         # Do plot
-        dataframe.plot(marker='o', ax=self.ax, color=self.colors)
-
-        # Create glow
-        n_lines = 10
-        diff_linewidth = 1.05
-        alpha_value = 0.03
-        for n in range(1, n_lines+1):
-            dataframe.plot(marker='o',
-                           linewidth=2+(diff_linewidth*n),
-                           alpha=alpha_value,
-                           legend=False,
-                           ax=self.ax,
-                           color=self.colors)
+        df.plot(marker='', ax=self.ax, color=self.colors)
 
     def setXAxisBound(self, xlow, xhigh):
         self.ax.set_xlim(xlow, xhigh)
