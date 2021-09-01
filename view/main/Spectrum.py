@@ -59,7 +59,7 @@ class SpectrumPage(ttk.Frame):
         self.spectrum_setting_container = FrequencyPane(self.container, self.controller)
 
         # Start to retrieve data to plot
-        self.parent.after(1000, self.getProcess)
+        self.parent.after(100, self.getProcess)
 
     def getProcess(self):
         print("hello")
@@ -81,6 +81,10 @@ class SpectrumPage(ttk.Frame):
 
             # get centre freq
             center_freq = self.spectrum_setting_container.get_center_freq()
+
+            # Set plot bounds
+            self.spectrum_plot.setXAxisBound(self.spectrum_setting_container.get_start_freq(),
+                                             self.spectrum_setting_container.get_stop_freq())
 
             # Start spectrum
             self.controller.start_spectrum_process(center_freq)

@@ -236,6 +236,15 @@ class FrequencyPane(ttk.LabelFrame):
             self.stop_freq_text.set(float(self.stop_freq_text.get()) * 10**6)
             self.center_freq_text.set(float(self.center_freq_text.get()) * 10**6)
 
+    def get_freq_units(self):
+        return self.units_state
+
+    def get_start_freq(self):
+        return self.start_freq_text.get()
+
+    def get_stop_freq(self):
+        return self.stop_freq_text.get()
+
     def get_center_freq(self):
 
         if self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:

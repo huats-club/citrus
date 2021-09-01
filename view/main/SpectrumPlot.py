@@ -77,7 +77,8 @@ class SpectrumPlot(ttk.Frame):
             app_params.SPECTRUM_PLOT_LEGEND_Y
         )
 
-        self.setYAxisBound(-35, -25)
+        # self.setXAxisBound(self.xlow, self.xhigh)
+        # self.setYAxisBound(-40, 0)
         df = pd.DataFrame(data, columns=['power'])
 
         self.ax.plot(df['power'], linewidth=1)
@@ -86,7 +87,8 @@ class SpectrumPlot(ttk.Frame):
         df.plot(marker='', ax=self.ax, color=self.colors)
 
     def setXAxisBound(self, xlow, xhigh):
-        self.ax.set_xlim(xlow, xhigh)
+        self.xlow = xlow
+        self.xhigh = xhigh
 
     def setYAxisBound(self, ylow, yhigh):
         self.ax.set_ylim(ylow, yhigh)

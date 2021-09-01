@@ -1,7 +1,8 @@
 from multiprocessing import Pipe, Process
 
-from AppUtil import process_spectrum, process_test
-from testing import IS_TESTING
+from testing import IS_TESTING, process_test
+
+from model.SDRUtil import process_spectrum
 
 
 class SDRHandler:
