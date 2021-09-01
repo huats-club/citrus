@@ -1,8 +1,8 @@
 import tkinter as tk
-from multiprocessing import Pipe, Process
+from multiprocessing import Pipe
 
 import AppParameters as app_params
-from AppUtil import testing
+from model.SDRHandler import SDRHandler
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
@@ -29,8 +29,8 @@ class Controller(tk.Frame):
         self.container.pack()
         self.make_start_page()
 
-        self.p = Process(target=testing, daemon=True, args=(self.pipe_process,))  # Testing
-        self.p.start()
+        # State variables
+        self.isSpectrumStart = False
 
     # Function to create start (landing) page
     def make_start_page(self):
@@ -59,3 +59,11 @@ class Controller(tk.Frame):
 
     def make_main_page(self, data_pipe):
         self.main_page = MainPage(self.parent, self, data_pipe)  # parent of main page is root
+
+    def start_spectrum_process(self, center_freq):
+        # Create sdr handler
+        self.sdr_handler = SDRHandler()
+        self.sdr_handler.start(self.pipe_process, center_freq)
+
+    def stop_spectrum_process(self):
+        self.sdr_handler.stop()
