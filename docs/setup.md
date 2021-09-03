@@ -31,7 +31,7 @@ If the Device Manager shows a warning at the USB driver of LimeSDR, then follow 
 
 ![Warning](img/device_manager_error.png)
 
-The driver can be downloaded from [here](https://www.ftdichip.com/Drivers/D3XX.html).
+The driver can be downloaded from [here](https://www.ftdichip.com/Drivers/D3XX.htm).
 
 ## Step 1: Build and Install `SoapySDR`
 
