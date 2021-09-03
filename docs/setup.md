@@ -21,6 +21,10 @@ According to `SoapySDR`'s [wiki page](https://github.com/pothosware/SoapySDR/wik
 
 This means that these dlls directory location must be saved in `SOAPY_SDR_PLUGIN_PATH` path in the system variables of PC.
 
+## Step -1: Install Miniconda with Python
+
+Download miniconda from [here](https://docs.conda.io/en/latest/miniconda.html) and install.
+
 ## Step 0: Install LimeSDR USB Driver
 
 If the Device Manager shows a warning at the USB driver of LimeSDR, then follow this guide: [here](https://wiki.myriadrf.org/LimeSDR-Mini_driver_installation) to install the drivers.
