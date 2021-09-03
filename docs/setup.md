@@ -35,6 +35,8 @@ Choose either ways.
 
 Get the pre-built `SoapySDR` and unzip the compressed folder directly.
 
+Copy the `SoapySDR` folder into `C:/Program Files`.
+
 ### Method 2: Gung-ho version
 
 Note: This step is highly dependent on the OS performing build. Meaning Windows 10 build for Windows 10, Intel for Intel, 64-bit for 64-bit etc.
