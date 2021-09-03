@@ -122,7 +122,7 @@ C:\Program Files\SoapySDR\lib\site-packages
 
 ## Step 5: Sanity check
 
-To check if the code works, run this sample script in Python with LimeSDR plugged in.
+To check if the settings works, run this sample script in Python with LimeSDR plugged in.
 
 ```python
 import SoapySDR
