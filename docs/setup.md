@@ -29,7 +29,7 @@ Download miniconda from [here](https://docs.conda.io/en/latest/miniconda.html) a
 
 If the Device Manager shows a warning at the USB driver of LimeSDR, then follow this guide: [here](https://wiki.myriadrf.org/LimeSDR-Mini_driver_installation) to install the drivers.
 
-The driver can be downloaded from [here](www.ftdichip.com/Drivers/D3XX.htm).
+The driver can be downloaded from [here](https://www.ftdichip.com/Drivers/D3XX.html).
 
 ## Step 1: Build and Install `SoapySDR`
 
