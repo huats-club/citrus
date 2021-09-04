@@ -37,7 +37,8 @@ def process_spectrum(pipe, center_freq, stop_pipe):
 
     # receive some samples
     while True:
-        sr = sdr.readStream(rxStream, [buff], len(buff))
+        # sr = sdr.readStream(rxStream, [buff], len(buff))
+        sdr.readStream(rxStream, [buff], len(buff))
         real = []
         imag = []
         power = [-33]
