@@ -23,7 +23,9 @@ This means that these dlls directory location must be saved in `SOAPY_SDR_PLUGIN
 
 ## Step -1: Install Miniconda with Python
 
-Download miniconda from [here](https://docs.conda.io/en/latest/miniconda.html) and install.
+Download Miniconda from [here](https://docs.conda.io/en/latest/miniconda.html) and install.
+
+Download Miniconda Python 3.7.
 
 ## Step 0: Install LimeSDR USB Driver
 
