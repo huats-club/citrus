@@ -62,7 +62,6 @@ class SpectrumPage(ttk.Frame):
         self.parent.after(100, self.getProcess)
 
     def getProcess(self):
-        print("hello")
 
         if self.pipe.poll(timeout=0):
             data = self.pipe.recv()
@@ -75,9 +74,10 @@ class SpectrumPage(ttk.Frame):
 
     def handle_spectrum_start(self):
 
+        # Start spectrum if frequency is valid and not already started
         if self.spectrum_setting_container.is_start_stop_freq_valid() and self.controller.isSpectrumStart == False:
 
-            print("start")
+            print("Spectrum page - start pressed")
 
             # get centre freq
             center_freq = self.spectrum_setting_container.get_center_freq()
@@ -95,9 +95,10 @@ class SpectrumPage(ttk.Frame):
             # Set controller state variable
             self.controller.isSpectrumStart = True
 
+        # Else display error message
         else:
             # display error
-            self.spectrum_setting_container.displayErrorMessage()
+            self.spectrum_setting_container.displayErrorMessage(self.controller.isSpectrumStart)
 
     def handle_spectrum_stop(self):
 
