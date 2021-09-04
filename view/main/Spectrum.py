@@ -104,7 +104,7 @@ class SpectrumPage(ttk.Frame):
 
         if self.controller.isSpectrumStart == True:
 
-            print("stop")
+            print("Spectrum page - stop pressed")
 
             # Stop spectrum
             self.controller.stop_spectrum_process()
