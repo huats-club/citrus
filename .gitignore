@@ -3,3 +3,4 @@ build/*
 *.xlsx
 *.csv
 *.pdf
+*.dxf
