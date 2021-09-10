@@ -48,7 +48,7 @@ for ii in range(10):
         imag.append(buff[i].imag)
 
     df = pd.DataFrame(list(zip(real, imag)), columns=['real', 'imag'])
-    df.to_csv('out' + str(ii) + '_' + str(bandwidth) + "mhz" + '.csv')
+    #df.to_csv('out' + str(ii) + '_' + str(bandwidth) + "mhz" + '.csv')
 
     # time[ii] = sr.timeNs / 10 ^ 6
 
