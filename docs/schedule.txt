@@ -35,6 +35,8 @@ Project starts 2021-08-26
 [System Integration] starts at [SDR Firm up]'s end
 [System Integration] lasts 7 days
 
+[Dev ends] happens at [System Integration]'s end
+
 [Testing] starts at [System Integration]'s end
 [Testing] lasts 7 days
 
@@ -47,5 +49,8 @@ Project starts 2021-08-26
 2021/08/26 is colored in salmon
 2021/09/03 is colored in salmon
 2021/09/17 is colored in salmon
+
+' Target Firm up day
+2021/10/01 is colored in lime
 
 @endgantt
