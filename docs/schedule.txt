@@ -29,6 +29,9 @@ Project starts 2021-08-26
 [System Integration] starts at [SDR Firm up]'s end
 [System Integration] lasts 7 days
 
+[Testing] starts at [System Integration]'s end
+[Testing] lasts 7 days
+
 ' Record meeting days
 2021/08/26 is colored in salmon
 2021/09/04 is colored in salmon
