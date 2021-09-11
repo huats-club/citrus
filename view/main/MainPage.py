@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from app_parameters import app_parameters
+from view.main.coverage_mode.Coverage import CoveragePage
 from view.main.spectrum_mode.Spectrum import SpectrumPage
 
 
@@ -24,12 +25,12 @@ class MainPage(ttk.Notebook):
         self.enable_traversal()  # Enable using keyboard to traverse tab
 
         # Add coverage tab
-        self.coverage_page = ttk.Frame(
+        self.coverage_page = CoveragePage(
             self,
+            self.controller,
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )
-        self.coverage_page.pack()
 
         # Add Spectrum Analyzer tab
         self.spectrum_page = SpectrumPage(
@@ -39,7 +40,6 @@ class MainPage(ttk.Notebook):
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )
-        self.spectrum_page.pack()
 
         # Add recording tab
         self.recording_page = ttk.Frame(
@@ -47,7 +47,6 @@ class MainPage(ttk.Notebook):
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )
-        self.recording_page.pack()
 
         self.add(
             self.coverage_page,
