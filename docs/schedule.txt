@@ -38,6 +38,11 @@ Project starts 2021-08-26
 [Testing] starts at [System Integration]'s end
 [Testing] lasts 7 days
 
+-- Stretch Goal --
+
+[Precision] starts at [Testing]'s end
+[Precision] lasts 7 days
+
 ' Record meeting days
 2021/08/26 is colored in salmon
 2021/09/04 is colored in salmon
