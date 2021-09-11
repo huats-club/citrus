@@ -22,6 +22,10 @@ Project starts 2021-08-26
 [GUI Completion] happens at [Floorplan Plot]'s end
 [GUI Completion] happens at [Heatmap]'s end
 
+[Wifi chip exploration] starts at [Floorplan Plot]'s end
+[Wifi chip exploration] starts at [Heatmap]'s end
+[Wifi chip exploration] lasts 7 days
+
 [SDR Firm up] starts at [Floorplan Plot]'s end
 [SDR Firm up] starts at [Heatmap]'s end
 [SDR Firm up] lasts 7 days
