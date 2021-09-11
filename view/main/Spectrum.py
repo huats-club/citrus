@@ -48,7 +48,7 @@ class SpectrumPage(ttk.Frame):
         )
 
         # Create empty plot of graph
-        self.spectrum_plot.createEmptyPlot()
+        self.spectrum_plot.create_empty_plot()
 
         # Create bottom bar for start, stop and save
         self.bottom_container = SpectrumSettingPane(self.spectrum_plot_container, self, controller)
@@ -57,26 +57,26 @@ class SpectrumPage(ttk.Frame):
         self.spectrum_setting_container = FrequencyPane(self.container, self.controller)
 
         # Start to retrieve data to plot
-        self.parent.after(100, self.getProcess)
+        self.parent.after(100, self.get_process)
 
-    def getProcess(self):
+    def get_process(self):
         if self.pipe.poll(timeout=0):
             data = self.pipe.recv()
             # do plot
-            self.spectrum_plot.doPlot(data)
+            self.spectrum_plot.do_plot(data)
 
-        self.parent.after(500, self.getProcess)
+        self.parent.after(500, self.get_process)
 
     def handle_spectrum_start(self):
 
         # Start spectrum if frequency is valid and not already started
-        if self.spectrum_setting_container.is_start_stop_freq_valid() and self.controller.isSpectrumStart == False:
+        if self.spectrum_setting_container.is_start_stop_freq_valid() and self.controller.is_spectrum_start == False:
             # get centre freq
             center_freq = self.spectrum_setting_container.get_center_freq()
 
             # Set plot bounds
-            self.spectrum_plot.setXAxisBound(self.spectrum_setting_container.get_start_freq(),
-                                             self.spectrum_setting_container.get_stop_freq())
+            self.spectrum_plot.set_X_axis_bound(self.spectrum_setting_container.get_start_freq(),
+                                                self.spectrum_setting_container.get_stop_freq())
 
             # Start spectrum
             self.controller.start_spectrum_process(center_freq)
@@ -85,16 +85,16 @@ class SpectrumPage(ttk.Frame):
             self.spectrum_setting_container.disable_frequency_pane()
 
             # Set controller state variable
-            self.controller.isSpectrumStart = True
+            self.controller.is_spectrum_start = True
 
         # Else display error message
         else:
             # display error
-            self.spectrum_setting_container.displayErrorMessage(self.controller.isSpectrumStart)
+            self.spectrum_setting_container.display_error_message(self.controller.is_spectrum_start)
 
     def handle_spectrum_stop(self):
 
-        if self.controller.isSpectrumStart == True:
+        if self.controller.is_spectrum_start == True:
             # Stop spectrum
             self.controller.stop_spectrum_process()
 
@@ -102,7 +102,7 @@ class SpectrumPage(ttk.Frame):
             self.spectrum_setting_container.enable_frequency_pane()
 
             # Set controller state variable
-            self.controller.isSpectrumStart = False
+            self.controller.is_spectrum_start = False
 
 
 class SpectrumSettingPane(tk.Frame):

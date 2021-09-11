@@ -199,15 +199,15 @@ class FrequencyPane(ttk.LabelFrame):
         self.start_entry["state"] = tk.NORMAL
         self.stop_entry["state"] = tk.NORMAL
 
-    def displayErrorMessage(self, isStarted):
+    def display_error_message(self, isStarted):
 
         if isStarted:
             self.error_message.set("Error! Spectrum Analyzer already started.")
         else:
             self.error_message.set("Error! Check frequency before start.")
-        self.after(3000, self.clearErrorMessage)
+        self.after(3000, self.clear_error_message)
 
-    def clearErrorMessage(self):
+    def clear_error_message(self):
         self.error_message.set("")
 
     def toggle_units(self):

@@ -91,22 +91,22 @@ class StartPage(tk.Frame):
             self.bottom,
             style="primary.Outline.TButton",
             text="Start",
-            command=self.controller.onStartButtonPress
+            command=self.controller.on_start_button_press
         )
         self.start_button.pack(
             anchor=tk.NW,
             side=tk.RIGHT
         )
 
-    def getInterface(self):
+    def get_interface(self):
         return self.interface_frame.getInterfaceSelected()
 
-    def getProjectSetting(self):
+    def get_project_settings(self):
         return self.project_frame.getSelection()
 
-    def displayErrorMessage(self):
+    def display_error_message(self):
         self.error_text.set("Error! Configurations incomplete.")
-        self.error_message_label.after(5000, self.clearErrorMessage)
+        self.error_message_label.after(5000, self.clear_error_message)
 
-    def clearErrorMessage(self):
+    def clear_error_message(self):
         self.error_text.set("")

@@ -22,7 +22,7 @@ class SpectrumPlot(ttk.Frame):
             expand=True  # ensures that the panel file out the the parent
         )
 
-    def createEmptyPlot(self):
+    def create_empty_plot(self):
         # https://towardsdatascience.com/cyberpunk-style-with-matplotlib-f47404c9d4c5
         plt.style.use("seaborn-dark")
 
@@ -63,7 +63,7 @@ class SpectrumPlot(ttk.Frame):
             app_parameters.SPECTRUM_PLOT_LEGEND_Y
         )
 
-    def doPlot(self, data):
+    def do_plot(self, data):
 
         self.figure.clear()
         self.ax = self.figure.add_subplot(111)
@@ -84,9 +84,9 @@ class SpectrumPlot(ttk.Frame):
         # Do plot
         df.plot(marker='', ax=self.ax, color=self.colors)
 
-    def setXAxisBound(self, xlow, xhigh):
+    def set_X_axis_bound(self, xlow, xhigh):
         self.xlow = xlow
         self.xhigh = xhigh
 
-    def setYAxisBound(self, ylow, yhigh):
+    def set_Y_axis_bound(self, ylow, yhigh):
         self.ax.set_ylim(ylow, yhigh)

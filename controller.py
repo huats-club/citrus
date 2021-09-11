@@ -20,32 +20,28 @@ class Controller(tk.Frame):
         self.pipe_process = pipe_process
         self.pipe_gui = pipe_gui
 
-        # Current session setting
-        self.currentInterface = ""
-        self.currentProjectSetting = ""
-
         # Put all pages into container
         self.container = tk.Frame(self.parent)
         self.container.pack()
         self.make_start_page()
 
         # State variables
-        self.isSpectrumStart = False
+        self.is_spectrum_start = False
 
     # Function to create start (landing) page
     def make_start_page(self):
         self.start = StartPage(self.container, self)
 
     # Function to execute when start button pressed
-    def onStartButtonPress(self):
-        isValidInterface = (self.start.getInterface() != "")
-        isValidProjectSetting = (self.start.getProjectSetting() != "")
+    def on_start_button_press(self):
+        is_valid_interface = (self.start.get_interface() != "")
+        is_valid_project_setting = (self.start.get_project_settings() != "")
 
         # Valid user input
-        if isValidInterface and isValidProjectSetting:
-            print(self.start.getInterface(), self.start.getProjectSetting())
-            self.currentInterface = self.start.getInterface()
-            self.currentProjectSetting = self.start.getProjectSetting()
+        if is_valid_interface and is_valid_project_setting:
+            print(self.start.get_interface(), self.start.get_project_settings())
+            self.current_interface = self.start.get_interface()
+            self.is_valid_project_setting = self.start.get_project_settings()
 
             # Wipe out current window
             self.container.destroy()
@@ -54,7 +50,7 @@ class Controller(tk.Frame):
             self.make_main_page(self.pipe_gui)
 
         else:  # invalid
-            self.start.displayErrorMessage()
+            self.start.display_error_message()
             return
 
     def make_main_page(self, data_pipe):
