@@ -45,7 +45,7 @@ Project starts 2021-08-26
 
 ' Record meeting days
 2021/08/26 is colored in salmon
-2021/09/04 is colored in salmon
+2021/09/03 is colored in salmon
 2021/09/17 is colored in salmon
 
 @endgantt
