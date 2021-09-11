@@ -3,8 +3,8 @@ from tkinter import ttk
 
 from app_parameters import app_parameters
 from view.main.FrequencyPane import FrequencyPane
-from view.main.SpectrumPlot import SpectrumPlot
-from view.main.SpectrumSettingPane import SpectrumSettingPane
+from view.main.spectrum_mode.SpectrumPlot import SpectrumPlot
+from view.main.spectrum_mode.SpectrumSettingPane import SpectrumSettingPane
 
 
 class SpectrumPage(ttk.Frame):

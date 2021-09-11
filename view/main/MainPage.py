@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from app_parameters import app_parameters
-from view.main.Spectrum import SpectrumPage
+from view.main.spectrum_mode.Spectrum import SpectrumPage
 
 
 class MainPage(ttk.Notebook):
