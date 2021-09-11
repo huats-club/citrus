@@ -1,0 +1,37 @@
+@startgantt
+
+Project starts 2021-08-26
+
+-- Phase 1 --
+
+[Spectrum Analyzer] starts 2021-08-27
+[Spectrum Analyzer] lasts 7 days
+
+[SDR Tuning] starts 2021-09-04
+[SDR Tuning] lasts 7 days
+
+[Floorplan Plot] starts 2021-09-11
+[Floorplan Plot] lasts 7 days
+
+[Heatmap] starts 2021-09-11
+[Heatmap] lasts 7 days
+
+-- Phase 2 --
+
+' Milestone
+[GUI Completion] happens at [Floorplan Plot]'s end
+[GUI Completion] happens at [Heatmap]'s end
+
+[SDR Firm up] starts at [Floorplan Plot]'s end
+[SDR Firm up] starts at [Heatmap]'s end
+[SDR Firm up] lasts 7 days
+
+[System Integration] starts at [SDR Firm up]'s end
+[System Integration] lasts 7 days
+
+' Record meeting days
+2021/08/26 is colored in salmon
+2021/09/04 is colored in salmon
+2021/09/17 is colored in salmon
+
+@endgantt
