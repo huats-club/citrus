@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 
 import AppParameters as app_params
-from numpy.core.numeric import True_
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SpectrumPlot import SpectrumPlot
 
