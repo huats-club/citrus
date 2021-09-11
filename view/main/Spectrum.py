@@ -72,6 +72,10 @@ class SpectrumPage(ttk.Frame):
 
         # Start spectrum if frequency is valid and not already started
         if self.spectrum_setting_container.is_start_stop_freq_valid() and self.controller.is_spectrum_start == False:
+
+            # Disable toggle to other tab
+            self.parent.disable_toggle_tab()
+
             # get centre freq
             center_freq = self.spectrum_setting_container.get_center_freq()
 
@@ -104,3 +108,6 @@ class SpectrumPage(ttk.Frame):
 
             # Set controller state variable
             self.controller.is_spectrum_start = False
+
+            # Enable traversal of tab
+            self.parent.enable_toggle_tab()
