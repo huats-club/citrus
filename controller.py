@@ -1,7 +1,7 @@
 import tkinter as tk
 from multiprocessing import Pipe
 
-import AppParameters as app_params
+from app_parameters import app_parameters
 from model.SDRHandler import SDRHandler
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
@@ -12,8 +12,8 @@ class Controller(tk.Frame):
         super().__init__(parent)
         self.parent = parent
         self.parent.resizable(width=False, height=False)    # Don't allow resizing
-        self.parent.title(app_params.APP_TITLE)
-        self.parent.iconbitmap(app_params.APP_ICO_PATH)
+        self.parent.title(app_parameters.APP_TITLE)
+        self.parent.iconbitmap(app_parameters.APP_ICO_PATH)
 
         # Create pipes for process
         pipe_process, pipe_gui = Pipe(True)

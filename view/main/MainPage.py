@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-import AppParameters as app_params
+from app_parameters import app_parameters
 from view.main.Spectrum import SpectrumPage
 
 
@@ -26,8 +26,8 @@ class MainPage(ttk.Notebook):
         # Add coverage tab
         self.coverage_page = ttk.Frame(
             self,
-            width=app_params.APP_WIDTH,
-            height=app_params.APP_HEIGHT
+            width=app_parameters.APP_WIDTH,
+            height=app_parameters.APP_HEIGHT
         )
         self.coverage_page.pack()
 
@@ -36,30 +36,30 @@ class MainPage(ttk.Notebook):
             self,
             self.controller,
             self.pipe,
-            width=app_params.APP_WIDTH,
-            height=app_params.APP_HEIGHT
+            width=app_parameters.APP_WIDTH,
+            height=app_parameters.APP_HEIGHT
         )
         self.spectrum_page.pack()
 
         # Add recording tab
         self.recording_page = ttk.Frame(
             self,
-            width=app_params.APP_WIDTH,
-            height=app_params.APP_HEIGHT
+            width=app_parameters.APP_WIDTH,
+            height=app_parameters.APP_HEIGHT
         )
         self.recording_page.pack()
 
         self.add(
             self.coverage_page,
-            text=app_params.MODE_COVERAGE
+            text=app_parameters.MODE_COVERAGE
         )
         self.add(
             self.spectrum_page,
-            text=app_params.MODE_SPECTRUM_ANALYZER
+            text=app_parameters.MODE_SPECTRUM_ANALYZER
         )
         self.add(
             self.recording_page,
-            text=app_params.MODE_RECORDING
+            text=app_parameters.MODE_RECORDING
         )
 
         # Temporarily select spectrum analyzer as main

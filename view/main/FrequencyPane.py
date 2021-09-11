@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-import AppParameters as app_params
+from app_parameters import app_parameters
 
 
 class FrequencyPane(ttk.LabelFrame):
     def __init__(self, parent, controller,
-                 units_state=app_params.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X,
+                 units_state=app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X,
                  *args, **kwargs):  # default state uses megahz
         self.parent = parent
         self.controller = controller
@@ -14,7 +14,7 @@ class FrequencyPane(ttk.LabelFrame):
         # Current units state
         self.units_state = units_state
         self.units_text = tk.StringVar()
-        self.units_text.set(units_state+app_params.SPECTRUM_PLOT_UNITS_POSTFIX_X)
+        self.units_text.set(units_state+app_parameters.SPECTRUM_PLOT_UNITS_POSTFIX_X)
 
         super().__init__(
             self.parent,
@@ -216,25 +216,28 @@ class FrequencyPane(ttk.LabelFrame):
             # print('not valid')
             return
 
-        if self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
-            self.units_state = app_params.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X
-            self.units_text.set(app_params.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X + app_params.SPECTRUM_PLOT_UNITS_POSTFIX_X)
+        if self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
+            self.units_state = app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X
+            self.units_text.set(
+                app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X + app_parameters.SPECTRUM_PLOT_UNITS_POSTFIX_X)
 
             self.start_freq_text.set(float(self.start_freq_text.get()) / (10**3))
             self.stop_freq_text.set(float(self.stop_freq_text.get()) / (10**3))
             self.center_freq_text.set(float(self.center_freq_text.get()) / (10**3))
 
-        elif self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X:
-            self.units_state = app_params.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X
-            self.units_text.set(app_params.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X + app_params.SPECTRUM_PLOT_UNITS_POSTFIX_X)
+        elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X:
+            self.units_state = app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X
+            self.units_text.set(
+                app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X + app_parameters.SPECTRUM_PLOT_UNITS_POSTFIX_X)
 
             self.start_freq_text.set(float(self.start_freq_text.get()) / (10**3))
             self.stop_freq_text.set(float(self.stop_freq_text.get()) / (10**3))
             self.center_freq_text.set(float(self.center_freq_text.get()) / (10**3))
 
-        elif self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
-            self.units_state = app_params.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X
-            self.units_text.set(app_params.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X + app_params.SPECTRUM_PLOT_UNITS_POSTFIX_X)
+        elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
+            self.units_state = app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X
+            self.units_text.set(
+                app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X + app_parameters.SPECTRUM_PLOT_UNITS_POSTFIX_X)
 
             self.start_freq_text.set(float(self.start_freq_text.get()) * 10**6)
             self.stop_freq_text.set(float(self.stop_freq_text.get()) * 10**6)
@@ -251,11 +254,11 @@ class FrequencyPane(ttk.LabelFrame):
 
     def get_center_freq(self):
 
-        if self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
+        if self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
             mag = 10 ** 9
-        elif self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
+        elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
             mag = 10 ** 3
-        elif self.units_state == app_params.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X:
+        elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X:
             mag = 10 ** 6
 
         return float(self.center_freq_text.get()) * mag

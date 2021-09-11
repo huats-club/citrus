@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-import AppParameters as app_params
+from app_parameters import app_parameters
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SpectrumPlot import SpectrumPlot
 
@@ -44,7 +44,7 @@ class SpectrumPage(ttk.Frame):
         self.spectrum_plot = SpectrumPlot(
             self.spectrum_plot_container,
             self.controller,
-            width=0.6*app_params.APP_WIDTH
+            width=0.6*app_parameters.APP_WIDTH
         )
 
         # Create empty plot of graph
@@ -60,11 +60,8 @@ class SpectrumPage(ttk.Frame):
         self.parent.after(100, self.getProcess)
 
     def getProcess(self):
-
         if self.pipe.poll(timeout=0):
             data = self.pipe.recv()
-            print(data)
-
             # do plot
             self.spectrum_plot.doPlot(data)
 
@@ -74,9 +71,6 @@ class SpectrumPage(ttk.Frame):
 
         # Start spectrum if frequency is valid and not already started
         if self.spectrum_setting_container.is_start_stop_freq_valid() and self.controller.isSpectrumStart == False:
-
-            print("Spectrum page - start pressed")
-
             # get centre freq
             center_freq = self.spectrum_setting_container.get_center_freq()
 
@@ -101,9 +95,6 @@ class SpectrumPage(ttk.Frame):
     def handle_spectrum_stop(self):
 
         if self.controller.isSpectrumStart == True:
-
-            print("Spectrum page - stop pressed")
-
             # Stop spectrum
             self.controller.stop_spectrum_process()
 

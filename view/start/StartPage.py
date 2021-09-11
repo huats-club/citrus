@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.font as tkFont
 from tkinter import ttk
 
-import AppParameters as app_params
+from app_parameters import app_parameters
 from view.start.InterfaceFrame import InterfaceFrame
 from view.start.ProjectFrame import ProjectFrame
 
@@ -34,7 +34,7 @@ class StartPage(tk.Frame):
         )
         self.introduction_label = ttk.Label(
             self.introduction_label_container,
-            text="Welcome to " + app_params.APP_TITLE,
+            text="Welcome to " + app_parameters.APP_TITLE,
             # style='info.TLabel',
             font=welcome_fontStyle,
             anchor=tk.CENTER

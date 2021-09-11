@@ -1,4 +1,4 @@
-from AppUtil import resource_path
+from app_util.app_util import resource_path
 
 ### Main App parameters ###
 WORKSPACE_FOLDER = 'workspace'

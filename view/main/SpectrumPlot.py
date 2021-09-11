@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 
-import AppParameters as app_params
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from app_parameters import app_parameters
 
 
 class SpectrumPlot(ttk.Frame):
@@ -57,10 +57,10 @@ class SpectrumPlot(ttk.Frame):
         self.ax.set_autoscaley_on(True)
 
         self.ax.set_xlabel(
-            app_params.SPECTRUM_PLOT_LEGEND_X
+            app_parameters.SPECTRUM_PLOT_LEGEND_X
         )
         self.ax.set_ylabel(
-            app_params.SPECTRUM_PLOT_LEGEND_Y
+            app_parameters.SPECTRUM_PLOT_LEGEND_Y
         )
 
     def doPlot(self, data):
@@ -71,14 +71,12 @@ class SpectrumPlot(ttk.Frame):
 
         self.canvas.draw_idle()
         self.ax.set_xlabel(
-            app_params.SPECTRUM_PLOT_LEGEND_X
+            app_parameters.SPECTRUM_PLOT_LEGEND_X
         )
         self.ax.set_ylabel(
-            app_params.SPECTRUM_PLOT_LEGEND_Y
+            app_parameters.SPECTRUM_PLOT_LEGEND_Y
         )
 
-        # self.setXAxisBound(self.xlow, self.xhigh)
-        # self.setYAxisBound(-40, 0)
         df = pd.DataFrame(data, columns=['power'])
 
         self.ax.plot(df['power'], linewidth=1)

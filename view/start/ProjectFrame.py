@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog as tkfd
 from tkinter import ttk
 
-import AppParameters as app_params
+from app_parameters import app_parameters
 
 
 class ProjectFrame(ttk.LabelFrame):
@@ -38,7 +38,7 @@ class ProjectFrame(ttk.LabelFrame):
         self.radio_new_project = ttk.Radiobutton(
             self.project_frame_container,
             text="New Project",
-            value=app_params.PROJECT_NEW,
+            value=app_parameters.PROJECT_NEW,
             variable=self.selected,
             command=self.disableLoadingConfig
         )
@@ -51,7 +51,7 @@ class ProjectFrame(ttk.LabelFrame):
         self.radio_load_project = ttk.Radiobutton(
             self.project_frame_container,
             text="Load Existing Project",
-            value=app_params.PROJECT_LOAD,
+            value=app_parameters.PROJECT_LOAD,
             variable=self.selected,
             command=self.enableLoadingConfig
         )
