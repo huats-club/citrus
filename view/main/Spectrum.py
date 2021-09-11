@@ -4,6 +4,7 @@ from tkinter import ttk
 from app_parameters import app_parameters
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SpectrumPlot import SpectrumPlot
+from view.main.SpectrumSettingPane import SpectrumSettingPane
 
 
 class SpectrumPage(ttk.Frame):
@@ -103,59 +104,3 @@ class SpectrumPage(ttk.Frame):
 
             # Set controller state variable
             self.controller.is_spectrum_start = False
-
-
-class SpectrumSettingPane(tk.Frame):
-    def __init__(self, parent, spectrum, controller, *args, **kwargs):
-
-        self.parent = parent
-        self.controller = controller
-        self.spectrum = spectrum
-
-        super().__init__(self.parent, *args, **kwargs)
-        self.pack(
-            side=tk.BOTTOM
-        )
-
-        # Start button
-        self.start_button = ttk.Button(
-            self,
-            style="primary.TButton",
-            text="Start",
-            command=self.spectrum.handle_spectrum_start
-        )
-        self.start_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=(20, 0)
-        )
-
-        # Stop button
-        self.stop_button = ttk.Button(
-            self,
-            style="primary.TButton",
-            text="Stop",
-            command=self.spectrum.handle_spectrum_stop
-        )
-        self.stop_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=(20, 0)
-        )
-
-        # Save button
-        self.save_button = ttk.Button(
-            self,
-            style="primary.TButton",
-            text="Save"
-        )
-        self.save_button.pack(
-            side=tk.RIGHT,
-            padx=10,
-            pady=(20, 0)
-        )
-
-        self.pack(
-            side=tk.BOTTOM,
-            anchor=tk.CENTER
-        )
