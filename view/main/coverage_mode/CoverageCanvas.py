@@ -13,5 +13,5 @@ class CoverageCanvas(tk.Canvas):
             pady=4,
             fill=tk.BOTH,
             expand=True,  # ensures fill out the the parent
-            side=tk.LEFT
+            side=tk.TOP
         )

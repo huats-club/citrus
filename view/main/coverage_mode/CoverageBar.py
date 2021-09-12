@@ -12,91 +12,77 @@ class CoverageBar(ttk.Frame):
             *args, **kwargs
         )
         self.pack(
-            padx=10,
-            pady=10,
+            padx=5,
+            pady=5,
             side=tk.BOTTOM,
-            anchor=tk.NW,
-            fill=tk.BOTH
+            fill=tk.X
         )
 
+        # String length for button
         self.STRING_LENGTH = 10
 
-        # Create container
-        self.container = ttk.Frame(self)
-        self.container.pack(
-            side=tk.TOP,
-            anchor=tk.NW,
-            fill=tk.BOTH
+        # Container for view utilties
+        self.view_container = ttk.Frame(self)
+        self.view_container.pack(
+            padx=5,
+            pady=5,
+            side=tk.LEFT,
+            anchor=tk.NW
+        )
+
+        # Container for plot utilities
+        self.plot_container = ttk.Frame(self)
+        self.plot_container.pack(
+            padx=5,
+            pady=5,
+            side=tk.RIGHT,
+            anchor=tk.NE
         )
 
         # Create pan button
         self.pan_button = ttk.Button(
-            self.container,
+            self.view_container,
             style="primary.TButton",
             text="Pan".center(self.STRING_LENGTH, ' ')
         )
         self.pan_button.pack(
             side=tk.LEFT,
             padx=10,
-            pady=(20, 0)
+            pady=5
         )
 
         # Create scan button
         self.scan_button = ttk.Button(
-            self.container,
+            self.view_container,
             style="primary.TButton",
             text="Scan".center(self.STRING_LENGTH, ' ')
         )
         self.scan_button.pack(
             side=tk.LEFT,
             padx=10,
-            pady=(20, 0)
-        )
-
-        # Create min value button
-        self.min_button = ttk.Button(
-            self.container,
-            style="primary.TButton",
-            text="Min".center(self.STRING_LENGTH, ' ')
-        )
-        self.min_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=(20, 0)
-        )
-
-        # Create max value button
-        self.max_button = ttk.Button(
-            self.container,
-            style="primary.TButton",
-            text="Max".center(self.STRING_LENGTH, ' ')
-        )
-        self.max_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=(20, 0)
+            pady=5
         )
 
         # Create plot button
         self.plot_button = ttk.Button(
-            self.container,
+            self.plot_container,
             style="primary.TButton",
             text="Plot".center(self.STRING_LENGTH, ' ')
         )
         self.plot_button.pack(
             side=tk.LEFT,
             padx=10,
-            pady=(20, 0)
+            pady=5
         )
 
         # Create combine button
         self.combine_button = ttk.Button(
-            self.container,
+            self.plot_container,
             style="primary.TButton",
             text="Combine".center(self.STRING_LENGTH, ' ')
         )
         self.combine_button.pack(
             side=tk.RIGHT,
             padx=10,
-            pady=(20, 0)
+            pady=5
         )

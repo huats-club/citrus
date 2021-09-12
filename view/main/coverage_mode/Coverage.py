@@ -29,28 +29,29 @@ class CoveragePage(ttk.Frame):
         )
 
         # Create top half of container
-        self.top_container = ttk.Frame(self.container)
-        self.top_container.pack(
+        self.left_container = ttk.Frame(self.container)
+        self.left_container.pack(
             padx=4,
             pady=4,
             fill=tk.BOTH,
             expand=True,
-            side=tk.TOP
+            side=tk.LEFT
         )
 
         # Create (menu) bottom half of container
-        self.bottom_container = ttk.Frame(self.container)
-        self.bottom_container.pack(
+        self.right_container = tk.Frame(self.container)
+        self.right_container.pack(
             padx=4,
             pady=4,
-            side=tk.BOTTOM
+            side=tk.RIGHT,
+            fill=tk.BOTH
         )
 
         # Create canvas for left top container
-        self.coverage_canvas = CoverageCanvas(self.top_container, self.controller)
+        self.coverage_canvas = CoverageCanvas(self.left_container, self.controller)
 
         # Create coverage menu bar for right top container
-        self.coverage_menu = CoverageMenu(self.top_container, self.controller)
+        self.coverage_menu = CoverageMenu(self.right_container, self.controller)
 
         # Create bottom bar
-        self.coverage_bar = CoverageBar(self.bottom_container, self.controller)
+        self.coverage_bar = CoverageBar(self.left_container, self.controller)
