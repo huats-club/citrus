@@ -3,18 +3,23 @@ from scapy.interfaces import IFACES
 from scapy.layers.dot11 import Dot11
 from scapy.sendrecv import sniff
 
+IFACE_NAME = "Realtek 8821AE Wireless LAN 802.11ac PCI-E NIC"
+devices = set()
+
 
 def packethandler(pkt):
-    print(pkt)
     if pkt.haslayer(Dot11):
-        print("hello")
+        dot11_layer = pkt.getlayer(Dot11)
+        if dot11_layer.addr2 and (dot11_layer.addr2 not in devices):
+            devices.add(dot11_layer.addr2)
+            print(dot11_layer.addr2)
 
 
 conf.sniff_promisc = False
 conf.use_pcap = True
 print(IFACES.show())
-mydev = IFACES.dev_from_index(8)
-sniff(iface=mydev, prn=packethandler, store=0)
+# mydev = IFACES.dev_from_index(10)
+sniff(iface=IFACE_NAME, prn=packethandler, store=0)
 
 # https://github.com/secdev/scapy/issues/2230
 # https://stackoverflow.com/questions/43314956/sniff-function-in-scapy-not-working-win
