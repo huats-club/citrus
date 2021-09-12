@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
+from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
 from view.main.coverage_mode.CoverageMenu import CoverageMenu
 from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
 
@@ -51,11 +52,14 @@ class CoveragePage(ttk.Frame):
         # Create canvas for left top container
         self.coverage_canvas = CoverageCanvas(self.left_container, self.controller)
 
+        # Create bottom bar
+        self.coverage_bar = CoverageBar(self.left_container, self.controller)
+
+        # Create coverage menu to upload file
+        self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
+
         # Create coverage menu bar for right top container
         self.coverage_menu = CoverageMenu(self.right_container, self.controller)
 
         # Create coverage value menu for right top container
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
-
-        # Create bottom bar
-        self.coverage_bar = CoverageBar(self.left_container, self.controller)
