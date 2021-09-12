@@ -9,8 +9,8 @@ class CoverageCanvas(tk.Canvas):
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
-            padx=10,
-            pady=10,
+            padx=4,
+            pady=4,
             fill=tk.BOTH,
             expand=True,  # ensures fill out the the parent
             side=tk.LEFT

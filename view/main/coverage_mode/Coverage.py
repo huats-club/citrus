@@ -22,8 +22,8 @@ class CoveragePage(ttk.Frame):
         # Create main container
         self.container = ttk.Frame(self)
         self.container.pack(
-            padx=10,
-            pady=10,
+            padx=4,
+            pady=4,
             fill=tk.BOTH,
             expand=True
         )
@@ -43,8 +43,6 @@ class CoveragePage(ttk.Frame):
         self.bottom_container.pack(
             padx=4,
             pady=4,
-            fill=tk.BOTH,
-            expand=True,
             side=tk.BOTTOM
         )
 
