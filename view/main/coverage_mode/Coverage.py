@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from view.main.coverage_mode.CoverageMenu import CoverageMenu
+
 
 class CoveragePage(ttk.Frame):
     def __init__(self, parent, controller, *args, **kwargs):
@@ -23,3 +25,28 @@ class CoveragePage(ttk.Frame):
             fill=tk.BOTH,
             expand=True
         )
+
+        # Create top half of container
+        self.top_container = ttk.Frame(self.container)
+        self.top_container.pack(
+            padx=10,
+            pady=10,
+            fill=tk.BOTH,
+            expand=True,
+            side=tk.TOP
+        )
+
+        # Create (menu) bottom half of container
+        self.bottom_container = ttk.Frame(self.container)
+        self.bottom_container.pack(
+            padx=10,
+            pady=10,
+            fill=tk.BOTH,
+            expand=True,
+            side=tk.BOTTOM
+        )
+
+        # Create canvas for left top container
+
+        # Create coverage menu bar for right top container
+        self.coverage_menu = CoverageMenu(self.top_container)
