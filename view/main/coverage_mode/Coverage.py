@@ -63,3 +63,24 @@ class CoveragePage(ttk.Frame):
 
         # Create coverage value menu for right top container
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
+
+    def display_dxf(self, dxf):
+
+        def print_entity(e, f):
+            print("LINE on layer: %s\n" % e.dxf.layer)
+            print("start point: %s\n" % e.dxf.start)
+            print("end point: %s\n" % e.dxf.end)
+
+            f.writelines("LINE on layer: %s\n" % e.dxf.layer)
+            f.writelines("start point: %s\n" % e.dxf.start)
+            f.writelines("end point: %s\n" % e.dxf.end)
+
+        f = open("out.txt", "a")
+
+        # try to parse and make sense of dxf
+        msp = dxf.modelspace()
+        for e in msp:
+            if e.dxftype() == 'LINE':
+                print_entity(e, f)
+
+        f.close()

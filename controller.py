@@ -1,5 +1,8 @@
+import sys
 import tkinter as tk
 from multiprocessing import Pipe
+
+import ezdxf
 
 from app_parameters import app_parameters
 from model.SDRHandler import SDRHandler
@@ -65,5 +68,25 @@ class Controller(tk.Frame):
         self.sdr_handler.stop()
 
     def load_dxf_to_canvas(self):
-        print(self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected())
-        pass
+        dxf_file = self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected()
+        try:
+            dxf = ezdxf.readfile(dxf_file)
+
+        except IOError:
+            print(f'Not a DXF file or a generic I/O error.')
+            sys.exit(1)
+        except ezdxf.DXFStructureError:
+            print(f'Invalid or corrupted DXF file.')
+            sys.exit(2)
+
+        # For debugging
+        print(f"Opened {dxf_file}")
+
+        # Save file as class member
+        self.dxf = dxf
+
+        # Display dxf file
+        self.display_dxf()
+
+    def display_dxf(self):
+        self.main_page.coverage_page.display_dxf(self.dxf)
