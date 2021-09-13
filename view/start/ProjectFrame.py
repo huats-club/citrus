@@ -40,7 +40,7 @@ class ProjectFrame(ttk.LabelFrame):
             text="New Project",
             value=app_parameters.PROJECT_NEW,
             variable=self.selected,
-            command=self.disableLoadingConfig
+            command=self.disable_loading_config
         )
         self.radio_new_project.pack(
             fill="both",
@@ -53,7 +53,7 @@ class ProjectFrame(ttk.LabelFrame):
             text="Load Existing Project",
             value=app_parameters.PROJECT_LOAD,
             variable=self.selected,
-            command=self.enableLoadingConfig
+            command=self.enable_loading_config
         )
         self.radio_load_project.pack(
             fill="both",
@@ -85,25 +85,25 @@ class ProjectFrame(ttk.LabelFrame):
             style="primary.Outline.TButton",
             text="Select file",
             state="disabled",
-            command=self.getFilepathFromRadioOption
+            command=self.get_filepath_from_radio_option
         )
         self.filepath_entry_button.pack(
             side=tk.RIGHT
         )
 
-    def getSelection(self):
+    def get_selection(self):
         return self.selected.get()
 
-    def enableLoadingConfig(self):
+    def enable_loading_config(self):
         self.filepath_entry_button.configure(state="normal")
 
-    def disableLoadingConfig(self):
+    def disable_loading_config(self):
         self.filepath_entry_button.configure(state="disabled")
         self.filepath_text.set("")
 
-    def getFilepathFromRadioOption(self):
+    def get_filepath_from_radio_option(self):
         try:
-            (self.path, *_) = tkfd.askopenfilename(initialdir="C:/")
+            self.path = tkfd.askopenfilename(initialdir="C:/")
             self.filepath_text.set(self.path)
         except ValueError:
             self.filepath_text.set("")

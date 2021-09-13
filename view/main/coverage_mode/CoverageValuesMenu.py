@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class CoverageMenu(ttk.LabelFrame):
+class CoverageValuesMenu(ttk.LabelFrame):
     def __init__(self, parent, controller, *args, **kwargs):
         self.parent = parent
         self.controller = controller
 
         super().__init__(
             self.parent,
-            text="AP Menu",
+            text="Strength Menu",
             *args, **kwargs
         )
         self.pack(

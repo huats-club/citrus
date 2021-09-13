@@ -1,7 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 
+from view.main.coverage_mode.CoverageBar import CoverageBar
+from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
+from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
 from view.main.coverage_mode.CoverageMenu import CoverageMenu
+from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
 
 
 class CoveragePage(ttk.Frame):
@@ -20,33 +24,42 @@ class CoveragePage(ttk.Frame):
         # Create main container
         self.container = ttk.Frame(self)
         self.container.pack(
-            padx=10,
-            pady=10,
+            padx=4,
+            pady=4,
             fill=tk.BOTH,
             expand=True
         )
 
         # Create top half of container
-        self.top_container = ttk.Frame(self.container)
-        self.top_container.pack(
-            padx=10,
-            pady=10,
+        self.left_container = ttk.Frame(self.container)
+        self.left_container.pack(
+            padx=4,
+            pady=4,
             fill=tk.BOTH,
             expand=True,
-            side=tk.TOP
+            side=tk.LEFT
         )
 
         # Create (menu) bottom half of container
-        self.bottom_container = ttk.Frame(self.container)
-        self.bottom_container.pack(
-            padx=10,
-            pady=10,
-            fill=tk.BOTH,
-            expand=True,
-            side=tk.BOTTOM
+        self.right_container = tk.Frame(self.container)
+        self.right_container.pack(
+            padx=4,
+            pady=4,
+            side=tk.RIGHT,
+            fill=tk.BOTH
         )
 
         # Create canvas for left top container
+        self.coverage_canvas = CoverageCanvas(self.left_container, self.controller)
+
+        # Create bottom bar
+        self.coverage_bar = CoverageBar(self.left_container, self.controller)
+
+        # Create coverage menu to upload file
+        self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
 
         # Create coverage menu bar for right top container
-        self.coverage_menu = CoverageMenu(self.top_container)
+        self.coverage_menu = CoverageMenu(self.right_container, self.controller)
+
+        # Create coverage value menu for right top container
+        self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)

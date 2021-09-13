@@ -58,5 +58,5 @@ class InterfaceFrame(ttk.LabelFrame):
         # List of interfaces available for selection
         self.interface_dropdown['values'] = app_parameters.INTERFACE_LIST
 
-    def getInterfaceSelected(self):
+    def get_interface_selected(self):
         return self.interface_dropdown_selection.get()

@@ -99,10 +99,10 @@ class StartPage(tk.Frame):
         )
 
     def get_interface(self):
-        return self.interface_frame.getInterfaceSelected()
+        return self.interface_frame.get_interface_selected()
 
     def get_project_settings(self):
-        return self.project_frame.getSelection()
+        return self.project_frame.get_selection()
 
     def display_error_message(self):
         self.error_text.set("Error! Configurations incomplete.")

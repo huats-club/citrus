@@ -62,7 +62,7 @@ class MainPage(ttk.Notebook):
         )
 
         # Temporarily select spectrum analyzer as main
-        self.select(self.spectrum_page)
+        self.select(self.coverage_page)
 
     def disable_toggle_tab(self):
         for tab_id in self.tabs():
