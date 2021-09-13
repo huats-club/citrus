@@ -63,3 +63,7 @@ class Controller(tk.Frame):
 
     def stop_spectrum_process(self):
         self.sdr_handler.stop()
+
+    def load_dxf_to_canvas(self):
+        print(self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected())
+        pass

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog as tkfd
 from tkinter import ttk
+from tkinter.constants import S
 
 
 class CoverageFileMenu(ttk.LabelFrame):
@@ -44,26 +45,51 @@ class CoverageFileMenu(ttk.LabelFrame):
         self.filepath_text = tk.StringVar()
         self.filepath_entry = ttk.Entry(
             self.filepath_container,
-            width=30,
+            width=45,
             textvariable=self.filepath_text,
             state="readonly"
         )
         self.filepath_entry.pack(
-            side=tk.LEFT
+            side=tk.TOP
         )
+
+        # Container to put buttons
+        self.buttons_container = tk.Frame(
+            self.container
+        )
+        self.buttons_container.pack(
+            side=tk.BOTTOM
+        )
+
         # Button to invoke dialog to select file to open
         self.filepath_entry_button = ttk.Button(
-            self.filepath_container,
+            self.buttons_container,
             style="primary.Outline.TButton",
             text="Select file",
             state="normal",
-            command=self.get_dxf_filepath
+            command=self.select_dxf_filepath
         )
         self.filepath_entry_button.pack(
-            side=tk.RIGHT
+            side=tk.LEFT,
+            padx=10,
+            pady=(5, 0)
         )
 
-    def get_dxf_filepath(self):
+        # Upload dxf button
+        self.upload_button = ttk.Button(
+            self.buttons_container,
+            style="primary.Outline.TButton",
+            text="Open file",
+            state="normal",
+            command=self.controller.load_dxf_to_canvas
+        )
+        self.upload_button.pack(
+            side=tk.RIGHT,
+            padx=10,
+            pady=(5, 0)
+        )
+
+    def select_dxf_filepath(self):
         try:
             self.path = tkfd.askopenfilename(
                 initialdir="C:/", filetypes=(("dxf files", "*.dxf"),
@@ -71,3 +97,6 @@ class CoverageFileMenu(ttk.LabelFrame):
             self.filepath_text.set(self.path)
         except ValueError:
             self.filepath_text.set("")
+
+    def get_dxf_filepath_selected(self):
+        return self.filepath_text.get()
