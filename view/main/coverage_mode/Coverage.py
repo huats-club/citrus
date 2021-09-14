@@ -74,5 +74,12 @@ class CoveragePage(ttk.Frame):
         # try to parse and make sense of dxf
         msp = dxf.modelspace()
         for e in msp:
+            print(e.dxftype())
             if e.dxftype() == 'LINE':
-                print_entity(e)
+                # Draw line onto the canvas
+                self.coverage_canvas.draw_line(
+                    e.dxf.start[0],
+                    e.dxf.start[1],
+                    e.dxf.end[0],
+                    e.dxf.end[1]
+                )

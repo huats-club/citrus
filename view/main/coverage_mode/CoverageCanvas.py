@@ -15,3 +15,6 @@ class CoverageCanvas(tk.Canvas):
             expand=True,  # ensures fill out the the parent
             side=tk.TOP
         )
+
+    def draw_line(self, start_x, start_y, end_x, end_y):
+        self.create_line(start_x, start_y, end_x, end_y)
