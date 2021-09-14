@@ -76,6 +76,8 @@ class CoveragePage(ttk.Frame):
         for e in msp:
             print(e.dxftype())
             if e.dxftype() == 'LINE':
+
+                # TODO: Must do vertical flip (transformation to tkinter coordinate) + scale
                 # Draw line onto the canvas
                 self.coverage_canvas.draw_line(
                     e.dxf.start[0],
