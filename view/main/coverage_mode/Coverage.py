@@ -67,17 +67,16 @@ class CoveragePage(ttk.Frame):
     def display_dxf(self, dxf):
 
         def print_entity(e):
-            print("LINE on layer: %s\n" % e.dxf.layer)
-            print("start point: %s\n" % e.dxf.start)
-            print("end point: %s\n" % e.dxf.end)
+            # print("LINE on layer: %s\n" % e.dxf.layer)
+            # print("start point: %s\n" % e.dxf.start)
+            # print("end point: %s\n" % e.dxf.end)
+            print(f"Start: {e.dxf.start} | End: {e.dxf.end}")
 
         # try to parse and make sense of dxf
         msp = dxf.modelspace()
         for e in msp:
-            print(e.dxftype())
             if e.dxftype() == 'LINE':
-
-                # TODO: Must do vertical flip (transformation to tkinter coordinate) + scale
+                print_entity(e)
                 # Draw line onto the canvas
                 self.coverage_canvas.draw_line(
                     e.dxf.start[0],
