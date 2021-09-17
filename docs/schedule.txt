@@ -11,10 +11,10 @@ Project starts 2021-08-26
 [SDR Tuning] lasts 7 days
 
 [Floorplan Plot] starts 2021-09-11
-[Floorplan Plot] lasts 7 days
+[Floorplan Plot] lasts 14 days
 
 [Heatmap] starts 2021-09-11
-[Heatmap] lasts 7 days
+[Heatmap] lasts 14 days
 
 -- Phase 2 --
 
@@ -22,12 +22,12 @@ Project starts 2021-08-26
 [GUI Completion] happens at [Floorplan Plot]'s end
 [GUI Completion] happens at [Heatmap]'s end
 
-[Wifi chip exploration] starts at [Floorplan Plot]'s end
-[Wifi chip exploration] starts at [Heatmap]'s end
-[Wifi chip exploration] lasts 7 days
+[Wifi chip exploration] starts 2021-09-17
+[Wifi chip exploration] lasts 8 days
 
 [SDR Firm up] starts at [Floorplan Plot]'s end
 [SDR Firm up] starts at [Heatmap]'s end
+[SDR Firm up] starts at [Wifi chip exploration]'s end
 [SDR Firm up] lasts 7 days
 
 -- Phase 3 --
