@@ -72,6 +72,8 @@ class CoveragePage(ttk.Frame):
             # print("end point: %s\n" % e.dxf.end)
             print(f"Start: {e.dxf.start} | End: {e.dxf.end}")
 
+        self.list_object = set()
+
         # try to parse and make sense of dxf
         msp = dxf.modelspace()
         for e in msp:
@@ -84,3 +86,8 @@ class CoveragePage(ttk.Frame):
                     e.dxf.end[0],
                     e.dxf.end[1]
                 )
+
+                self.list_object.add((e.dxf.start[0], e.dxf.start[1]))
+                self.list_object.add((e.dxf.end[0], e.dxf.end[1]))
+
+        print(self.list_object)
