@@ -1,8 +1,7 @@
-
 import tkinter as tk
 from tkinter import ttk
 
-from app_parameters import app_parameters
+from model.dxf2tk import dxf2tk
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
@@ -67,88 +66,42 @@ class CoveragePage(ttk.Frame):
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
 
     def display_dxf(self, dxf):
-
-        def print_entity(e):
-            # print("LINE on layer: %s\n" % e.dxf.layer)
-            # print("start point: %s\n" % e.dxf.start)
-            # print("end point: %s\n" % e.dxf.end)
-            print(f"Start: {e.dxf.start} | End: {e.dxf.end}")
-
-        def print_entity_arc(e):
-            # print("LINE on layer: %s\n" % e.dxf.layer)
-            # print("start point: %s\n" % e.dxf.start)
-            # print("end point: %s\n" % e.dxf.end)
-            print(
-                f"center: {e.dxf.center} | radius: {e.dxf.radius} | start angle: {e.dxf.start_angle} | end angle: {e.dxf.end_angle}")
-
-        self.my_x = set()
-        self.my_y = set()
-        self.lines = []
-        self.arcs = []
+        dxf2tk_converter = dxf2tk()
 
         # try to parse and make sense of dxf
         msp = dxf.modelspace()
         for e in msp:
-
-            temp = {}
-
             if e.dxftype() == 'LINE':
-                self.my_x.add(e.dxf.start[0])
-                self.my_x.add(e.dxf.end[0])
-                self.my_y.add(e.dxf.start[1])
-                self.my_y.add(e.dxf.end[1])
-
-                self.lines.append([e.dxf.start[0], e.dxf.start[1], e.dxf.end[0], e.dxf.end[1]])
+                dxf2tk_converter.add_line(e.dxf.start[0],
+                                          e.dxf.start[1],
+                                          e.dxf.end[0],
+                                          e.dxf.end[1]
+                                          )
 
             if e.dxftype() == 'ARC':
-                center_x = e.dxf.center[0]
-                center_y = e.dxf.center[1]
-                radius = e.dxf.radius
-                start_angle = e.dxf.start_angle
-                end_angle = e.dxf.end_angle
+                dxf2tk_converter.add_arc(e.dxf.center[0],
+                                         e.dxf.center[1],
+                                         e.dxf.radius,
+                                         e.dxf.start_angle,
+                                         e.dxf.end_angle
+                                         )
 
-                self.my_x.add(center_x)
-                self.my_y.add(center_y)
+        converted_lines, converted_arcs = dxf2tk_converter.convert()
 
-                temp['center_x'] = center_x
-                temp['center_y'] = center_y
-                temp['radius'] = radius
-                temp['start_angle'] = start_angle
-                temp['end_angle'] = end_angle
-                self.arcs.append(temp)
-
-        sorted_x = sorted(list(self.my_x))
-        sorted_y = sorted(list(self.my_y))
-
-        x_bound = sorted_x[-1] + sorted_x[0]
-        y_bound = sorted_y[-1] + sorted_y[0]
-
-        for line in self.lines:
-            line[0] = line[0] / x_bound * app_parameters.CANVAS_WIDTH
-            line[2] = line[2] / x_bound * app_parameters.CANVAS_WIDTH
-
-            line[1] = line[1] / y_bound * app_parameters.CANVAS_HEIGHT
-            line[3] = line[3] / y_bound * app_parameters.CANVAS_HEIGHT
-
+        for line in converted_lines:
             self.coverage_canvas.draw_line(
-                line[0],
-                app_parameters.CANVAS_HEIGHT - line[1],
-                line[2],
-                app_parameters.CANVAS_HEIGHT - line[3]
+                line["start_x"],
+                line["start_y"],
+                line["end_x"],
+                line["end_y"]
             )
 
-        for arc in self.arcs:
-            start_x_left_upper = (arc['center_x'] - arc['radius']) / x_bound * app_parameters.CANVAS_WIDTH
-            start_y_left_upper = (arc['center_y'] - arc['radius']) / y_bound * app_parameters.CANVAS_HEIGHT
-
-            end_x_right_lower = (arc['center_x'] + arc['radius']) / x_bound * app_parameters.CANVAS_WIDTH
-            end_y_right_lower = (arc['center_y'] + arc['radius']) / y_bound * app_parameters.CANVAS_HEIGHT
-
+        for arc in converted_arcs:
             self.coverage_canvas.draw_arc(
-                start_x_left_upper,
-                app_parameters.CANVAS_HEIGHT - start_y_left_upper,
-                end_x_right_lower,
-                app_parameters.CANVAS_HEIGHT - end_y_right_lower,
-                arc['start_angle'],
-                360 - (arc['start_angle'] - arc['end_angle'])
+                arc["x_left_upper"],
+                arc["y_left_upper"],
+                arc["x_right_lower"],
+                arc["y_right_lower"],
+                arc["start_angle"],
+                arc["extent"]
             )

@@ -28,10 +28,21 @@ class CoverageCanvas(tk.Canvas):
         # self.bind("<Button-1>", self.canvas_put_point)
 
     def draw_arc(self, start_x, start_y, end_x, end_y, start_angle, extent):
-        self.create_arc(start_x, start_y, end_x, end_y, start=start_angle, extent=extent, style="arc")
+        self.create_arc(start_x,
+                        start_y,
+                        end_x,
+                        end_y,
+                        start=start_angle,
+                        extent=extent,
+                        style="arc"
+                        )
 
     def draw_line(self, start_x, start_y, end_x, end_y):
-        self.create_line(start_x, start_y, end_x, end_y)
+        self.create_line(start_x,
+                         start_y,
+                         end_x,
+                         end_y
+                         )
 
     def canvas_put_point(self, event):
         python_green = "#476042"
