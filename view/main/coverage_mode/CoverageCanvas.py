@@ -20,13 +20,6 @@ class CoverageCanvas(tk.Canvas):
             side=tk.TOP
         )
 
-        # self.bind("<MouseWheel>", self.do_zoom)
-        # self.bind('<ButtonPress-1>', lambda event: self.scan_mark(event.x, event.y))
-        # self.bind("<B1-Motion>", lambda event: self.scan_dragto(event.x, event.y, gain=1))
-
-        # Create event to put points on canvas
-        # self.bind("<Button-1>", self.canvas_put_point)
-
     def draw_arc(self, start_x, start_y, end_x, end_y, start_angle, extent):
         self.create_arc(start_x,
                         start_y,
