@@ -1,0 +1,3 @@
+[submodule "lswifi"]
+	path = lswifi
+	url = https://github.com/joshschmelzle/lswifi
