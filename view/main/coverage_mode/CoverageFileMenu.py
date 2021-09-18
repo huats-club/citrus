@@ -84,6 +84,20 @@ class CoverageFileMenu(ttk.LabelFrame):
             command=self.controller.load_dxf_to_canvas
         )
         self.upload_button.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=(5, 0)
+        )
+
+        # Clear dxf button
+        self.clear_button = ttk.Button(
+            self.buttons_container,
+            style="primary.Outline.TButton",
+            text="Clear file",
+            state="normal",
+            command=self.controller.clear_dxf_from_canvas
+        )
+        self.clear_button.pack(
             side=tk.RIGHT,
             padx=10,
             pady=(5, 0)

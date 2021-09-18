@@ -31,6 +31,9 @@ class Controller(tk.Frame):
         # State variables
         self.is_spectrum_start = False
 
+        # Reset dxf load variable
+        self.dxf_opened = False
+
     # Function to create start (landing) page
     def make_start_page(self):
         self.start = StartPage(self.container, self)
@@ -68,25 +71,41 @@ class Controller(tk.Frame):
         self.sdr_handler.stop()
 
     def load_dxf_to_canvas(self):
-        dxf_file = self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected()
-        try:
-            dxf = ezdxf.readfile(dxf_file)
 
-        except IOError:
-            print(f'Not a DXF file or a generic I/O error.')
-            sys.exit(1)
-        except ezdxf.DXFStructureError:
-            print(f'Invalid or corrupted DXF file.')
-            sys.exit(2)
+        if self.dxf_opened == False:
+            dxf_file = self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected()
+            try:
+                dxf = ezdxf.readfile(dxf_file)
 
-        # For debugging
-        print(f"Opened {dxf_file}")
+            except IOError:
+                print(f'Not a DXF file or a generic I/O error.')
+                sys.exit(1)
+            except ezdxf.DXFStructureError:
+                print(f'Invalid or corrupted DXF file.')
+                sys.exit(2)
 
-        # Save file as class member
-        self.dxf = dxf
+            # For debugging
+            print(f"Opened {dxf_file}")
 
-        # Display dxf file
-        self.display_dxf()
+            # Save file as class member
+            self.dxf = dxf
+
+            # Display dxf file
+            self.display_dxf()
+
+            # Flag to indicate dxf already opened
+            self.dxf_opened = True
+
+        else:
+            print("Dxf already opened, consider clearing canvas first")
 
     def display_dxf(self):
         self.main_page.coverage_page.display_dxf(self.dxf)
+
+    def clear_dxf_from_canvas(self):
+        if self.dxf_opened == True:
+            self.main_page.coverage_page.coverage_canvas.delete("all")
+            self.dxf_opened = False
+
+        else:
+            print("nothing to clear")
