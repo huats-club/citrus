@@ -55,7 +55,8 @@ class CoverageBar(ttk.Frame):
         self.scan_button = ttk.Button(
             self.view_container,
             style="primary.TButton",
-            text="Scan".center(self.STRING_LENGTH, ' ')
+            text="Scan".center(self.STRING_LENGTH, ' '),
+            command=self.controller.do_scan
         )
         self.scan_button.pack(
             side=tk.LEFT,
@@ -86,3 +87,9 @@ class CoverageBar(ttk.Frame):
             padx=10,
             pady=5
         )
+
+    def disable_scan_button(self):
+        self.scan_button.state = tk.DISABLED
+
+    def enable_scan_button(self):
+        self.scan_button.state = tk.NORMAL

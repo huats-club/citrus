@@ -109,3 +109,21 @@ class Controller(tk.Frame):
 
         else:
             print("nothing to clear")
+
+    def do_scan(self):
+
+        # Do scan only if dxf is opened
+        if self.dxf_opened:
+
+            # If wifi, run lswifi scan
+            if self.current_interface == app_parameters.INTERFACE_WIFI:
+                print("scan wifi")
+
+            # If limesdr, run limesdr scan
+            if self.current_interface == app_parameters.INTERFACE_SDR:
+                print("scan sdr")
+
+        # Else, prompt dxf to be loaded
+        else:
+            self.main_page.coverage_page.set_no_dxf_error_message()
+            self.main_page.coverage_page.disable_scan_button()

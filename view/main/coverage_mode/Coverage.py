@@ -5,6 +5,7 @@ from model.dxf2tk import dxf2tk
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
+from view.main.coverage_mode.CoverageInfoPanel import CoverageInfoPanel
 from view.main.coverage_mode.CoverageMenu import CoverageMenu
 from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
 
@@ -65,6 +66,9 @@ class CoveragePage(ttk.Frame):
         # Create coverage value menu for right top container
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
 
+        # Create error message bar
+        self.coverage_info_panel = CoverageInfoPanel(self.right_container, self.controller)
+
     def display_dxf(self, dxf):
         dxf2tk_converter = dxf2tk()
 
@@ -105,3 +109,16 @@ class CoveragePage(ttk.Frame):
                 arc["start_angle"],
                 arc["extent"]
             )
+
+    def set_no_dxf_error_message(self):
+        self.coverage_info_panel.warning_text.set("Error! No dxf file selected.")
+        self.after(5000, self.clear_no_dxf_error_message)
+
+    def clear_no_dxf_error_message(self):
+        self.coverage_info_panel.warning_text.set("")
+
+    def disable_scan_button(self):
+        self.coverage_bar.disable_scan_button()
+
+    def enable_scan_button(self):
+        self.coverage_bar.enable_scan_button()
