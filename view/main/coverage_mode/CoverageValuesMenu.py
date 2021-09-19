@@ -19,6 +19,7 @@ class CoverageValuesMenu(ttk.LabelFrame):
             anchor=tk.NW,
             fill=tk.BOTH
         )
+
         # Create panel for input of start/stop freq
         self.panel_container = ttk.Frame(self)
         self.panel_container.pack(

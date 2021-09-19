@@ -121,6 +121,7 @@ class Controller(tk.Frame):
                 print("scan wifi")
                 wifi_scanner = WifiScanner()
                 results = wifi_scanner.scan()
+                self.main_page.coverage_page.populate_wifi_scan_results(results)
 
             # If limesdr, run limesdr scan
             if self.current_interface == app_parameters.INTERFACE_SDR:

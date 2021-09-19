@@ -122,3 +122,6 @@ class CoveragePage(ttk.Frame):
 
     def enable_scan_button(self):
         self.coverage_bar.enable_scan_button()
+
+    def populate_wifi_scan_results(self, json_list):
+        self.coverage_menu.populate_wifi_scan_results(json_list)
