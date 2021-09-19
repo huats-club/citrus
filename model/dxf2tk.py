@@ -62,8 +62,14 @@ class dxf2tk:
         self.sorted_x_list = sorted(list(self.x_list))
         self.sorted_y_list = sorted(list(self.y_list))
 
-        self.x_bound = self.sorted_x_list[-1] + self.sorted_x_list[0]
-        self.y_bound = self.sorted_y_list[-1] + self.sorted_y_list[0]
+        self.x_min = self.sorted_x_list[0]
+        self.y_min = self.sorted_y_list[0]
+        self.x_max = self.sorted_x_list[-1]
+        self.y_max = self.sorted_y_list[-1]
+
+        # Maximum bound of dxf values
+        self.x_bound = self.x_min + self.x_max
+        self.y_bound = self.y_min + self.y_max
 
         # Store all lines / arcs in list of dictionary
         self.converted_lines = []
