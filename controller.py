@@ -6,6 +6,7 @@ import ezdxf
 
 from app_parameters import app_parameters
 from model.SDRHandler import SDRHandler
+from model.WifiScanner import WifiScanner
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
@@ -118,6 +119,8 @@ class Controller(tk.Frame):
             # If wifi, run lswifi scan
             if self.current_interface == app_parameters.INTERFACE_WIFI:
                 print("scan wifi")
+                wifi_scanner = WifiScanner()
+                results = wifi_scanner.scan()
 
             # If limesdr, run limesdr scan
             if self.current_interface == app_parameters.INTERFACE_SDR:
