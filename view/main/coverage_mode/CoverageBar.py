@@ -51,19 +51,6 @@ class CoverageBar(ttk.Frame):
             pady=5
         )
 
-        # Create scan button
-        self.scan_button = ttk.Button(
-            self.view_container,
-            style="primary.Outline.TButton",
-            text="Scan".center(self.STRING_LENGTH, ' '),
-            command=self.controller.do_scan
-        )
-        self.scan_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=5
-        )
-
         # Create plot button
         self.plot_button = ttk.Button(
             self.plot_container,
@@ -87,9 +74,3 @@ class CoverageBar(ttk.Frame):
             padx=10,
             pady=5
         )
-
-    def disable_scan_button(self):
-        self.scan_button.state = tk.DISABLED
-
-    def enable_scan_button(self):
-        self.scan_button.state = tk.NORMAL

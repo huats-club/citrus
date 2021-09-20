@@ -4,9 +4,9 @@ from tkinter import ttk
 from model.dxf2tk import dxf2tk
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
+from view.main.coverage_mode.CoverageDataDisplay import CoverageDataDisplay
 from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
 from view.main.coverage_mode.CoverageInfoPanel import CoverageInfoPanel
-from view.main.coverage_mode.CoverageMenu import CoverageMenu
 from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
 
 
@@ -61,7 +61,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
 
         # Create coverage menu bar for right top container
-        self.coverage_menu = CoverageMenu(self.right_container, self.controller)
+        self.coverage_display_data = CoverageDataDisplay(self.right_container, self.controller)
 
         # Create coverage value menu for right top container
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
@@ -118,13 +118,13 @@ class CoveragePage(ttk.Frame):
         self.coverage_info_panel.warning_text.set("")
 
     def disable_scan_button(self):
-        self.coverage_bar.disable_scan_button()
+        self.coverage_display_data.disable_scan_button()
 
     def enable_scan_button(self):
-        self.coverage_bar.enable_scan_button()
+        self.coverage_display_data.enable_scan_button()
 
     def populate_wifi_scan_results(self, json_list):
-        self.coverage_menu.populate_wifi_scan_results(json_list)
+        self.coverage_display_data.populate_wifi_scan_results(json_list)
 
     def clear_wifi_scan_results(self):
-        self.coverage_menu.clear_wifi_scan_results()
+        self.coverage_display_data.clear_wifi_scan_results()
