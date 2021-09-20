@@ -17,8 +17,11 @@ class CoverageMenu(ttk.LabelFrame):
             pady=10,
             side=tk.TOP,
             anchor=tk.NW,
-            fill=tk.BOTH
+            fill=tk.X
         )
+
+        # iid for entries
+        self.idx = 0
 
         # Create panel for display ssid, strength, mac and channel
         self.panel_container = ttk.Frame(self)
@@ -37,6 +40,13 @@ class CoverageMenu(ttk.LabelFrame):
             'rssi',
             'channel'
         ]
+
+        self.column_width = {
+            'ssid': 160,
+            'bssid': 140,
+            'rssi': 40,
+            'channel': 80
+        }
 
         # Create display treeview panel to show wifi data
         self.panel = ttk.Treeview(
@@ -57,7 +67,7 @@ class CoverageMenu(ttk.LabelFrame):
         for column_name in self.column_names:
             self.panel.column(
                 column_name,
-                width=100,
+                width=self.column_width[column_name],
                 anchor=tk.CENTER
             )
             self.panel.heading(
@@ -67,9 +77,8 @@ class CoverageMenu(ttk.LabelFrame):
             )
 
     def populate_wifi_scan_results(self, json_list):
-        idx = 0
-        for json in json_list:
 
+        for json in json_list:
             ssid = json['ssid']
             bssid = json['bssid']
             rssi = json['rssi']
@@ -77,9 +86,12 @@ class CoverageMenu(ttk.LabelFrame):
 
             self.panel.insert(
                 parent="",
-                index=idx,
-                iid=idx,
+                index=self.idx,
+                iid=self.idx,
                 text="",
                 values=(ssid, bssid, rssi, channel)
             )
-            idx += 1
+            self.idx += 1
+
+    def clear_wifi_scan_results(self):
+        self.panel.delete(*self.panel.get_children())

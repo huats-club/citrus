@@ -125,3 +125,6 @@ class CoveragePage(ttk.Frame):
 
     def populate_wifi_scan_results(self, json_list):
         self.coverage_menu.populate_wifi_scan_results(json_list)
+
+    def clear_wifi_scan_results(self):
+        self.coverage_menu.clear_wifi_scan_results()

@@ -108,10 +108,15 @@ class Controller(tk.Frame):
             self.main_page.coverage_page.coverage_canvas.delete("all")
             self.dxf_opened = False
 
+            self.main_page.coverage_page.clear_wifi_scan_results()
+
         else:
             print("nothing to clear")
 
     def do_scan(self):
+
+        # clear scan first
+        self.main_page.coverage_page.clear_wifi_scan_results()
 
         # Do scan only if dxf is opened
         if self.dxf_opened:
