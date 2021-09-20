@@ -42,7 +42,7 @@ class CoverageBar(ttk.Frame):
         # Create pan button
         self.pan_button = ttk.Button(
             self.view_container,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Pan".center(self.STRING_LENGTH, ' ')
         )
         self.pan_button.pack(
@@ -54,7 +54,7 @@ class CoverageBar(ttk.Frame):
         # Create scan button
         self.scan_button = ttk.Button(
             self.view_container,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Scan".center(self.STRING_LENGTH, ' '),
             command=self.controller.do_scan
         )
@@ -67,7 +67,7 @@ class CoverageBar(ttk.Frame):
         # Create plot button
         self.plot_button = ttk.Button(
             self.plot_container,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Plot".center(self.STRING_LENGTH, ' ')
         )
         self.plot_button.pack(
@@ -79,7 +79,7 @@ class CoverageBar(ttk.Frame):
         # Create combine button
         self.combine_button = ttk.Button(
             self.plot_container,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Combine".center(self.STRING_LENGTH, ' ')
         )
         self.combine_button.pack(
