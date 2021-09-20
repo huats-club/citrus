@@ -67,7 +67,19 @@ class CoverageMenu(ttk.LabelFrame):
             )
 
     def populate_wifi_scan_results(self, json_list):
-
+        idx = 0
         for json in json_list:
-            print(json['ssid'], json['bssid'], json['apname'], json['rssi'],
-                  f"{json['channel_frequency']}|{json['channel_number']}|{json['channel_width']}")
+
+            ssid = json['ssid']
+            bssid = json['bssid']
+            rssi = json['rssi']
+            channel = json['channel_frequency'] + json['channel_number'] + json['channel_width']
+
+            self.panel.insert(
+                parent="",
+                index=idx,
+                iid=idx,
+                text="",
+                values=(ssid, bssid, rssi, channel)
+            )
+            idx += 1
