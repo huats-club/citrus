@@ -131,3 +131,6 @@ class Controller(tk.Frame):
         else:
             self.main_page.coverage_page.set_no_dxf_error_message()
             self.main_page.coverage_page.disable_scan_button()
+
+    def configure_rssi_sensitivity(self):
+        print("configure rssi sensitivity")
