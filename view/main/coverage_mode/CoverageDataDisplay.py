@@ -41,14 +41,16 @@ class CoverageDataDisplay(ttk.LabelFrame):
             'ssid',
             'bssid',
             'rssi',
-            'channel'
+            'freq',
+            'channel[#@MHz]'
         ]
 
         self.column_width = {
             'ssid': 160,
             'bssid': 140,
             'rssi': 40,
-            'channel': 80
+            'freq': 50,
+            'channel[#@MHz]': 120
         }
 
         # Create display treeview panel to show wifi data
@@ -71,7 +73,7 @@ class CoverageDataDisplay(ttk.LabelFrame):
             self.panel.column(
                 column_name,
                 width=self.column_width[column_name],
-                anchor=tk.CENTER
+                anchor=tk.W
             )
             self.panel.heading(
                 column_name,
@@ -119,14 +121,15 @@ class CoverageDataDisplay(ttk.LabelFrame):
             ssid = json['ssid']
             bssid = json['bssid']
             rssi = json['rssi']
-            channel = json['channel_frequency'] + json['channel_number'] + json['channel_width']
+            freq = json['channel_frequency']
+            channel = json['channel_number'] + "@" + json['channel_width']
 
             self.panel.insert(
                 parent="",
                 index=self.idx,
                 iid=self.idx,
                 text="",
-                values=(ssid, bssid, rssi, channel)
+                values=(ssid, bssid, rssi, freq, channel)
             )
             self.idx += 1
 

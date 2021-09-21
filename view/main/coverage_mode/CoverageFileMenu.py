@@ -45,7 +45,7 @@ class CoverageFileMenu(ttk.LabelFrame):
         self.filepath_text = tk.StringVar()
         self.filepath_entry = ttk.Entry(
             self.filepath_container,
-            width=45,
+            width=70,
             textvariable=self.filepath_text,
             state="readonly"
         )
