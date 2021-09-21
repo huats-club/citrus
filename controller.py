@@ -7,6 +7,7 @@ import ezdxf
 from app_parameters import app_parameters
 from model.SDRHandler import SDRHandler
 from model.WifiScanner import WifiScanner
+from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
@@ -97,8 +98,12 @@ class Controller(tk.Frame):
             # Flag to indicate dxf already opened
             self.dxf_opened = True
 
+            # Enable plotting of points
+            self.main_page.coverage_page.enable_canvas_click()
+
         else:
             print("Dxf already opened, consider clearing canvas first")
+            self.main_page.coverage_page.disable_canvas_click()
 
     def display_dxf(self):
         self.main_page.coverage_page.display_dxf(self.dxf)
@@ -109,6 +114,9 @@ class Controller(tk.Frame):
             self.dxf_opened = False
 
             self.main_page.coverage_page.clear_wifi_scan_results()
+
+            # Disable canvas click
+            self.main_page.coverage_page.disable_canvas_click()
 
         else:
             print("nothing to clear")

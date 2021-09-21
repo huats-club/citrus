@@ -128,3 +128,9 @@ class CoveragePage(ttk.Frame):
 
     def clear_wifi_scan_results(self):
         self.coverage_display_data.clear_wifi_scan_results()
+
+    def enable_canvas_click(self):
+        self.coverage_canvas.enable_click()
+
+    def disable_canvas_click(self):
+        self.coverage_canvas.disable_click()

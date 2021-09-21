@@ -18,6 +18,14 @@ class CoverageCanvas(tk.Canvas):
             side=tk.TOP
         )
 
+    def enable_click(self):
+        # Bind button click to out point
+        self.bind("<Button-1>", self.canvas_put_point)
+
+    def disable_click(self):
+        # Bind button click to out point
+        self.unbind("<Button-1>")
+
     def draw_arc(self, start_x, start_y, end_x, end_y, start_angle, extent):
         self.create_arc(start_x,
                         start_y,
