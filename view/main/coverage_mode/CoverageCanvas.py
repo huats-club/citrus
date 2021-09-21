@@ -23,7 +23,6 @@ class CoverageCanvas(tk.Canvas):
         self.bind("<Button-1>", self.canvas_put_point)
 
     def disable_click(self):
-        # Bind button click to out point
         self.unbind("<Button-1>")
 
     def draw_arc(self, start_x, start_y, end_x, end_y, start_angle, extent):
