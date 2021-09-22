@@ -4,9 +4,10 @@ from app_parameters import app_parameters
 
 
 class CoverageCanvas(tk.Canvas):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, coverage, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.coverage = coverage
 
         super().__init__(self.parent,
                          width=app_parameters.CANVAS_WIDTH,
@@ -51,3 +52,6 @@ class CoverageCanvas(tk.Canvas):
 
         # Display oval drawing
         self.create_oval(x1, y1, x2, y2, fill=python_green)
+
+        # Record point and associate with current selected wifi
+        self.coverage.add_point_data(event.x, event.y)

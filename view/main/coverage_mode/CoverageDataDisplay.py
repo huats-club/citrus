@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from tkinter import ttk
 
@@ -158,3 +159,6 @@ class CoverageDataDisplay(ttk.LabelFrame):
             idx += 1
 
         print(self.current_selected)
+
+    def get_current_selected(self):
+        return copy.deepcopy(self.current_selected)

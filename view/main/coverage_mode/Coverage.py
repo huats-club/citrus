@@ -16,7 +16,7 @@ class CoveragePage(ttk.Frame):
         self.controller = controller
 
         # Collect point (x,y) data
-        self.canvas_points = []
+        self.recorded_points = []
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -55,7 +55,7 @@ class CoveragePage(ttk.Frame):
         )
 
         # Create canvas for left top container
-        self.coverage_canvas = CoverageCanvas(self.left_container, self.controller)
+        self.coverage_canvas = CoverageCanvas(self.left_container, self.controller, self)
 
         # Create bottom bar
         self.coverage_bar = CoverageBar(self.left_container, self.controller)
@@ -138,5 +138,17 @@ class CoveragePage(ttk.Frame):
     def disable_canvas_click(self):
         self.coverage_canvas.disable_click()
 
-    def add_point_data(self, x, y, data):
-        pass
+    def add_point_data(self, x, y):
+        # Get currently select wifi data
+        wifi_selected = self.coverage_display_data.get_current_selected()
+
+        # Add to list
+        self.recorded_points.append(
+            {
+                'tk_x': x,
+                'tk_y': y,
+                'wifi_data_selected': wifi_selected
+            }
+        )
+
+        print(self.recorded_points)
