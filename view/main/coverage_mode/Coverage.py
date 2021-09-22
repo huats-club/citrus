@@ -15,6 +15,9 @@ class CoveragePage(ttk.Frame):
         self.parent = parent
         self.controller = controller
 
+        # Collect point (x,y) data
+        self.canvas_points = []
+
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
             padx=10,
@@ -134,3 +137,6 @@ class CoveragePage(ttk.Frame):
 
     def disable_canvas_click(self):
         self.coverage_canvas.disable_click()
+
+    def add_point_data(self, x, y, data):
+        pass

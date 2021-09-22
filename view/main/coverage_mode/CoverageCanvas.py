@@ -46,8 +46,8 @@ class CoverageCanvas(tk.Canvas):
         python_green = "#476042"
 
         # Get points from button click
-        x1, y1 = (event.x - 2), (event.y - 2)
-        x2, y2 = (event.x + 2), (event.y + 2)
+        x1, y1 = (event.x - 5), (event.y - 5)
+        x2, y2 = (event.x + 5), (event.y + 5)
 
         # Display oval drawing
         self.create_oval(x1, y1, x2, y2, fill=python_green)

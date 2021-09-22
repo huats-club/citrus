@@ -36,6 +36,9 @@ class Controller(tk.Frame):
         # Reset dxf load variable
         self.dxf_opened = False
 
+        # Scan results done
+        self.scan_done = False
+
     # Function to create start (landing) page
     def make_start_page(self):
         self.start = StartPage(self.container, self)
@@ -129,12 +132,18 @@ class Controller(tk.Frame):
         # Do scan only if dxf is opened
         if self.dxf_opened:
 
+            if self.scan_done:
+                self.main_page.coverage_page.clear_wifi_scan_results()
+                self.scan_done = False
+
             # If wifi, run lswifi scan
             if self.current_interface == app_parameters.INTERFACE_WIFI:
-                print("scan wifi")
                 wifi_scanner = WifiScanner()
                 results = wifi_scanner.scan()
                 self.main_page.coverage_page.populate_wifi_scan_results(results)
+
+                # Indicate scan is done
+                self.scan_done = True
 
             # If limesdr, run limesdr scan
             if self.current_interface == app_parameters.INTERFACE_SDR:

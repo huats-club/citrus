@@ -7,6 +7,9 @@ class CoverageDataDisplay(ttk.LabelFrame):
         self.parent = parent
         self.controller = controller
 
+        # Currently selected row of data
+        self.current_selected = {}
+
         # String length for button
         self.STRING_LENGTH = 10
 
@@ -81,9 +84,12 @@ class CoverageDataDisplay(ttk.LabelFrame):
                 anchor=tk.CENTER
             )
 
+        # Allow clicking of treeview items
+        self.panel.bind('<ButtonRelease-1>', self.selectItem)
+
         # Container for button utilities
-        self.plot_container = ttk.Frame(self)
-        self.plot_container.pack(
+        self.button_container = ttk.Frame(self)
+        self.button_container.pack(
             padx=5,
             side=tk.BOTTOM,
             anchor=tk.CENTER
@@ -91,7 +97,7 @@ class CoverageDataDisplay(ttk.LabelFrame):
 
         # Create scan button
         self.scan_button = ttk.Button(
-            self.plot_container,
+            self.button_container,
             style="primary.Outline.TButton",
             text="Scan".center(self.STRING_LENGTH, ' '),
             command=self.controller.do_scan
@@ -104,7 +110,7 @@ class CoverageDataDisplay(ttk.LabelFrame):
 
         # Create clear button
         self.clear_button = ttk.Button(
-            self.plot_container,
+            self.button_container,
             style="primary.Outline.TButton",
             text="Clear".center(self.STRING_LENGTH, ' '),
             command=self.clear_wifi_scan_results
@@ -141,3 +147,14 @@ class CoverageDataDisplay(ttk.LabelFrame):
 
     def enable_scan_button(self):
         self.scan_button.state = tk.NORMAL
+
+    def selectItem(self, a):
+        curItem = self.panel.focus()
+        data = self.panel.item(curItem)['values']
+
+        idx = 0
+        for name in self.column_names:
+            self.current_selected[name] = data[idx]
+            idx += 1
+
+        print(self.current_selected)
