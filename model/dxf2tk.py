@@ -2,7 +2,8 @@ from app_parameters import app_parameters
 
 
 class dxf2tk:
-    def __init__(self):
+    def __init__(self, coverage):
+        self.coverage = coverage
         self.x_list = set()
         self.y_list = set()
         self.lines = []
@@ -70,6 +71,10 @@ class dxf2tk:
         # Maximum bound of dxf values
         self.x_bound = self.x_min + self.x_max
         self.y_bound = self.y_min + self.y_max
+
+        # Save bounds in controller also
+        self.coverage.x_bound = self.x_bound
+        self.coverage.y_bound = self.y_bound
 
         # Store all lines / arcs in list of dictionary
         self.converted_lines = []

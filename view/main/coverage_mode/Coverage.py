@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from model.dxf2tk import dxf2tk
+from model.tk2dxf import tk2dxf
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageDataDisplay import CoverageDataDisplay
@@ -14,6 +15,10 @@ class CoveragePage(ttk.Frame):
     def __init__(self, parent, controller, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+
+        # Save current canvas x and y bounds
+        self.x_bound = -1
+        self.y_bound = -1
 
         # Collect point (x,y) data
         self.recorded_points = []
@@ -73,7 +78,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_info_panel = CoverageInfoPanel(self.right_container, self.controller)
 
     def display_dxf(self, dxf):
-        dxf2tk_converter = dxf2tk()
+        dxf2tk_converter = dxf2tk(self)
 
         # try to parse and make sense of dxf
         msp = dxf.modelspace()
@@ -154,9 +159,13 @@ class CoveragePage(ttk.Frame):
             data
         )
 
+        tk2dxf_converter = tk2dxf(self)
+
         # Save coordinates in log
         with open(self.controller.log_name, 'a+') as f:
-            f.write(f"tk_x: {data['tk_x']} | tk_y: {data['tk_y']}\n")
+            conv_x = tk2dxf_converter.tk2dxf_convert_x(data['tk_x'])
+            conv_y = tk2dxf_converter.tk2dxf_convert_y(data['tk_y'])
+            f.write(f"x: {conv_x} | y: {conv_y}\n")
 
         # Save wifi data in json log
         with open(self.controller.log_json, 'a+') as f:
