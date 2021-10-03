@@ -1,10 +1,7 @@
-import os
 import tkinter as tk
 from tkinter import ttk
 
 from model.dxf2tk import dxf2tk
-from model.tk2dxf import tk2dxf
-from PIL import Image
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageDataDisplay import CoverageDataDisplay
@@ -120,12 +117,7 @@ class CoveragePage(ttk.Frame):
                 arc["extent"]
             )
 
-        # Save dxf plot into png
-        self.coverage_canvas.postscript(file="test.eps")
-        img = Image.open("test.eps")
-        img.save("test.png", "png")
-        img.close()
-        os.remove("test.eps")
+        self.after(500, self.coverage_canvas.capture)
 
     def set_no_dxf_error_message(self):
         self.coverage_info_panel.warning_text.set("Error! No dxf file selected.")
@@ -168,12 +160,12 @@ class CoveragePage(ttk.Frame):
             data
         )
 
-        tk2dxf_converter = tk2dxf(self)
-
         # Save coordinates in log
         with open(self.controller.log_name, 'a+') as f:
-            conv_x = tk2dxf_converter.tk2dxf_convert_x(data['tk_x'])
-            conv_y = tk2dxf_converter.tk2dxf_convert_y(data['tk_y'])
+            # conv_x = tk2dxf_converter.tk2dxf_convert_x(data['tk_x'])
+            # conv_y = tk2dxf_converter.tk2dxf_convert_y(data['tk_y'])
+            conv_x = data['tk_x']
+            conv_y = data['tk_y']
             f.write(f"x: {conv_x} | y: {conv_y}\n")
 
         # Save wifi data in json log

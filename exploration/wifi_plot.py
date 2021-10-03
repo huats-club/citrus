@@ -7,7 +7,7 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as pp
 import numpy as np
 from matplotlib.font_manager import FontManager
-from pylab import imread, imshow
+from pylab import imread
 from scipy.interpolate import Rbf
 
 # Create file path to current source directory
@@ -48,7 +48,7 @@ for item in store:
         survey_points[k].append(item[k])
 
 # Read in floorplan image
-floorplan_filepath = source_path + r"\floorplan\scaled.png"
+floorplan_filepath = source_path + r"\test.png"
 
 floorplan = imread(floorplan_filepath)
 floorplan_width = len(floorplan[0])

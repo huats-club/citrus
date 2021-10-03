@@ -1,0 +1,10 @@
+{'ssid': 'NOKIA-2291', 'bssid': '08:9b:b9:1c:22:9a', 'rssi': -66, 'freq': 2447, 'channel[#@MHz]': '8@20'}
+{'ssid': 'NOKIA-2291', 'bssid': '08:9b:b9:1c:22:9a', 'rssi': -66, 'freq': 2447, 'channel[#@MHz]': '8@20'}
+{'ssid': 'NOKIA-2291', 'bssid': '08:9b:b9:1c:22:9a', 'rssi': -66, 'freq': 2447, 'channel[#@MHz]': '8@20'}
+{'ssid': 'NOKIA-2291', 'bssid': '08:9b:b9:1c:22:9a', 'rssi': -66, 'freq': 2447, 'channel[#@MHz]': '8@20'}
+{'ssid': 'NOKIA-2291', 'bssid': '08:9b:b9:1c:22:9a', 'rssi': -66, 'freq': 2447, 'channel[#@MHz]': '8@20'}
+{'ssid': 'SINGTEL-6F09 5G', 'bssid': '4c:1b:86:a5:6f:0b', 'rssi': -93, 'freq': 5805, 'channel[#@MHz]': '161@80'}
+{'ssid': 'SINGTEL-6F09 5G', 'bssid': '4c:1b:86:a5:6f:0b', 'rssi': -93, 'freq': 5805, 'channel[#@MHz]': '161@80'}
+{'ssid': 'thankyou', 'bssid': '04:92:26:88:1f:5c', 'rssi': -82, 'freq': 2437, 'channel[#@MHz]': '6@20'}
+{'ssid': 'thankyou', 'bssid': '04:92:26:88:1f:5c', 'rssi': -82, 'freq': 2437, 'channel[#@MHz]': '6@20'}
+{'ssid': 'thankyou', 'bssid': '04:92:26:88:1f:5c', 'rssi': -82, 'freq': 2437, 'channel[#@MHz]': '6@20'}

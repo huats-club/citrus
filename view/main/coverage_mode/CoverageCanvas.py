@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from app_parameters import app_parameters
+from PIL import ImageGrab
 
 
 class CoverageCanvas(tk.Canvas):
@@ -55,3 +56,15 @@ class CoverageCanvas(tk.Canvas):
 
         # Record point and associate with current selected wifi
         self.coverage.add_point_data(event.x, event.y)
+
+    def capture(self):
+
+        # Create image to save canvas to
+        box = (
+            self.winfo_rootx(),
+            self.winfo_rooty(),
+            self.winfo_rootx() + self.winfo_width(),
+            self.winfo_rooty() + self.winfo_height()
+        )
+        grab = ImageGrab.grab(bbox=box)
+        grab.save("test.png")
