@@ -113,4 +113,4 @@ class CoverageFileMenu(ttk.LabelFrame):
             self.filepath_text.set("")
 
     def get_dxf_filepath_selected(self):
-        return self.filepath_text.get()
+        return self.filepath_text.get(), self.filepath_text.get().split("/")[-1]

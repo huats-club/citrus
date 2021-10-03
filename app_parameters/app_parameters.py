@@ -1,7 +1,9 @@
 from app_util.app_util import resource_path
 
 ### Main App parameters ###
-WORKSPACE_FOLDER = 'workspace'
+WORKSPACE_FOLDER = r'workspace'
+PRIVATE_FOLDER = r'workspace\cached'
+
 APP_HEIGHT = 800
 APP_WIDTH = 1500
 APP_TITLE = "Citrus"
@@ -29,3 +31,11 @@ SPECTRUM_PLOT_UNITSD_Y = "Signal Strength"
 
 CANVAS_HEIGHT = 800
 CANVAS_WIDTH = 1200
+
+POINT_KEY_TK_X = 'tk_x'
+POINT_KEY_TK_Y = 'tk_y'
+POINT_KEY_WIFI_DATA = 'wifi_data'
+
+WIFI_HEATMAP_PLOT_X = 'x'
+WIFI_HEATMAP_PLOT_Y = 'y'
+WIFI_HEATMAP_PLOT_RSSI = 'x'

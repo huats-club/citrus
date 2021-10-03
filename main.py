@@ -17,10 +17,12 @@ if __name__ == "__main__":
     # Check folder path for user data
     if os.path.exists(app_parameters.WORKSPACE_FOLDER) and IS_TESTING:
         shutil.rmtree(app_parameters.WORKSPACE_FOLDER)
-        os.makedirs(app_parameters.WORKSPACE_FOLDER)
+        os.mkdir(app_parameters.WORKSPACE_FOLDER)
+        os.mkdir(app_parameters.PRIVATE_FOLDER)
 
     if not os.path.exists(app_parameters.WORKSPACE_FOLDER):
-        os.makedirs(app_parameters.WORKSPACE_FOLDER)
+        os.mkdir(app_parameters.WORKSPACE_FOLDER)
+        os.mkdir(app_parameters.PRIVATE_FOLDER)
 
     # Initialize Tk GUI in main thread
     root = tk.Tk()

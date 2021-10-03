@@ -67,4 +67,4 @@ class CoverageCanvas(tk.Canvas):
             self.winfo_rooty() + self.winfo_height()
         )
         grab = ImageGrab.grab(bbox=box)
-        grab.save("test.png")
+        grab.save(self.controller.floorplan_saved_image_path)

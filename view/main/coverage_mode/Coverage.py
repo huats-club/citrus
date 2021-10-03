@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 
+from app_parameters import app_parameters
 from model.dxf2tk import dxf2tk
+from model.WifiHeatmapPlotter import WifiHeatmapPlotter
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageDataDisplay import CoverageDataDisplay
@@ -21,6 +23,7 @@ class CoveragePage(ttk.Frame):
 
         # Collect point (x,y) data
         self.recorded_points = []
+        self.has_points = False
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -121,14 +124,11 @@ class CoveragePage(ttk.Frame):
                 arc["extent"]
             )
 
-        self.after(500, self.coverage_canvas.capture)
+    def capture_canvas(self):
+        self.coverage_canvas.capture()
 
     def set_no_dxf_error_message(self):
-        self.coverage_info_panel.warning_text.set("Error! No dxf file selected.")
-        self.after(5000, self.clear_no_dxf_error_message)
-
-    def clear_no_dxf_error_message(self):
-        self.coverage_info_panel.warning_text.set("")
+        self.coverage_info_panel.set_no_dxf_error_message()
 
     def disable_scan_button(self):
         self.coverage_display_data.disable_scan_button()
@@ -141,6 +141,7 @@ class CoveragePage(ttk.Frame):
 
     def clear_wifi_scan_results(self):
         self.recorded_points = []
+        self.has_points = False
         self.coverage_display_data.clear_wifi_scan_results()
 
     def enable_canvas_click(self):
@@ -155,9 +156,9 @@ class CoveragePage(ttk.Frame):
 
         # Prepared dictionary
         data = {
-            'tk_x': x,
-            'tk_y': y,
-            'wifi_data_selected': wifi_selected
+            app_parameters.POINT_KEY_TK_X: x,
+            app_parameters.POINT_KEY_TK_Y: y,
+            app_parameters.POINT_KEY_WIFI_DATA: wifi_selected
         }
 
         # Add to list
@@ -165,14 +166,30 @@ class CoveragePage(ttk.Frame):
             data
         )
 
+        # Indicate flag that points exist
+        self.has_points = True
+
         # Save coordinates in log
         with open(self.controller.log_name, 'a+') as f:
-            # conv_x = tk2dxf_converter.tk2dxf_convert_x(data['tk_x'])
-            # conv_y = tk2dxf_converter.tk2dxf_convert_y(data['tk_y'])
-            conv_x = data['tk_x']
-            conv_y = data['tk_y']
+            conv_x = data[app_parameters.POINT_KEY_TK_X]
+            conv_y = data[app_parameters.POINT_KEY_TK_Y]
             f.write(f"x: {conv_x} | y: {conv_y}\n")
 
         # Save wifi data in json log
         with open(self.controller.log_json, 'a+') as f:
             f.write(f"{wifi_selected}\n")
+
+    # Save whatever plot is on the tkinter if valid heatmap
+    def save_heatmap_plot(self):
+
+        # Save plot if points available
+        if self.has_points:
+            wifi_heatmap_plotter = WifiHeatmapPlotter(
+                self.recorded_points,
+                self.controller.floorplan_saved_image_path,
+                self.controller.dxf_filename
+            )
+
+        # No points from wifi scan
+        else:
+            self.coverage_info_panel.set_no_wifi_scan_error_message()

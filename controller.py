@@ -83,9 +83,13 @@ class Controller(tk.Frame):
     def load_dxf_to_canvas(self):
 
         if self.dxf_opened == False:
-            dxf_file = self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected()
+            self.dxf_filepath, self.dxf_filename = self.main_page.coverage_page.coverage_file_menu.get_dxf_filepath_selected()
+
+            # remove extensions from dxf filename
+            self.dxf_filename = self.dxf_filename.replace(".dxf", "")
+
             try:
-                dxf = ezdxf.readfile(dxf_file)
+                dxf = ezdxf.readfile(self.dxf_filepath)
 
             except IOError:
                 print(f'Not a DXF file or a generic I/O error.')
@@ -95,7 +99,7 @@ class Controller(tk.Frame):
                 sys.exit(2)
 
             # For debugging
-            print(f"Opened {dxf_file}")
+            print(f"Opened {self.dxf_filepath}")
 
             # Save file as class member
             self.dxf = dxf
@@ -103,8 +107,9 @@ class Controller(tk.Frame):
             # Display dxf file
             self.display_dxf()
 
-            # Flag to indicate dxf already opened
-            self.dxf_opened = True
+            # Cache the image of display on tkinter canvas after display
+            self.floorplan_saved_image_path = fr"{app_parameters.PRIVATE_FOLDER}\{self.dxf_filename}.png"
+            self.main_page.coverage_page.after(500, self.main_page.coverage_page.capture_canvas)
 
             # Enable plotting of points
             self.main_page.coverage_page.enable_canvas_click()
@@ -115,6 +120,9 @@ class Controller(tk.Frame):
 
     def display_dxf(self):
         self.main_page.coverage_page.display_dxf(self.dxf)
+
+        # Flag to indicate dxf already opened
+        self.dxf_opened = True
 
     def clear_dxf_from_canvas(self):
         if self.dxf_opened == True:
@@ -161,3 +169,16 @@ class Controller(tk.Frame):
 
     def configure_rssi_sensitivity(self):
         print("configure rssi sensitivity")
+
+    # Save whatever plot is on the tkinter if valid heatmap
+    def save_heatmap_plot(self):
+
+        # Display only if dxf file opened and wifi scan done
+        if self.dxf_opened and self.scan_done:
+            self.main_page.coverage_page.save_heatmap_plot()
+
+        elif not self.dxf_opened:
+            self.main_page.coverage_page.coverage_info_panel.set_no_dxf_error_message()
+
+        elif not self.scan_done:
+            self.main_page.coverage_page.coverage_info_panel.set_no_wifi_scan_error_message()

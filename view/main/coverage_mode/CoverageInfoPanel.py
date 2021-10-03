@@ -33,7 +33,11 @@ class CoverageInfoPanel(tk.Frame):
 
     def set_no_dxf_error_message(self):
         self.warning_text.set("Error! No dxf file selected.")
-        self.after(5000, self.clear_no_dxf_error_message)
+        self.after(5000, self.clear_error_message)
 
-    def clear_no_dxf_error_message(self):
+    def clear_error_message(self):
         self.warning_text.set("")
+
+    def set_no_wifi_scan_error_message(self):
+        self.warning_text.set("Error! Select Wifi points on floorplan.")
+        self.after(5000, self.clear_error_message)

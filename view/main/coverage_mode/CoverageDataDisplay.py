@@ -158,7 +158,7 @@ class CoverageDataDisplay(ttk.LabelFrame):
             self.current_selected[name] = data[idx]
             idx += 1
 
-        print(self.current_selected)
+        # print(self.current_selected)
 
     def get_current_selected(self):
         return copy.deepcopy(self.current_selected)
