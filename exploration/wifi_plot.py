@@ -25,8 +25,8 @@ with open(coord_log_path, "r") as f:
         tokenized = [x.split(":")[1] for x in tokenized]
 
         # Do conversion from tkinter coordinate space to dxf coordinate space
-        conv_x = tokenized[0]
-        conv_y = tokenized[1]
+        conv_x = int(tokenized[0])
+        conv_y = int(tokenized[1])
 
         temp["x"] = conv_x
         temp["y"] = conv_y
@@ -121,20 +121,16 @@ ax.imshow(floorplan, interpolation='bicubic', zorder=1, alpha=1)
 labelsize = FontManager.get_default_size() * 0.4
 
 # Show points
-# for idx in range(0, len(survey_points['tk_x'])):
-#     if(survey_points['tk_x'][idx], survey_points['tk_y'][idx]) in floorplan_corner_coord:
-#         continue
+for idx in range(0, len(survey_points['x'])):
+    if(survey_points['x'][idx], survey_points['y'][idx]) in floorplan_corner_coord:
+        continue
 
-#     ax.plot(
-#         survey_points['tk_x'][idx], survey_points['tk_y'][idx], zorder=200,
-#         marker='o', markeredgecolor='black', markeredgewidth=1,
-#         markerfacecolor=mapper.to_rgba(survey_points['rssi'][idx]), markersize=6
-#     )
-#     ax.text(
-#         survey_points['tk_x'][idx], survey_points['tk_y'][idx] - 30,
-#         survey_points['ssid'][idx], fontsize=labelsize,
-#         horizontalalignment='center'
-#     )
-fname = f"rssi_{title}.png"
+    ax.plot(
+        survey_points['x'][idx], survey_points['y'][idx], zorder=200,
+        marker='o', markeredgecolor='black', markeredgewidth=0.8, markersize=2.5,
+        markerfacecolor=mapper.to_rgba(survey_points['rssi'][idx])
+    )
+
+fname = f"test_output.png"
 pp.savefig(fname, dpi=300)
 pp.close('all')
