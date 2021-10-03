@@ -1,8 +1,10 @@
+import os
 import tkinter as tk
 from tkinter import ttk
 
 from model.dxf2tk import dxf2tk
 from model.tk2dxf import tk2dxf
+from PIL import Image
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageDataDisplay import CoverageDataDisplay
@@ -117,6 +119,13 @@ class CoveragePage(ttk.Frame):
                 arc["start_angle"],
                 arc["extent"]
             )
+
+        # Save dxf plot into png
+        self.coverage_canvas.postscript(file="test.eps")
+        img = Image.open("test.eps")
+        img.save("test.png", "png")
+        img.close()
+        os.remove("test.eps")
 
     def set_no_dxf_error_message(self):
         self.coverage_info_panel.warning_text.set("Error! No dxf file selected.")
