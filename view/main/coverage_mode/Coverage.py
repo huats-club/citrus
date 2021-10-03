@@ -154,6 +154,10 @@ class CoveragePage(ttk.Frame):
             data
         )
 
-        # print(self.recorded_points)
+        # Save coordinates in log
         with open(self.controller.log_name, 'a+') as f:
-            f.write(f"tk_x: {data['tk_x']} | tk_y: {data['tk_y']} | rssi: {data['wifi_data_selected']}\n")
+            f.write(f"tk_x: {data['tk_x']} | tk_y: {data['tk_y']}\n")
+
+        # Save wifi data in json log
+        with open(self.controller.log_json, 'a+') as f:
+            f.write(f"{wifi_selected}\n")
