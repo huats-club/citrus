@@ -1,3 +1,4 @@
+import datetime as datetime
 import sys
 import tkinter as tk
 from multiprocessing import Pipe
@@ -7,7 +8,6 @@ import ezdxf
 from app_parameters import app_parameters
 from model.SDRHandler import SDRHandler
 from model.WifiScanner import WifiScanner
-from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
@@ -38,6 +38,9 @@ class Controller(tk.Frame):
 
         # Scan results done
         self.scan_done = False
+
+        # Current wifi log
+        self.log_name = fr"{app_parameters.WORKSPACE_FOLDER}/log_{datetime.datetime.date(datetime.datetime.now())}.txt"
 
     # Function to create start (landing) page
     def make_start_page(self):

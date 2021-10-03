@@ -142,13 +142,18 @@ class CoveragePage(ttk.Frame):
         # Get currently select wifi data
         wifi_selected = self.coverage_display_data.get_current_selected()
 
+        # Prepared dictionary
+        data = {
+            'tk_x': x,
+            'tk_y': y,
+            'wifi_data_selected': wifi_selected
+        }
+
         # Add to list
         self.recorded_points.append(
-            {
-                'tk_x': x,
-                'tk_y': y,
-                'wifi_data_selected': wifi_selected
-            }
+            data
         )
 
-        print(self.recorded_points)
+        # print(self.recorded_points)
+        with open(self.controller.log_name, 'a+') as f:
+            f.write(f"tk_x: {data['tk_x']} | tk_y: {data['tk_y']} | rssi: {data['wifi_data_selected']}\n")
