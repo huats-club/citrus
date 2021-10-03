@@ -5,3 +5,5 @@ build/*
 *.pdf
 *.dxf
 workspace
+test_output.png
+test.png
