@@ -77,6 +77,10 @@ class CoveragePage(ttk.Frame):
         self.coverage_info_panel = CoverageInfoPanel(self.right_container, self.controller)
 
     def display_dxf(self, dxf):
+        # Clear all recorded points if not already empty
+        self.recorded_points = []
+
+        # Create converter
         dxf2tk_converter = dxf2tk(self)
 
         # try to parse and make sense of dxf
@@ -136,6 +140,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_display_data.populate_wifi_scan_results(json_list)
 
     def clear_wifi_scan_results(self):
+        self.recorded_points = []
         self.coverage_display_data.clear_wifi_scan_results()
 
     def enable_canvas_click(self):
