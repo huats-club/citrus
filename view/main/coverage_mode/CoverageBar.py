@@ -68,7 +68,8 @@ class CoverageBar(ttk.Frame):
         self.combine_button = ttk.Button(
             self.plot_container,
             style="primary.Outline.TButton",
-            text="Combine".center(self.STRING_LENGTH, ' ')
+            text="Combine".center(self.STRING_LENGTH, ' '),
+            command=self.controller.display_heatmap
         )
         self.combine_button.pack(
             side=tk.RIGHT,

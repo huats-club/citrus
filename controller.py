@@ -182,3 +182,20 @@ class Controller(tk.Frame):
 
         elif not self.scan_done:
             self.main_page.coverage_page.coverage_info_panel.set_no_wifi_scan_error_message()
+
+    # Display created heatmap on tkinter canvas
+    def display_heatmap(self):
+
+        # Rebuild heatmap first
+        self.save_heatmap_plot()
+
+        # Display heatmap in tkinter canvas
+        self.image = tk.PhotoImage(
+            file="workspace/scaled.png"
+        )
+        self.main_page.coverage_page.coverage_canvas.create_image(
+            0,
+            0,
+            image=self.image,
+            anchor=tk.NW
+        )

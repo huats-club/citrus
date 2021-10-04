@@ -5,7 +5,6 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plot
 import numpy as np
 from app_parameters import app_parameters
-from matplotlib.font_manager import FontManager
 from pylab import imread
 from scipy.interpolate import Rbf
 
@@ -50,8 +49,6 @@ class WifiHeatmapPlotter:
             int(x) for x in self.survey_points['rssi']
         ]
 
-        # print(self.survey_points)
-
         # Prepare for plot
         self.prepare_plot()
 
@@ -85,9 +82,14 @@ class WifiHeatmapPlotter:
         self.gx, self.gy = gx.flatten(), gy.flatten()
 
         # Set plot figure size
-        # pp.rcParams['figure.figsize'] = (
-        #     self.floorplan_width / 300, self.floorplan_height / 300
-        # )
+        self.dpi = 300
+        plot.rcParams['figure.dpi'] = (
+            self.dpi
+        )
+        plot.rcParams['figure.figsize'] = (
+            app_parameters.CANVAS_WIDTH / self.dpi,
+            app_parameters.CANVAS_HEIGHT / self.dpi
+        )
         self.fig, self.ax = plot.subplots(1)
         plot.margins(0, 0)
         plot.subplots_adjust(
@@ -100,8 +102,6 @@ class WifiHeatmapPlotter:
         )
         for item in [self.fig, self.ax]:
             item.patch.set_visible(False)
-        # title = "rssi"
-        # ax.set_title(title)
 
         # Fix plot threshold max and min
         self.vmin = min(self.survey_points['rssi'])
@@ -158,7 +158,6 @@ class WifiHeatmapPlotter:
             zorder=1,
             alpha=1
         )
-        # labelsize = FontManager.get_default_size() * 0.4
 
         # Show points
         for idx in range(0, len(self.survey_points['x'])):
@@ -170,8 +169,8 @@ class WifiHeatmapPlotter:
                 self.survey_points['y'][idx],
                 zorder=200,
                 marker='o',
-                markeredgecolor='black',
-                markeredgewidth=0.8,
+                # markeredgecolor='black',
+                markeredgewidth=0.4,
                 markersize=2.5,
                 markerfacecolor=self.mapper.to_rgba(self.survey_points['rssi'][idx])
             )
@@ -179,7 +178,7 @@ class WifiHeatmapPlotter:
         fname = fr"{app_parameters.WORKSPACE_FOLDER}\{output_name}.png"
         plot.savefig(
             fname,
-            dpi=300,
+            dpi=self.dpi,
             bbox_inches='tight'
         )
         plot.close('all')
