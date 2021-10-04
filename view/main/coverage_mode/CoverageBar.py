@@ -55,7 +55,7 @@ class CoverageBar(ttk.Frame):
         self.plot_button = ttk.Button(
             self.plot_container,
             style="primary.Outline.TButton",
-            text="Plot".center(self.STRING_LENGTH, ' '),
+            text="Save Plot".center(self.STRING_LENGTH, ' '),
             command=self.controller.save_heatmap_plot
         )
         self.plot_button.pack(

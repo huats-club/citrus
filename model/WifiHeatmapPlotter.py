@@ -11,10 +11,9 @@ from scipy.interpolate import Rbf
 
 
 class WifiHeatmapPlotter:
-    def __init__(self, x_y_wifidata, floorplan_image_path, output_name):
+    def __init__(self, x_y_wifidata, floorplan_image_path):
 
         self.floorplan_image_path = floorplan_image_path
-        self.output_name = output_name
 
         # Prepare data into plottable format
         self.survey_points = defaultdict(list)
@@ -51,7 +50,7 @@ class WifiHeatmapPlotter:
             int(x) for x in self.survey_points['rssi']
         ]
 
-        print(self.survey_points)
+        # print(self.survey_points)
 
         # Prepare for plot
         self.prepare_plot()
@@ -78,18 +77,18 @@ class WifiHeatmapPlotter:
                 self.survey_points[k].append(min(self.survey_points[k]))
 
         # Do plot scaling
-        num_x = int(self.floorplan_width/4)
-        num_y = int(num_x/(self.floorplan_width/self.floorplan_height))
-        x = np.linspace(0, self.floorplan_width, num_x)
-        y = np.linspace(0, self.floorplan_height, num_y)
+        self.num_x = int(self.floorplan_width/4)
+        self.num_y = int(self.num_x/(self.floorplan_width/self.floorplan_height))
+        x = np.linspace(0, self.floorplan_width, self.num_x)
+        y = np.linspace(0, self.floorplan_height, self.num_y)
         gx, gy = np.meshgrid(x, y)
-        gx, gy = gx.flatten(), gy.flatten()
+        self.gx, self.gy = gx.flatten(), gy.flatten()
 
         # Set plot figure size
         # pp.rcParams['figure.figsize'] = (
         #     self.floorplan_width / 300, self.floorplan_height / 300
         # )
-        fig, ax = plot.subplots(1)
+        self.fig, self.ax = plot.subplots(1)
         plot.margins(0, 0)
         plot.subplots_adjust(
             top=1,
@@ -99,59 +98,61 @@ class WifiHeatmapPlotter:
             hspace=0,
             wspace=0
         )
-        for item in [fig, ax]:
+        for item in [self.fig, self.ax]:
             item.patch.set_visible(False)
         # title = "rssi"
         # ax.set_title(title)
 
         # Fix plot threshold max and min
-        vmin = min(self.survey_points['rssi'])
-        vmax = max(self.survey_points['rssi'])
+        self.vmin = min(self.survey_points['rssi'])
+        self.vmax = max(self.survey_points['rssi'])
 
-        if vmin != vmax:
-            rbf = Rbf(
+        if self.vmin != self.vmax:
+            self.rbf = Rbf(
                 self.survey_points['x'],
                 self.survey_points['y'],
                 self.survey_points['rssi'],
                 function='linear'
             )
-            z = rbf(gx, gy)
-            z = z.reshape((num_y, num_x))
+            z = self.rbf(gx, gy)
+            self.z = z.reshape((self.num_y, self.num_x))
         else:
             # Uniform array with the same color everywhere
             # (avoids interpolation artifacts)
-            z = np.ones((num_y, num_x))*vmin
+            self.z = np.ones((self.num_y, self.num_x))*self.vmin
 
         # Render the interpolated data to the plot
-        ax.axis('off')
+        self.ax.axis('off')
 
         # Create color map for plot reference
-        cmap = plot.get_cmap("RdYlGn")
+        self.cmap = plot.get_cmap("RdYlGn")
 
         # begin color mapping
-        norm = matplotlib.colors.Normalize(
-            vmin=vmin,
-            vmax=vmax,
+        self.norm = matplotlib.colors.Normalize(
+            vmin=self.vmin,
+            vmax=self.vmax,
             clip=True
         )
-        mapper = cm.ScalarMappable(
-            norm=norm,
-            cmap=cmap
+        self.mapper = cm.ScalarMappable(
+            norm=self.norm,
+            cmap=self.cmap
         )
         # end color mapping
 
-        image = ax.imshow(
-            z,
+    def save(self, output_name):
+
+        self.image = self.ax.imshow(
+            self.z,
             extent=(0, self.floorplan_width, self.floorplan_height, 0),
             alpha=0.5,
             zorder=100,
-            cmap=cmap,
-            vmin=vmin,
-            vmax=vmax
+            cmap=self.cmap,
+            vmin=self.vmin,
+            vmax=self.vmax
         )
 
         # Draw floorplan itself to the lowest layer with full opacity
-        ax.imshow(
+        self.ax.imshow(
             self.floorplan,
             interpolation='bicubic',
             zorder=1,
@@ -164,7 +165,7 @@ class WifiHeatmapPlotter:
             if(self.survey_points['x'][idx], self.survey_points['y'][idx]) in self.floorplan_corner_coord:
                 continue
 
-            ax.plot(
+            self.ax.plot(
                 self.survey_points['x'][idx],
                 self.survey_points['y'][idx],
                 zorder=200,
@@ -172,10 +173,10 @@ class WifiHeatmapPlotter:
                 markeredgecolor='black',
                 markeredgewidth=0.8,
                 markersize=2.5,
-                markerfacecolor=mapper.to_rgba(self.survey_points['rssi'][idx])
+                markerfacecolor=self.mapper.to_rgba(self.survey_points['rssi'][idx])
             )
 
-        fname = fr"{app_parameters.WORKSPACE_FOLDER}\{self.output_name}.png"
+        fname = fr"{app_parameters.WORKSPACE_FOLDER}\{output_name}.png"
         plot.savefig(
             fname,
             dpi=300,

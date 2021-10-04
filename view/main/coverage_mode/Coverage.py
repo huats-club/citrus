@@ -186,7 +186,10 @@ class CoveragePage(ttk.Frame):
         if self.has_points:
             wifi_heatmap_plotter = WifiHeatmapPlotter(
                 self.recorded_points,
-                self.controller.floorplan_saved_image_path,
+                self.controller.floorplan_saved_image_path
+            )
+
+            wifi_heatmap_plotter.save(
                 self.controller.dxf_filename
             )
 
