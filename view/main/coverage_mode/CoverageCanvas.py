@@ -57,6 +57,9 @@ class CoverageCanvas(tk.Canvas):
         # Record point and associate with current selected wifi
         self.coverage.add_point_data(event.x, event.y)
 
+        # Set that new wifi heatmap needs to be regenerated
+        self.controller.session.set_need_to_save()
+
     def capture(self):
 
         # Create image to save canvas to

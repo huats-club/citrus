@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from app_parameters import app_parameters
 from view.main.coverage_mode.Coverage import CoveragePage
+from view.main.recording_mode.Recording import RecordingPage
 from view.main.spectrum_mode.Spectrum import SpectrumPage
 
 
@@ -42,8 +43,9 @@ class MainPage(ttk.Notebook):
         )
 
         # Add recording tab
-        self.recording_page = ttk.Frame(
+        self.recording_page = RecordingPage(
             self,
+            self.controller,
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )
