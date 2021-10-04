@@ -7,6 +7,7 @@ import ezdxf
 
 from app_parameters import app_parameters
 from model.SDRHandler import SDRHandler
+from model.Session import Session
 from model.WifiScanner import WifiScanner
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
@@ -43,6 +44,9 @@ class Controller(tk.Frame):
         ts = datetime.datetime.date(datetime.datetime.now())
         self.log_name = fr"{app_parameters.WORKSPACE_FOLDER}/log_{ts}.txt"
         self.log_json = fr"{app_parameters.WORKSPACE_FOLDER}/{ts}.txt"
+
+        # Create new session object
+        self.session = Session()
 
     # Function to create start (landing) page
     def make_start_page(self):
@@ -87,6 +91,9 @@ class Controller(tk.Frame):
 
             # remove extensions from dxf filename
             self.dxf_filename = self.dxf_filename.replace(".dxf", "")
+
+            # Save filename into session
+            self.session.save_dxf_name(self.dxf_filename)
 
             try:
                 dxf = ezdxf.readfile(self.dxf_filepath)
@@ -191,7 +198,7 @@ class Controller(tk.Frame):
 
         # Display heatmap in tkinter canvas
         self.image = tk.PhotoImage(
-            file="workspace/scaled.png"
+            file=f"{app_parameters.WORKSPACE_FOLDER}/{self.session.get_dxf_prefix()}_{self.session.get_prev_plot_num()}.png"
         )
         self.main_page.coverage_page.coverage_canvas.create_image(
             0,

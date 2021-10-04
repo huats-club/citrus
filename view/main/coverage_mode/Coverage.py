@@ -190,8 +190,10 @@ class CoveragePage(ttk.Frame):
             )
 
             wifi_heatmap_plotter.save(
-                self.controller.dxf_filename
+                f"{self.controller.session.get_dxf_prefix()}_{self.controller.session.get_current_plot_num()}"
             )
+
+            self.controller.session.increment_plot_num()
 
         # No points from wifi scan
         else:
