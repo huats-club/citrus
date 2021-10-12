@@ -14,12 +14,15 @@ from view.start.StartPage import StartPage
 
 
 class Controller(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, session_name):
         super().__init__(parent)
         self.parent = parent
         self.parent.resizable(width=False, height=False)    # Don't allow resizing
         self.parent.title(app_parameters.APP_TITLE)
         self.parent.iconbitmap(app_parameters.APP_ICO_PATH)
+
+        # Create new session object
+        self.session = Session(session_name)
 
         # Create pipes for process
         pipe_process, pipe_gui = Pipe(True)
@@ -42,11 +45,8 @@ class Controller(tk.Frame):
 
         # Current wifi log
         ts = datetime.datetime.date(datetime.datetime.now())
-        self.log_name = fr"{app_parameters.WORKSPACE_FOLDER}/log_{ts}.txt"
-        self.log_json = fr"{app_parameters.WORKSPACE_FOLDER}/{ts}.txt"
-
-        # Create new session object
-        self.session = Session()
+        self.log_name = fr"{self.session.get_session_workspace_path()}/log_{ts}.txt"
+        self.log_json = fr"{self.session.get_session_workspace_path()}/{ts}.txt"
 
     # Function to create start (landing) page
     def make_start_page(self):
@@ -74,7 +74,7 @@ class Controller(tk.Frame):
             return
 
     def make_main_page(self, data_pipe):
-        self.main_page = MainPage(self.parent, self, data_pipe)  # parent of main page is root
+        self.main_page = MainPage(self.parent, self, data_pipe, self.session)  # parent of main page is root
 
     def start_spectrum_process(self, center_freq):
         # Create sdr handler
@@ -115,7 +115,7 @@ class Controller(tk.Frame):
             self.display_dxf()
 
             # Cache the image of display on tkinter canvas after display
-            self.floorplan_saved_image_path = fr"{app_parameters.PRIVATE_FOLDER}\{self.dxf_filename}.png"
+            self.floorplan_saved_image_path = fr"{self.session.get_session_private_folder_path()}\{self.dxf_filename}.png"
             self.main_page.coverage_page.after(500, self.main_page.coverage_page.capture_canvas)
 
             # Enable plotting of points
@@ -206,10 +206,15 @@ class Controller(tk.Frame):
             # Set no need to save
             self.session.set_no_need_to_save()
 
-        # Display heatmap in tkinter canvas
-        self.image = tk.PhotoImage(
-            file=f"{app_parameters.WORKSPACE_FOLDER}/{self.session.get_dxf_prefix()}_{self.session.get_prev_plot_num()}.png"
-        )
+        # don't display if no previous
+        if self.session.get_prev_plot_num() > 0:
+            # Display heatmap in tkinter canvas
+            self.image = tk.PhotoImage(
+                file=f"{self.session.get_session_workspace_path()}/{self.session.get_dxf_prefix()}_{self.session.get_prev_plot_num()}.png"
+            )
+        else:
+            self.image = tk.PhotoImage()
+
         self.main_page.coverage_page.coverage_canvas.create_image(
             0,
             0,

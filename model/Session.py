@@ -1,7 +1,15 @@
+from app_parameters import app_parameters
+
+
 class Session:
-    def __init__(self):
+    def __init__(self, session_name):
         self.current_plot_num = 1
         self.need_to_save = True
+
+        # session data
+        self.session_name = session_name
+        self.session_workspace_folder = app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
+        self.session_private_folder = app_parameters.PRIVATE_FOLDER + f"/{session_name}"
 
     def get_current_plot_num(self):
         return self.current_plot_num
@@ -26,3 +34,9 @@ class Session:
 
     def set_no_need_to_save(self):
         self.need_to_save = False
+
+    def get_session_workspace_path(self):
+        return self.session_workspace_folder
+
+    def get_session_private_folder_path(self):
+        return self.session_private_folder

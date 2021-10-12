@@ -8,10 +8,11 @@ from view.main.spectrum_mode.Spectrum import SpectrumPage
 
 
 class MainPage(ttk.Notebook):
-    def __init__(self, parent, controller, data_pipe, *args, **kwargs):
+    def __init__(self, parent, controller, data_pipe, session, *args, **kwargs):
         self.parent = parent
         self.controller = controller
         self.pipe = data_pipe
+        self.session = session
         super().__init__(
             self.parent,
             style="primary.TNotebook",
@@ -29,6 +30,7 @@ class MainPage(ttk.Notebook):
         self.coverage_page = CoveragePage(
             self,
             self.controller,
+            self.session,
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )

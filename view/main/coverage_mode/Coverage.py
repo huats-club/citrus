@@ -13,9 +13,10 @@ from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
 
 
 class CoveragePage(ttk.Frame):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, session, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.session = session
 
         # Save current canvas x and y bounds
         self.x_bound = -1
@@ -186,7 +187,8 @@ class CoveragePage(ttk.Frame):
         if self.has_points:
             wifi_heatmap_plotter = WifiHeatmapPlotter(
                 self.recorded_points,
-                self.controller.floorplan_saved_image_path
+                self.controller.floorplan_saved_image_path,
+                self.session
             )
 
             wifi_heatmap_plotter.save(
