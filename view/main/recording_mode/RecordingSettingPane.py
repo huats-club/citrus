@@ -9,6 +9,9 @@ class RecordingSettingPane(tk.Frame):
         self.controller = controller
         self.recording = recording
 
+        self.SELECTED_2D = 0
+        self.SELECTED_3D = 1
+
         super().__init__(self.parent, *args, **kwargs)
         self.pack(
             side=tk.BOTTOM,
@@ -75,9 +78,14 @@ class RecordingSettingPane(tk.Frame):
             pady=5
         )
 
+        # variables for radio to select
+        self.dimension_selected = tk.IntVar()
+
         self.radio_2d = ttk.Radiobutton(
             self.dimension_selector_frame,
-            text="2D"
+            text="2D",
+            variable=self.dimension_selected,
+            value=self.SELECTED_2D
         )
         self.radio_2d.pack(
             side=tk.LEFT,
@@ -87,10 +95,14 @@ class RecordingSettingPane(tk.Frame):
 
         self.radio_3d = ttk.Radiobutton(
             self.dimension_selector_frame,
-            text="3D"
+            text="3D",
+            variable=self.dimension_selected,
+            value=self.SELECTED_3D
         )
         self.radio_3d.pack(
             side=tk.RIGHT,
             padx=10,
             pady=5
         )
+
+        self.radio_2d.invoke()
