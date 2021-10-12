@@ -161,7 +161,7 @@ class FrequencyPane(ttk.LabelFrame):
         # Toggle button
         self.toggle_button = ttk.Button(
             self.button_containers,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Toggle units",
             command=self.toggle_units
         )

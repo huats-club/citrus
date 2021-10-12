@@ -17,7 +17,7 @@ class SpectrumSettingPane(tk.Frame):
         # Start button
         self.start_button = ttk.Button(
             self,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Start",
             command=self.spectrum.handle_spectrum_start
         )
@@ -30,7 +30,7 @@ class SpectrumSettingPane(tk.Frame):
         # Stop button
         self.stop_button = ttk.Button(
             self,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Stop",
             command=self.spectrum.handle_spectrum_stop
         )
@@ -43,7 +43,7 @@ class SpectrumSettingPane(tk.Frame):
         # Save button
         self.save_button = ttk.Button(
             self,
-            style="primary.TButton",
+            style="primary.Outline.TButton",
             text="Save"
         )
         self.save_button.pack(
