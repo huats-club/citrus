@@ -1,7 +1,6 @@
 import numpy as np  # use numpy for buffers
 import pandas as pd
 import SoapySDR
-from matplotlib import pyplot as plt
 from SoapySDR import SOAPY_SDR_CF32, SOAPY_SDR_RX
 
 # enumerate devices
@@ -22,11 +21,13 @@ for freqRange in freqs:
     print(freqRange)  # Prints 0, 3.8e+09 --> corresponds to board's 10MHz up to 3.5GHz
 
 # apply settings
-bandwidth = 10
-sdr.setSampleRate(SOAPY_SDR_RX, 0, 1e6)
+bandwidth = 20
+sdr.setSampleRate(SOAPY_SDR_RX, 0, 2 * (10**6))
 sdr.setFrequency(SOAPY_SDR_RX, 0, 740.3 * (10**6))
-sdr.setAntenna(SOAPY_SDR_RX, 0, 'Auto')
-sdr.setGainMode(SOAPY_SDR_RX, 0, automatic=True)
+sdr.setAntenna(SOAPY_SDR_RX, 0, 'LNAW')
+sdr.setGain(SOAPY_SDR_RX, 0, "LNA", 12)
+sdr.setGain(SOAPY_SDR_RX, 0, "PGA", -12)
+sdr.setGain(SOAPY_SDR_RX, 0, "TIA", 0)
 sdr.setBandwidth(SOAPY_SDR_RX, 0, bandwidth*(10 ** 6))
 
 # setup a stream (complex floats)
@@ -37,7 +38,7 @@ sdr.activateStream(rxStream)  # start streaming
 buff = np.array([0]*1024, np.complex64)
 
 # receive some samples
-for ii in range(10):
+for ii in range(100):
     sr = sdr.readStream(rxStream, [buff], len(buff))
 
     out = pd.DataFrame()
@@ -48,9 +49,7 @@ for ii in range(10):
         imag.append(buff[i].imag)
 
     df = pd.DataFrame(list(zip(real, imag)), columns=['real', 'imag'])
-    #df.to_csv('out' + str(ii) + '_' + str(bandwidth) + "mhz" + '.csv')
-
-    # time[ii] = sr.timeNs / 10 ^ 6
+    df.to_csv('out' + str(ii) + '_' + str(bandwidth) + "mhz" + '.csv')
 
 # shutdown the stream
 sdr.deactivateStream(rxStream)  # stop streaming
