@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np  # use numpy for buffers
 import pandas as pd
 import SoapySDR
@@ -19,6 +21,8 @@ print(sdr.listGains(SOAPY_SDR_RX, 0))
 freqs = sdr.getFrequencyRange(SOAPY_SDR_RX, 0)
 for freqRange in freqs:
     print(freqRange)  # Prints 0, 3.8e+09 --> corresponds to board's 10MHz up to 3.5GHz
+
+sys.exit()
 
 # apply settings
 bandwidth = 20
