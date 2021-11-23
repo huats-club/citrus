@@ -17,7 +17,7 @@ def process_spectrum(pipe, center_freq, stop_pipe):
     while isRun:
         now = time.time()
 
-        if now - prev > 1:
+        if now - prev > 0.8:
             out = p.run()
             pipe.send(out)
             prev = time.time()

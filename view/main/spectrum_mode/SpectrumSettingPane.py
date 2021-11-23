@@ -44,7 +44,8 @@ class SpectrumSettingPane(tk.Frame):
         self.save_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
-            text="Save"
+            text="Save",
+            command=self.spectrum.handle_spectrum_save
         )
         self.save_button.pack(
             side=tk.RIGHT,

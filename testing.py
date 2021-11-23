@@ -2,8 +2,8 @@ import time
 
 import pandas as pd
 
-IS_TESTING = True
-# IS_TESTING = False
+#IS_TESTING = True
+IS_TESTING = False
 
 
 def process_test(pipe, center_freq, stop_pipe):

@@ -90,3 +90,6 @@ class SpectrumPlot(ttk.Frame):
 
     def set_Y_axis_bound(self, ylow, yhigh):
         self.ax.set_ylim(ylow, yhigh)
+
+    def save(self, filepath):
+        self.figure.savefig(filepath)
