@@ -207,10 +207,10 @@ class Controller(tk.Frame):
             self.session.set_no_need_to_save()
 
         # don't display if no previous
-        if self.session.get_prev_plot_num() > 0:
+        if self.session.get_prev_coverage_plot_num() > 0:
             # Display heatmap in tkinter canvas
             self.image = tk.PhotoImage(
-                file=f"{self.session.get_session_workspace_path()}/{self.session.get_dxf_prefix()}_{self.session.get_prev_plot_num()}.png"
+                file=f"{self.session.get_session_workspace_path()}/{self.session.get_dxf_prefix()}_{self.session.get_prev_coverage_plot_num()}.png"
             )
         else:
             self.image = tk.PhotoImage()
