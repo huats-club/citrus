@@ -4,7 +4,9 @@ build/*
 *.csv
 *.pdf
 *.dxf
+*.npy
 workspace
 test_output.png
 test.png
 todo.txt
+3d.png
