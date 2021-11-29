@@ -2,11 +2,14 @@
 # https://stackoverflow.com/questions/37711538/matplotlib-3d-axes-ticks-labels-and-latex
 
 import math
+import warnings
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib import cm
-from numpy.lib.function_base import interp  # colour map
+
+warnings.simplefilter("ignore", UserWarning)
 
 
 def gen_data():
@@ -71,9 +74,7 @@ if __name__ == "__main__":
     freq_bins_np_2d = np.load(f"{root}/freq_bins_np_2d.npy")
     data_3dplot_np = np.load(f"{root}/data_3dplot_np.npy")
     data_2dplot_np = np.load(f"{root}/data_2dplot_np.npy")
-    # print(ts_np.shape)
-    # print(freq_bins_np.shape)
-    # print(dataset_np.shape)
+    freq_bins_np = np.load(f"{root}/freq_bins_np.npy")
 
     # 3d waterfall plot
     fig1 = plt.figure(num=1)
@@ -97,12 +98,11 @@ if __name__ == "__main__":
     ax1.set_ylabel('timestamps')
     ax1.set_zlabel('spec')
     fig1.savefig(f"{root}/3d.png", bbox_inches='tight')
-    # plt.show()
 
     # 2d waterfall plot
     fig2 = plt.figure(num=2)
     ax2 = fig2.add_subplot()
-    waterfall2d = ax2.imshow(np.asarray(data_2dplot_np), cmap=cm.get_cmap("jet"), interpolation='bicubic')
+    waterfall2d = ax2.imshow(data_2dplot_np, cmap=cm.get_cmap("jet"), interpolation='bicubic')
     fig2.colorbar(
         waterfall2d,
         location="bottom",
@@ -111,4 +111,9 @@ if __name__ == "__main__":
         shrink=0.4,
         aspect=30
     )
+    ax2.set_yticks([])
+    pos_list = np.arange(3)
+    xticks = [730.3, 740.3, 750.3]
+    ax2.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
+    ax2.xaxis.set_major_formatter(ticker.FixedFormatter((xticks)))
     fig2.savefig(f"{root}/2d.png", bbox_inches='tight')
