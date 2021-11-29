@@ -1,4 +1,5 @@
 # https://stackoverflow.com/questions/56788798/python-spectrogram-in-3d-like-matlabs-spectrogram-function
+# https://stackoverflow.com/questions/37711538/matplotlib-3d-axes-ticks-labels-and-latex
 
 import matplotlib.pyplot as plt
 import numpy as np
