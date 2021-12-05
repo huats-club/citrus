@@ -69,6 +69,7 @@ def gen_data():
 
 
 if __name__ == "__main__":
+    gen_data()
     root = 'C:/Users/65844/Desktop/citrus/exploration/3dplot_data'
     ts_np_2d = np.load(f"{root}/ts_np_2d.npy")
     freq_bins_np_2d = np.load(f"{root}/freq_bins_np_2d.npy")
