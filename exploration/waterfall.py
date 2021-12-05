@@ -112,7 +112,6 @@ if __name__ == "__main__":
         aspect=30
     )
     ax2.set_yticks([])
-    pos_list = np.arange(3)
     xticks = [730.3, 740.3, 750.3]
     ax2.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
     ax2.xaxis.set_major_formatter(ticker.FixedFormatter((xticks)))
