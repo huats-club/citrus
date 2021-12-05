@@ -6,7 +6,6 @@ build/*
 *.dxf
 *.npy
 workspace
-test_output.png
-test.png
 todo.txt
 exploration/3dplot_data/*.png
+exploration/3dplot_data/*.gif
