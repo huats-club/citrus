@@ -28,6 +28,22 @@ class SpectrogramPlotter:
         self.incre = 1
 
     def generate_figure(self):
+
+        plt.style.use("seaborn-dark")
+
+        for param in ['figure.facecolor', 'axes.facecolor', 'savefig.facecolor']:
+            plt.rcParams[param] = '#212946'  # bluish dark grey
+
+        for param in ['text.color', 'axes.labelcolor', 'xtick.color', 'ytick.color']:
+            plt.rcParams[param] = '0.9'  # very light grey
+
+        self.colors = [
+            '#08F7FE',  # teal/cyan
+            '#FE53BB',  # pink
+            '#F5D300',  # yellow
+            '#00ff41',  # matrix green
+        ]
+
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot()
 
@@ -60,7 +76,8 @@ class SpectrogramPlotter:
             orientation="horizontal",
             ax=self.ax,
             shrink=0.4,
-            aspect=30
+            aspect=30,
+            pad=0.08
         )
         self.ax.set_yticks([])
         self.ax.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))

@@ -36,7 +36,22 @@ class WaterfallPlotter:
 
     def generate_figure(self):
 
-        self.fig = plt.figure()
+        plt.style.use("seaborn-dark")
+
+        for param in ['figure.facecolor', 'axes.facecolor', 'savefig.facecolor']:
+            plt.rcParams[param] = '#212946'  # bluish dark grey
+
+        for param in ['text.color', 'axes.labelcolor', 'xtick.color', 'ytick.color']:
+            plt.rcParams[param] = '0.9'  # very light grey
+
+        self.colors = [
+            '#08F7FE',  # teal/cyan
+            '#FE53BB',  # pink
+            '#F5D300',  # yellow
+            '#00ff41',  # matrix green
+        ]
+
+        self.fig = plt.figure(dpi=100)
         self.ax = self.fig.add_subplot(projection='3d')
 
         # set axis label
