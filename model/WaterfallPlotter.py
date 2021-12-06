@@ -88,8 +88,8 @@ class WaterfallPlotter:
         )
         self.fig.colorbar(
             self.surf,
-            location="bottom",
-            orientation="horizontal",
+            location="left",
+            orientation="vertical",
             ax=self.ax,
             shrink=0.4,
             aspect=30
