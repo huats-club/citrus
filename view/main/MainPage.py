@@ -8,10 +8,11 @@ from view.main.spectrum_mode.Spectrum import SpectrumPage
 
 
 class MainPage(ttk.Notebook):
-    def __init__(self, parent, controller, data_pipe, session, *args, **kwargs):
+    def __init__(self, parent, controller, spectrum_pipe, recording_pipe, session, *args, **kwargs):
         self.parent = parent
         self.controller = controller
-        self.pipe = data_pipe
+        self.spectrum_pipe = spectrum_pipe
+        self.recording_pipe = recording_pipe
         self.session = session
         super().__init__(
             self.parent,
@@ -39,7 +40,7 @@ class MainPage(ttk.Notebook):
         self.spectrum_page = SpectrumPage(
             self,
             self.controller,
-            self.pipe,
+            self.spectrum_pipe,
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )
@@ -48,6 +49,7 @@ class MainPage(ttk.Notebook):
         self.recording_page = RecordingPage(
             self,
             self.controller,
+            self.recording_pipe,
             width=app_parameters.APP_WIDTH,
             height=app_parameters.APP_HEIGHT
         )

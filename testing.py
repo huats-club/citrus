@@ -1,18 +1,43 @@
+import math
 import time
 
-import pandas as pd
-
-#IS_TESTING = True
-IS_TESTING = False
+IS_TESTING = True
+# IS_TESTING = False
 
 
-def process_test(pipe, center_freq, stop_pipe):
-    df = pd.read_csv(r'out.csv')
+def process_test_coverage(pipe, center_freq, stop_pipe):
+    # read in fft data
+    fft_data = []
+    with open('C:/Users/65844/Desktop/citrus/exploration/3dplot_data/data.txt') as f:
+        fft_data = f.readlines()
+        fft_data = [float(x.strip()) for x in fft_data]
+
+    # process to dbm data
+    signal_data = [20*math.log10(2*x / 1024) for x in fft_data]
 
     while True:
         if IS_TESTING:
-            pipe.send(df['power'])
+            pipe.send(signal_data)
             if stop_pipe.poll(timeout=0):
                 stop_pipe.recv()
                 return
-            time.sleep(5)
+            time.sleep(3)
+
+
+def process_test_recording(pipe, center_freq, stop_pipe):
+    # read in fft data
+    fft_data = []
+    with open('C:/Users/65844/Desktop/citrus/exploration/3dplot_data/data.txt') as f:
+        fft_data = f.readlines()
+        fft_data = [float(x.strip()) for x in fft_data]
+
+    # process to dbm data
+    signal_data = [20*math.log10(2*x / 1024) for x in fft_data]
+
+    while True:
+        if IS_TESTING:
+            pipe.send(signal_data)
+            if stop_pipe.poll(timeout=0):
+                stop_pipe.recv()
+                return
+            time.sleep(3)

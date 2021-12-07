@@ -9,8 +9,8 @@ class RecordingSettingPane(tk.Frame):
         self.controller = controller
         self.recording = recording
 
-        self.SELECTED_2D = 0
-        self.SELECTED_3D = 1
+        self.SELECTED_2D = 1
+        self.SELECTED_3D = 0
 
         super().__init__(self.parent, *args, **kwargs)
         self.pack(
@@ -81,23 +81,12 @@ class RecordingSettingPane(tk.Frame):
         # variables for radio to select
         self.dimension_selected = tk.IntVar()
 
-        self.radio_2d = ttk.Radiobutton(
-            self.dimension_selector_frame,
-            text="2D",
-            variable=self.dimension_selected,
-            value=self.SELECTED_2D
-        )
-        self.radio_2d.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=5
-        )
-
         self.radio_3d = ttk.Radiobutton(
             self.dimension_selector_frame,
             text="3D",
             variable=self.dimension_selected,
-            value=self.SELECTED_3D
+            value=self.SELECTED_3D,
+            command=self.handle_switch_3d_plot
         )
         self.radio_3d.pack(
             side=tk.RIGHT,
@@ -105,4 +94,31 @@ class RecordingSettingPane(tk.Frame):
             pady=5
         )
 
-        self.radio_2d.invoke()
+        self.radio_2d = ttk.Radiobutton(
+            self.dimension_selector_frame,
+            text="2D",
+            variable=self.dimension_selected,
+            value=self.SELECTED_2D,
+            command=self.handle_switch_2d_plot
+        )
+        self.radio_2d.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=5
+        )
+
+    def handle_switch_3d_plot(self):
+        self.recording.handle_switch_waterfall_plot()
+
+    def handle_switch_2d_plot(self):
+        self.recording.handle_switch_spec_plot()
+
+    def disable_setting_pane(self):
+        self.start_button["state"] = tk.DISABLED
+        self.radio_2d.configure(state=tk.DISABLED)
+        self.radio_3d.configure(state=tk.DISABLED)
+
+    def enable_setting_pane(self):
+        self.start_button["state"] = tk.NORMAL
+        self.radio_2d.configure(state=tk.NORMAL)
+        self.radio_3d.configure(state=tk.NORMAL)

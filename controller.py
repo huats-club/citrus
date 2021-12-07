@@ -6,7 +6,8 @@ from multiprocessing import Pipe
 import ezdxf
 
 from app_parameters import app_parameters
-from model.SDRHandler import SDRHandler
+from model.CoverageHandler import CoverageHandler
+from model.RecordingHandler import RecordingHandler
 from model.Session import Session
 from model.WifiScanner import WifiScanner
 from view.main.MainPage import MainPage
@@ -24,10 +25,15 @@ class Controller(tk.Frame):
         # Create new session object
         self.session = Session(session_name)
 
-        # Create pipes for process
-        pipe_process, pipe_gui = Pipe(True)
-        self.pipe_process = pipe_process
-        self.pipe_gui = pipe_gui
+        # Create pipes for coverage process
+        pipe_spectrum_process, pipe_spectrum_gui = Pipe(True)
+        self.pipe_spectrum_process = pipe_spectrum_process
+        self.pipe_spectrum_gui = pipe_spectrum_gui
+
+        # Create pipes for recording process
+        pipe_recording_process, pipe_recording_gui = Pipe(True)
+        self.pipe_recording_process = pipe_recording_process
+        self.pipe_recording_gui = pipe_recording_gui
 
         # Put all pages into container
         self.container = tk.Frame(self.parent)
@@ -36,6 +42,7 @@ class Controller(tk.Frame):
 
         # State variables
         self.is_spectrum_start = False
+        self.is_recording_start = False
 
         # Reset dxf load variable
         self.dxf_opened = False
@@ -67,22 +74,15 @@ class Controller(tk.Frame):
             self.container.destroy()
 
             # Add notebook to original
-            self.make_main_page(self.pipe_gui)
+            self.make_main_page(self.pipe_spectrum_gui, self.pipe_recording_gui)
 
         else:  # invalid
             self.start.display_error_message()
             return
 
-    def make_main_page(self, data_pipe):
-        self.main_page = MainPage(self.parent, self, data_pipe, self.session)  # parent of main page is root
-
-    def start_spectrum_process(self, center_freq):
-        # Create sdr handler
-        self.sdr_handler = SDRHandler()
-        self.sdr_handler.start(self.pipe_process, center_freq)
-
-    def stop_spectrum_process(self):
-        self.sdr_handler.stop()
+    def make_main_page(self, spectrum_pipe, recording_pipe):
+        self.main_page = MainPage(self.parent, self, spectrum_pipe, recording_pipe,
+                                  self.session)  # parent of main page is root
 
     def load_dxf_to_canvas(self):
 
@@ -221,3 +221,18 @@ class Controller(tk.Frame):
             image=self.image,
             anchor=tk.NW
         )
+
+    def start_spectrum_process(self, center_freq):
+        # Create sdr handler
+        self.sdr_handler = CoverageHandler()
+        self.sdr_handler.start(self.pipe_spectrum_process, center_freq)
+
+    def stop_spectrum_process(self):
+        self.sdr_handler.stop()
+
+    def start_recording_process(self, center_freq):
+        self.recording_handler = RecordingHandler()
+        self.recording_handler.start(self.pipe_recording_process, center_freq)
+
+    def stop_recording_process(self):
+        self.recording_handler.stop()

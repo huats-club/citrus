@@ -1,11 +1,11 @@
 from multiprocessing import Pipe, Process
 
-from testing import IS_TESTING, process_test
+from testing import IS_TESTING, process_test_coverage
 
-from model.SDRUtil import process_spectrum
+from model.CoverageUtil import process_spectrum
 
 
-class SDRHandler:
+class CoverageHandler:
     def __init__(self):
         # Create stop pipes for process
         stop_pipe_handler, stop_pipe_process = Pipe(True)
@@ -21,7 +21,7 @@ class SDRHandler:
         else:
             # Define mock process
             self.process_spectrum_analyzer = Process(
-                target=process_test, daemon=True,
+                target=process_test_coverage, daemon=True,
                 args=(pipe, center_freq, self.stop_pipe_process,))
 
         self.process_spectrum_analyzer.start()
