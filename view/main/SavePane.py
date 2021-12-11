@@ -49,7 +49,6 @@ class SavePane(ttk.Frame):
         )
 
         # Search button
-        # TODO: command for search directory
         self.search_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
