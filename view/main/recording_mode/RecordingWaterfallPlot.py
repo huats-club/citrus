@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+import matplotlib as mpl
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -99,8 +100,10 @@ class RecordingWaterfallPlot(ttk.Frame):
             self.signal_np = np.delete(self.signal_np, 0, axis=0)
             self.signal_np = np.append(self.signal_np, [latest_signal_data], axis=0)
 
-        # plot
+        # clear plot
         self.ax.clear()
+
+        # plot
         self.surf = self.ax.plot_surface(
             self.freq_bins_np_X,
             self.ts_np_Y,
@@ -109,15 +112,23 @@ class RecordingWaterfallPlot(ttk.Frame):
             antialiased=True
         )
 
-        if self.isFirst:
-            self.fig.colorbar(
-                self.surf,
-                location="left",
-                orientation="vertical",
-                ax=self.ax,
-                shrink=0.4,
-                aspect=30
-            )
+        # # remove the previous colorbar
+        # if not self.isFirst:
+        #     self.cb.remove()
+
+        # self.cb = self.fig.colorbar(
+        #     self.surf,
+        #     location="left",
+        #     orientation="vertical",
+        #     ax=self.ax,
+        #     shrink=0.4,
+        #     aspect=30
+        # )
+
+        # set axis label
+        self.ax.set_xlabel(app_parameters.WATERFALL_PLOT_LEGEND_X)
+        self.ax.set_ylabel(app_parameters.WATERFALL_PLOT_LEGEND_Y)
+        self.ax.set_zlabel(app_parameters.WATERFALL_PLOT_LEGEND_Z)
 
         self.isFirst = False
         self.canvas.draw()
