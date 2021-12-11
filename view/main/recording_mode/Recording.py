@@ -14,6 +14,8 @@ class RecordingPage(ttk.Frame):
         self.controller = controller
         self.pipe = pipe
 
+        self.save_path = self.controller.session.get_session_workspace_path()
+
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
             padx=10,
@@ -142,9 +144,15 @@ class RecordingPage(ttk.Frame):
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
 
+    def update_save_path(self, path):
+        self.save_path = path
+
     # Provide interface for save pane to call common function
     def handle_save(self):
         self.handle_recording_save()
 
     def handle_recording_save(self):
-        print("save recording")
+        count = self.controller.session.get_current_recording_plot_num()
+        filepath = f"{self.save_path}/recording_{count}"
+        self.controller.session.increment_recording_plot_num()
+        self.recording_plot.save(filepath)

@@ -129,3 +129,6 @@ class RecordingWaterfallPlot(ttk.Frame):
         self.isFirst = False
         self.canvas.draw()
         print(f"done - {self.incre}")
+
+    def save(self, filepath):
+        self.fig.savefig(filepath)

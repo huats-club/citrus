@@ -127,3 +127,6 @@ class RecordingSpecPlot(ttk.Frame):
         )
 
         self.ax.set_autoscaley_on(True)
+
+    def save(self, filepath):
+        self.fig.savefig(filepath)

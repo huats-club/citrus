@@ -78,5 +78,6 @@ class SavePane(ttk.Frame):
         try:
             self.save_path = tkfd.askdirectory(initialdir="C:/")
             self.filepath_text.set(self.save_path)
+            self.owner.update_save_path(self.save_path)
         except ValueError:
             self.filepath_text.set(self.controller.session.get_session_workspace_path())

@@ -5,6 +5,7 @@ class Session:
     def __init__(self, session_name):
         self.current_coverage_plot_num = 1
         self.current_spectrum_plot_num = 1
+        self.current_recording_plot_num = 1
         self.need_to_save = True
 
         # session data
@@ -12,7 +13,7 @@ class Session:
         self.session_workspace_folder = app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
         self.session_private_folder = app_parameters.PRIVATE_FOLDER + f"/{session_name}"
 
-    def get_current_spectrum_plot_name(self):
+    def get_current_spectrum_plot_num(self):
         return self.current_spectrum_plot_num
 
     def increment_spectrum_plot_num(self):
@@ -26,6 +27,12 @@ class Session:
 
     def increment_coverage_plot_num(self):
         self.current_coverage_plot_num += 1
+
+    def get_current_recording_plot_num(self):
+        return self.current_recording_plot_num
+
+    def increment_recording_plot_num(self):
+        self.current_recording_plot_num += 1
 
     def save_dxf_name(self, name):
         self.name = name
