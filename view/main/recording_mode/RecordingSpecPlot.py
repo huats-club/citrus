@@ -40,6 +40,7 @@ class RecordingSpecPlot(ttk.Frame):
         # prepare z signal data store
         self.signal_datastore_np = np.full((400, 2048), -100)
 
+        global first
         first = True
         self.create_empty_plot()
         self.draw()
@@ -71,6 +72,7 @@ class RecordingSpecPlot(ttk.Frame):
         # plot
         self.waterfall2d = self.ax.imshow(self.signal_datastore_np, cmap=cm.get_cmap("jet"), interpolation='bicubic')
 
+        global first
         if first:
             self.fig.colorbar(
                 self.waterfall2d,
@@ -81,6 +83,8 @@ class RecordingSpecPlot(ttk.Frame):
                 aspect=30,
                 pad=0.08
             )
+            first = False
+
         self.ax.set_yticks([])
         self.ax.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
         self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.xticks_label)))
