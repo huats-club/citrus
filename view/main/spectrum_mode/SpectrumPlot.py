@@ -3,6 +3,7 @@ from tkinter import ttk
 
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd
 from app_parameters import app_parameters
@@ -57,10 +58,16 @@ class SpectrumPlot(ttk.Frame):
         self.ax.set_autoscaley_on(True)
 
         self.ax.set_xlabel(
-            app_parameters.SPECTRUM_PLOT_LEGEND_X
+            app_parameters.SPECTRUM_PLOT_LEGEND_X,
+            labelpad=20,
+            fontsize="large",
+            fontweight="medium"
         )
         self.ax.set_ylabel(
-            app_parameters.SPECTRUM_PLOT_LEGEND_Y
+            app_parameters.SPECTRUM_PLOT_LEGEND_Y,
+            labelpad=20,
+            fontsize="large",
+            fontweight="medium"
         )
 
     def do_plot(self, data):
@@ -71,25 +78,43 @@ class SpectrumPlot(ttk.Frame):
 
         self.canvas.draw_idle()
         self.ax.set_xlabel(
-            app_parameters.SPECTRUM_PLOT_LEGEND_X
+            app_parameters.SPECTRUM_PLOT_LEGEND_X,
+            labelpad=20,
+            fontsize="large",
+            fontweight="medium"
         )
         self.ax.set_ylabel(
-            app_parameters.SPECTRUM_PLOT_LEGEND_Y
+            app_parameters.SPECTRUM_PLOT_LEGEND_Y,
+            labelpad=20,
+            fontsize="large",
+            fontweight="medium"
         )
 
+        # get data to plot
         df = pd.DataFrame(data, columns=['power'])
 
+        # plot data
         self.ax.plot(df['power'], linewidth=1)
-
-        # Do plot
         df.plot(marker='', ax=self.ax, color=self.colors)
 
-    def set_X_axis_bound(self, xlow, xhigh):
-        self.xlow = xlow
-        self.xhigh = xhigh
+        # change axis values label
+        self.ax.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
+        self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.freq_label_list)))
 
-    def set_Y_axis_bound(self, ylow, yhigh):
-        self.ax.set_ylim(ylow, yhigh)
+    def set_X_axis_freq(self, start_freq, centre_freq, end_freq, units):
+
+        # generate list of label
+        if units == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
+            self.freq_label_list = [start_freq, centre_freq / pow(10, 3), end_freq]
+
+        elif units == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X:
+            self.freq_label_list = [start_freq, centre_freq / pow(10, 6), end_freq]
+
+        else:
+            self.freq_label_list = [start_freq, centre_freq / pow(10, 9), end_freq]
+
+        # process to string
+        self.freq_label_list = [f"{x} {units}Hz" for x in self.freq_label_list]
 
     def save(self, filepath):
         self.figure.savefig(filepath)

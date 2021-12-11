@@ -78,12 +78,14 @@ class SpectrumPage(ttk.Frame):
             # Disable toggle to other tab
             self.parent.disable_toggle_tab()
 
-            # get centre freq
+            # get freqs
+            start_freq = self.spectrum_setting_container.get_start_freq()
             center_freq = self.spectrum_setting_container.get_center_freq()
+            end_freq = self.spectrum_setting_container.get_stop_freq()
 
             # Set plot bounds
-            self.spectrum_plot.set_X_axis_bound(self.spectrum_setting_container.get_start_freq(),
-                                                self.spectrum_setting_container.get_stop_freq())
+            units = self.spectrum_setting_container.get_freq_units()
+            self.spectrum_plot.set_X_axis_freq(start_freq, center_freq, end_freq, units)
 
             # Start spectrum
             self.controller.start_spectrum_process(center_freq)
