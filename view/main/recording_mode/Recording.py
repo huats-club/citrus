@@ -142,5 +142,9 @@ class RecordingPage(ttk.Frame):
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
 
+    # Provide interface for save pane to call common function
+    def handle_save(self):
+        self.handle_recording_save()
+
     def handle_recording_save(self):
         print("save recording")

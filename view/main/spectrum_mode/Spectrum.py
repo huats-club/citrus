@@ -112,6 +112,10 @@ class SpectrumPage(ttk.Frame):
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
 
+    # Provide interface for save pane to call common function
+    def handle_save(self):
+        self.handle_spectrum_save()
+
     def handle_spectrum_save(self):
         count = self.controller.session.get_current_spectrum_plot_name()
         filepath = f"{self.controller.session.get_session_workspace_path()}/spectrum_{count}"

@@ -100,7 +100,12 @@ class RecordingSettingPane(tk.Frame):
         )
 
         # Save button
-        self.save_pane = SavePane(self, self.controller, tk.LEFT)
+        self.save_pane = SavePane(
+            self,
+            self.controller,
+            self.recording,
+            tk.LEFT
+        )
 
     def handle_switch_3d_plot(self):
         self.recording.handle_switch_waterfall_plot()

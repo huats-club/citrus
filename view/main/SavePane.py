@@ -3,9 +3,10 @@ from tkinter import ttk
 
 
 class SavePane(ttk.Frame):
-    def __init__(self, parent, controller, side, *args, **kwargs):
+    def __init__(self, parent, controller, owner, side, *args, **kwargs):
 
         self.parent = parent
+        self.owner = owner
         self.controller = controller
 
         super().__init__(
@@ -60,11 +61,11 @@ class SavePane(ttk.Frame):
         )
 
         # Save button
-        # TODO: command for save image in plot canvas
         self.save_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
-            text="Save"
+            text="Save",
+            command=self.owner.handle_save  # call interface common save method to be implmented by parent
         )
         self.save_button.pack(
             side=tk.RIGHT,
