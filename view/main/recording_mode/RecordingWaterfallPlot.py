@@ -44,9 +44,6 @@ class RecordingWaterfallPlot(ttk.Frame):
         # flag to indicate first data
         self.isFirst = True
 
-        # incre
-        self.incre = 1
-
     def create_empty_3d_plot(self):
         # https://towardsdatascience.com/cyberpunk-style-with-matplotlib-f47404c9d4c5
 
@@ -103,6 +100,7 @@ class RecordingWaterfallPlot(ttk.Frame):
             self.signal_np = np.append(self.signal_np, [latest_signal_data], axis=0)
 
         # plot
+        self.ax.clear()
         self.surf = self.ax.plot_surface(
             self.freq_bins_np_X,
             self.ts_np_Y,
@@ -121,14 +119,8 @@ class RecordingWaterfallPlot(ttk.Frame):
                 aspect=30
             )
 
-        # debug
-        root = 'C:/Users/65844/Desktop/citrus/exploration/citrus_plots'
-        self.fig.savefig(f"{root}/3d_class_{self.incre}.png", bbox_inches='tight')
-        self.incre += 1
-
         self.isFirst = False
         self.canvas.draw()
-        print(f"done - {self.incre}")
 
     def save(self, filepath):
         self.fig.savefig(filepath)
