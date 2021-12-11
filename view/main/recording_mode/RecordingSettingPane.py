@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from view.main.SavePane import SavePane
+
 
 class RecordingSettingPane(tk.Frame):
     def __init__(self, parent, recording, controller, *args, **kwargs):
@@ -44,30 +46,18 @@ class RecordingSettingPane(tk.Frame):
             pady=(20, 0)
         )
 
-        # Save button
-        self.save_button = ttk.Button(
-            self,
-            style="primary.Outline.TButton",
-            text="Save",
-            command=self.recording.handle_recording_save
-        )
-        self.save_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=(20, 0)
-        )
-
         # Toggle 2D / 3D view - radio buttons
         self.dimension_selector_frame = ttk.Frame(
             self,
             relief=tk.GROOVE
         )
         self.dimension_selector_frame.pack(
-            side=tk.RIGHT,
+            side=tk.LEFT,
             padx=10,
             pady=(20, 0)
         )
 
+        # Create label to instruct users to select dimensions
         self.dimension_selector_label = ttk.Label(
             self.dimension_selector_frame,
             text="Select dimension: "
@@ -75,12 +65,13 @@ class RecordingSettingPane(tk.Frame):
         self.dimension_selector_label.pack(
             side=tk.LEFT,
             padx=10,
-            pady=5
+            pady=10
         )
 
         # variables for radio to select
         self.dimension_selected = tk.IntVar()
 
+        # Create 3D radio button
         self.radio_3d = ttk.Radiobutton(
             self.dimension_selector_frame,
             text="3D",
@@ -91,9 +82,10 @@ class RecordingSettingPane(tk.Frame):
         self.radio_3d.pack(
             side=tk.RIGHT,
             padx=10,
-            pady=5
+            pady=10
         )
 
+        # Create 2D radio button
         self.radio_2d = ttk.Radiobutton(
             self.dimension_selector_frame,
             text="2D",
@@ -102,10 +94,13 @@ class RecordingSettingPane(tk.Frame):
             command=self.handle_switch_2d_plot
         )
         self.radio_2d.pack(
-            side=tk.LEFT,
+            side=tk.RIGHT,
             padx=10,
-            pady=5
+            pady=10
         )
+
+        # Save button
+        self.save_pane = SavePane(self, self.controller, tk.LEFT)
 
     def handle_switch_3d_plot(self):
         self.recording.handle_switch_waterfall_plot()

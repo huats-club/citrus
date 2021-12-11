@@ -1,0 +1,73 @@
+import tkinter as tk
+from tkinter import ttk
+
+
+class SavePane(ttk.Frame):
+    def __init__(self, parent, controller, side, *args, **kwargs):
+
+        self.parent = parent
+        self.controller = controller
+
+        super().__init__(
+            self.parent,
+            relief=tk.GROOVE,
+            *args,
+            **kwargs
+        )
+        self.pack(
+            side=side,  # TBC
+            anchor=tk.CENTER,
+            padx=10,
+            pady=(20, 0)
+        )
+
+        # Label to prompt user to enter path to save to
+        self.enter_save_path_label = ttk.Label(
+            self,
+            text="Enter path to save: "
+        )
+        self.enter_save_path_label.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=5
+        )
+
+        # Filepath entry display
+        self.filepath_text = tk.StringVar(value=self.controller.session.get_session_workspace_path())
+        self.filepath_entry = ttk.Entry(
+            self,
+            width=50,
+            textvariable=self.filepath_text,
+            state="normal"
+        )
+        self.filepath_entry.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=5
+        )
+
+        # Save button
+        # TODO: command for search directory
+        self.search_button = ttk.Button(
+            self,
+            style="primary.Outline.TButton",
+            text="Search"
+        )
+        self.search_button.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=5
+        )
+
+        # Save button
+        # TODO: command for save image in plot canvas
+        self.save_button = ttk.Button(
+            self,
+            style="primary.Outline.TButton",
+            text="Save"
+        )
+        self.save_button.pack(
+            side=tk.RIGHT,
+            padx=10,
+            pady=5
+        )
