@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog as tkfd
 from tkinter import ttk
 
 
@@ -52,7 +53,8 @@ class SavePane(ttk.Frame):
         self.search_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
-            text="Search"
+            text="Search",
+            command=self.get_filepath
         )
         self.search_button.pack(
             side=tk.LEFT,
@@ -72,3 +74,10 @@ class SavePane(ttk.Frame):
             padx=10,
             pady=5
         )
+
+    def get_filepath(self):
+        try:
+            self.save_path = tkfd.askdirectory(initialdir="C:/")
+            self.filepath_text.set(self.save_path)
+        except ValueError:
+            self.filepath_text.set(self.controller.session.get_session_workspace_path())
