@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from view.main.SavePane import SavePane
+
 
 class SpectrumSettingPane(tk.Frame):
     def __init__(self, parent, spectrum, controller, *args, **kwargs):
@@ -41,19 +43,9 @@ class SpectrumSettingPane(tk.Frame):
         )
 
         # Save button
-        self.save_button = ttk.Button(
+        self.save_pane = SavePane(
             self,
-            style="primary.Outline.TButton",
-            text="Save",
-            command=self.spectrum.handle_spectrum_save
-        )
-        self.save_button.pack(
-            side=tk.RIGHT,
-            padx=10,
-            pady=(20, 0)
-        )
-
-        self.pack(
-            side=tk.BOTTOM,
-            anchor=tk.CENTER
+            self.controller,
+            self.spectrum,
+            tk.RIGHT
         )
