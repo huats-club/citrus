@@ -39,18 +39,6 @@ class CoverageBar(ttk.Frame):
             anchor=tk.NE
         )
 
-        # Create pan button
-        self.pan_button = ttk.Button(
-            self.view_container,
-            style="primary.Outline.TButton",
-            text="Pan".center(self.STRING_LENGTH, ' ')
-        )
-        self.pan_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=5
-        )
-
         # Create plot button
         self.plot_button = ttk.Button(
             self.plot_container,
