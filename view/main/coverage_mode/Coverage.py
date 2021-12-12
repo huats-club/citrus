@@ -131,6 +131,9 @@ class CoveragePage(ttk.Frame):
     def set_no_dxf_error_message(self):
         self.coverage_info_panel.set_no_dxf_error_message()
 
+    def set_load_dxf_error_message(self):
+        self.coverage_info_panel.set_load_dxf_error_message()
+
     def disable_scan_button(self):
         self.coverage_display_data.disable_scan_button()
 

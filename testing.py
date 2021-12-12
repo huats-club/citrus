@@ -1,8 +1,8 @@
 import math
 import time
 
-# IS_TESTING = True
-IS_TESTING = False
+IS_TESTING = True
+# IS_TESTING = False
 
 
 def process_test_coverage(pipe, center_freq, stop_pipe):

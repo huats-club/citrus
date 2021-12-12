@@ -35,6 +35,10 @@ class CoverageInfoPanel(tk.Frame):
         self.warning_text.set("Error! No dxf file selected.")
         self.after(5000, self.clear_error_message)
 
+    def set_load_dxf_error_message(self):
+        self.warning_text.set("Error! Dxf file cannot be loaded.")
+        self.after(5000, self.clear_error_message)
+
     def clear_error_message(self):
         self.warning_text.set("")
 

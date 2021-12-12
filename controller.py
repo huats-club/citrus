@@ -98,18 +98,21 @@ class Controller(tk.Frame):
             try:
                 dxf = ezdxf.readfile(self.dxf_filepath)
 
+                # Save file as class member
+                self.dxf = dxf
+
             except IOError:
                 print(f'Not a DXF file or a generic I/O error.')
-                sys.exit(1)
+                self.main_page.coverage_page.set_load_dxf_error_message()
+                return
+
             except ezdxf.DXFStructureError:
                 print(f'Invalid or corrupted DXF file.')
-                sys.exit(2)
+                self.main_page.coverage_page.set_load_dxf_error_message()
+                return
 
             # For debugging
             print(f"Opened {self.dxf_filepath}")
-
-            # Save file as class member
-            self.dxf = dxf
 
             # Display dxf file
             self.display_dxf()
