@@ -55,8 +55,6 @@ class SpectrumPlot(ttk.Frame):
             expand=True  # ensures that the panel fill out the the parent
         )
 
-        self.ax.set_autoscaley_on(True)
-
         self.ax.set_xlabel(
             app_parameters.SPECTRUM_PLOT_LEGEND_X,
             labelpad=20,
@@ -100,6 +98,9 @@ class SpectrumPlot(ttk.Frame):
         # change axis values label
         self.ax.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
         self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.freq_label_list)))
+
+        # self.ax.set_autoscaley_on(True)
+        self.ax.set_ylim(-140, 20)
 
     def set_X_axis_freq(self, start_freq, centre_freq, end_freq, units):
 
