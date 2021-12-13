@@ -12,12 +12,12 @@ class RecordingHandler:
         self.stop_pipe_process = stop_pipe_process
         self.stop_pipe_handler = stop_pipe_handler
 
-    def start(self, pipe, center_freq):
+    def start(self, pipe, center_freq, bandwidth):
         if not IS_TESTING:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
                 target=process_spectrum, daemon=True,
-                args=(pipe, center_freq, self.stop_pipe_process,))
+                args=(pipe, center_freq, bandwidth, self.stop_pipe_process,))
 
         else:
             # Define mock process

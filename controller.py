@@ -1,5 +1,4 @@
 import datetime as datetime
-import sys
 import tkinter as tk
 from multiprocessing import Pipe
 
@@ -83,6 +82,21 @@ class Controller(tk.Frame):
     def make_main_page(self, spectrum_pipe, recording_pipe):
         self.main_page = MainPage(self.parent, self, spectrum_pipe, recording_pipe,
                                   self.session)  # parent of main page is root
+
+    def start_spectrum_process(self, center_freq, bandwidth):
+        # Create sdr handler
+        self.sdr_handler = CoverageHandler()
+        self.sdr_handler.start(self.pipe_spectrum_process, center_freq, bandwidth)
+
+    def stop_spectrum_process(self):
+        self.sdr_handler.stop()
+
+    def start_recording_process(self, center_freq, bandwidth):
+        self.recording_handler = RecordingHandler()
+        self.recording_handler.start(self.pipe_recording_process, center_freq, bandwidth)
+
+    def stop_recording_process(self):
+        self.recording_handler.stop()
 
     def load_dxf_to_canvas(self):
 
@@ -178,6 +192,7 @@ class Controller(tk.Frame):
             self.main_page.coverage_page.disable_scan_button()
 
     def configure_rssi_sensitivity(self):
+        # TODO: set rssi filtering
         print("configure rssi sensitivity")
 
     # Save whatever plot is on the tkinter if valid heatmap
@@ -224,18 +239,3 @@ class Controller(tk.Frame):
             image=self.image,
             anchor=tk.NW
         )
-
-    def start_spectrum_process(self, center_freq):
-        # Create sdr handler
-        self.sdr_handler = CoverageHandler()
-        self.sdr_handler.start(self.pipe_spectrum_process, center_freq)
-
-    def stop_spectrum_process(self):
-        self.sdr_handler.stop()
-
-    def start_recording_process(self, center_freq):
-        self.recording_handler = RecordingHandler()
-        self.recording_handler.start(self.pipe_recording_process, center_freq)
-
-    def stop_recording_process(self):
-        self.recording_handler.stop()

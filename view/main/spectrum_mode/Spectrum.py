@@ -83,12 +83,15 @@ class SpectrumPage(ttk.Frame):
             center_freq = self.spectrum_setting_container.get_center_freq()
             end_freq = self.spectrum_setting_container.get_stop_freq()
 
+            # get bandwidth
+            bandwidth = self.spectrum_setting_container.get_bandwidth()
+
             # Set plot bounds
             units = self.spectrum_setting_container.get_freq_units()
             self.spectrum_plot.set_X_axis_freq(start_freq, center_freq, end_freq, units)
 
             # Start spectrum
-            self.controller.start_spectrum_process(center_freq)
+            self.controller.start_spectrum_process(center_freq, bandwidth)
 
             # Disable setting of frequency in frequency pane
             self.spectrum_setting_container.disable_frequency_pane()

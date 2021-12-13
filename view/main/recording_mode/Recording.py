@@ -46,7 +46,6 @@ class RecordingPage(ttk.Frame):
         )
 
         # Waterfall plot - display in first show
-        # TODO
         self.recording_plot = RecordingWaterfallPlot(
             self.recording_plot_container,
             self.controller
@@ -106,8 +105,11 @@ class RecordingPage(ttk.Frame):
             # get centre freq
             center_freq = self.recording_setting.get_center_freq()
 
+            # get bandwidth
+            bandwidth = self.recording_setting.get_bandwidth()
+
             # Start process
-            self.controller.start_recording_process(center_freq)
+            self.controller.start_recording_process(center_freq, bandwidth)
 
         # Else display error message
         else:

@@ -263,6 +263,17 @@ class FrequencyPane(ttk.LabelFrame):
 
         return float(self.center_freq_text.get()) * mag
 
+    def get_bandwidth(self):
+
+        if self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
+            mag = 10 ** 9
+        elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
+            mag = 10 ** 3
+        elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_MEGA_X:
+            mag = 10 ** 6
+
+        return (float(self.stop_freq_text.get()) - float(self.start_freq_text.get())) * mag
+
     def populate_center_freq(self):
         self.after(100, self.populate_center_freq)
         if self.is_start_stop_freq_valid():
