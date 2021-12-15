@@ -10,10 +10,9 @@ from scipy.interpolate import Rbf
 
 
 class WifiHeatmapPlotter:
-    def __init__(self, x_y_wifidata, floorplan_image_path, session):
+    def __init__(self, x_y_wifidata, floorplan_image_path):
 
         self.floorplan_image_path = floorplan_image_path
-        self.session = session
 
         # Prepare data into plottable format
         self.survey_points = defaultdict(list)
@@ -140,7 +139,7 @@ class WifiHeatmapPlotter:
         )
         # end color mapping
 
-    def save(self, output_name):
+    def save(self, output_path):
 
         self.image = self.ax.imshow(
             self.z,
@@ -176,9 +175,9 @@ class WifiHeatmapPlotter:
                 markerfacecolor=self.mapper.to_rgba(self.survey_points['rssi'][idx])
             )
 
-        fname = fr"{self.session.get_session_workspace_path()}\{output_name}.png"
+        # Save plot
         plot.savefig(
-            fname,
+            output_path,
             dpi=self.dpi,
             bbox_inches='tight'
         )

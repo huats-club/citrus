@@ -125,14 +125,15 @@ class Controller(tk.Frame):
                 self.main_page.coverage_page.set_load_dxf_error_message()
                 return
 
-            # For debugging
-            print(f"Opened {self.dxf_filepath}")
-
             # Display dxf file
-            self.display_dxf()
+            self.main_page.coverage_page.display_dxf(self.dxf)
+
+            # Flag to indicate dxf already opened
+            self.dxf_opened = True
 
             # Cache the image of display on tkinter canvas after display
-            self.floorplan_saved_image_path = fr"{self.session.get_session_private_folder_path()}\{self.dxf_filename}.png"
+            # This is to create an image to etch up to tkinter canvas
+            self.loaded_floorplan_saved_image_path = fr"{self.session.get_session_private_folder_path()}\{self.dxf_filename}_tkinter.png"
             self.main_page.coverage_page.after(500, self.main_page.coverage_page.capture_canvas)
 
             # Enable plotting of points
@@ -141,12 +142,6 @@ class Controller(tk.Frame):
         else:
             print("Dxf already opened, consider clearing canvas first")
             self.main_page.coverage_page.disable_canvas_click()
-
-    def display_dxf(self):
-        self.main_page.coverage_page.display_dxf(self.dxf)
-
-        # Flag to indicate dxf already opened
-        self.dxf_opened = True
 
     def clear_dxf_from_canvas(self):
         if self.dxf_opened == True:
@@ -160,6 +155,9 @@ class Controller(tk.Frame):
 
         else:
             print("nothing to clear")
+
+    def get_floorplan_image_path(self):
+        return self.loaded_floorplan_saved_image_path
 
     def do_scan(self):
 
@@ -196,13 +194,13 @@ class Controller(tk.Frame):
         print("configure rssi sensitivity")
 
     # Save whatever plot is on the tkinter if valid heatmap
-    def save_heatmap_plot(self):
+    def save_heatmap_plot(self, output_path, forceSave=False):
 
-        if self.session.is_need_to_save():
+        if self.session.is_need_to_save() or forceSave:
 
             # Display only if dxf file opened and wifi scan done
             if self.dxf_opened and self.scan_done:
-                self.main_page.coverage_page.save_heatmap_plot()
+                self.main_page.coverage_page.save_heatmap_plot(output_path)
 
             elif not self.dxf_opened:
                 self.main_page.coverage_page.coverage_info_panel.set_no_dxf_error_message()
@@ -212,24 +210,26 @@ class Controller(tk.Frame):
 
             self.session.set_no_need_to_save()
 
-    # Display created heatmap on tkinter canvas
+    # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
 
         # If require to resave
         if self.session.is_need_to_save():
 
             # Rebuild heatmap first
-            self.save_heatmap_plot()
+            output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
+            saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
+            self.save_heatmap_plot(saved_heatmap_path)
+            self.session.increment_coverage_plot_num()
 
             # Set no need to save
             self.session.set_no_need_to_save()
 
+        # Display heatmap in tkinter canvas
         # don't display if no previous
         if self.session.get_prev_coverage_plot_num() > 0:
-            # Display heatmap in tkinter canvas
-            self.image = tk.PhotoImage(
-                file=f"{self.session.get_session_workspace_path()}/{self.session.get_dxf_prefix()}_{self.session.get_prev_coverage_plot_num()}.png"
-            )
+            self.image = tk.PhotoImage(file=saved_heatmap_path)
+
         else:
             self.image = tk.PhotoImage()
 
@@ -239,3 +239,11 @@ class Controller(tk.Frame):
             image=self.image,
             anchor=tk.NW
         )
+
+    def save_current_heatmap(self):
+        # Display only if dxf file opened and wifi scan done
+        if self.dxf_opened and self.scan_done:
+            output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
+            output_file = f"{self.session.get_session_workspace_path()}/{output_file_name}"
+            self.save_heatmap_plot(output_file, True)
+            self.session.increment_coverage_save_num()

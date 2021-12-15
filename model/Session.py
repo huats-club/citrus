@@ -4,6 +4,7 @@ from app_parameters import app_parameters
 class Session:
     def __init__(self, session_name):
         self.current_coverage_plot_num = 1
+        self.current_coverage_save_num = 1
         self.current_spectrum_plot_num = 1
         self.current_recording_plot_num = 1
         self.need_to_save = True
@@ -27,6 +28,12 @@ class Session:
 
     def increment_coverage_plot_num(self):
         self.current_coverage_plot_num += 1
+
+    def get_current_coverage_save_num(self):
+        return self.current_coverage_save_num
+
+    def increment_coverage_save_num(self):
+        self.current_coverage_save_num += 1
 
     def get_current_recording_plot_num(self):
         return self.current_recording_plot_num

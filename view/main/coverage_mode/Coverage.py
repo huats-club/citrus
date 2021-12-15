@@ -184,21 +184,15 @@ class CoveragePage(ttk.Frame):
             f.write(f"{wifi_selected}\n")
 
     # Save whatever plot is on the tkinter if valid heatmap
-    def save_heatmap_plot(self):
+    def save_heatmap_plot(self, output_path):
 
         # Save plot if points available
         if self.has_points:
             wifi_heatmap_plotter = WifiHeatmapPlotter(
-                self.recorded_points,
-                self.controller.floorplan_saved_image_path,
-                self.session
-            )
+                self.recorded_points, self.controller.get_floorplan_image_path())
 
-            wifi_heatmap_plotter.save(
-                f"{self.controller.session.get_dxf_prefix()}_{self.controller.session.get_current_coverage_plot_num()}"
-            )
-
-            self.controller.session.increment_coverage_plot_num()
+            # TODO: refactor, abstract out the incrementing num to controller level!!
+            wifi_heatmap_plotter.save(output_path)
 
         # No points from wifi scan
         else:
