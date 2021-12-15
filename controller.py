@@ -49,6 +49,9 @@ class Controller(tk.Frame):
         # Scan results done
         self.scan_done = False
 
+        # TODO: remove later
+        self.current_interface = app_parameters.INTERFACE_WIFI
+
         # Current wifi log
         ts = datetime.datetime.date(datetime.datetime.now())
         self.log_name = fr"{self.session.get_session_workspace_path()}/log_{ts}.txt"
@@ -60,13 +63,11 @@ class Controller(tk.Frame):
 
     # Function to execute when start button pressed
     def on_start_button_press(self):
-        is_valid_interface = (self.start.get_interface() != "")
+        # is_valid_interface = (self.start.get_interface() != "")
         is_valid_project_setting = (self.start.get_project_settings() != "")
 
         # Valid user input
-        if is_valid_interface and is_valid_project_setting:
-            print(self.start.get_interface(), self.start.get_project_settings())
-            self.current_interface = self.start.get_interface()
+        if is_valid_project_setting:
             self.is_valid_project_setting = self.start.get_project_settings()
 
             # Wipe out current window
@@ -116,12 +117,10 @@ class Controller(tk.Frame):
                 self.dxf = dxf
 
             except IOError:
-                print(f'Not a DXF file or a generic I/O error.')
                 self.main_page.coverage_page.set_load_dxf_error_message()
                 return
 
             except ezdxf.DXFStructureError:
-                print(f'Invalid or corrupted DXF file.')
                 self.main_page.coverage_page.set_load_dxf_error_message()
                 return
 
@@ -140,7 +139,6 @@ class Controller(tk.Frame):
             self.main_page.coverage_page.enable_canvas_click()
 
         else:
-            print("Dxf already opened, consider clearing canvas first")
             self.main_page.coverage_page.disable_canvas_click()
 
     def clear_dxf_from_canvas(self):
@@ -154,11 +152,12 @@ class Controller(tk.Frame):
             self.main_page.coverage_page.disable_canvas_click()
 
         else:
-            print("nothing to clear")
+            return
 
     def get_floorplan_image_path(self):
         return self.loaded_floorplan_saved_image_path
 
+    # TODO: update with new coverage workflow
     def do_scan(self):
 
         # clear scan first
