@@ -18,7 +18,7 @@ class CoveragePage(ttk.Frame):
         self.controller = controller
         self.session = session
 
-        self.save_dir_path = self.controller.session.get_session_workspace_path()
+        self.save_dir_path = self.session.get_session_workspace_path()
 
         # Save current canvas x and y bounds
         self.x_bound = -1
