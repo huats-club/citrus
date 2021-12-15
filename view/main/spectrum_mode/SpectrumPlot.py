@@ -100,7 +100,7 @@ class SpectrumPlot(ttk.Frame):
         self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.freq_label_list)))
 
         # self.ax.set_autoscaley_on(True)
-        self.ax.set_ylim(-140, 20)
+        self.ax.set_ylim(-140, 0)
 
     def set_X_axis_freq(self, start_freq, centre_freq, end_freq, units):
 
