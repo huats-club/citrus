@@ -18,6 +18,8 @@ class CoveragePage(ttk.Frame):
         self.controller = controller
         self.session = session
 
+        self.save_dir_path = self.controller.session.get_session_workspace_path()
+
         # Save current canvas x and y bounds
         self.x_bound = -1
         self.y_bound = -1
@@ -66,7 +68,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_canvas = CoverageCanvas(self.left_container, self.controller, self)
 
         # Create bottom bar
-        self.coverage_bar = CoverageBar(self.left_container, self.controller)
+        self.coverage_bar = CoverageBar(self.left_container, self.controller, self)
 
         # Create coverage menu to upload file
         self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
@@ -191,9 +193,16 @@ class CoveragePage(ttk.Frame):
             wifi_heatmap_plotter = WifiHeatmapPlotter(
                 self.recorded_points, self.controller.get_floorplan_image_path())
 
-            # TODO: refactor, abstract out the incrementing num to controller level!!
             wifi_heatmap_plotter.save(output_path)
 
         # No points from wifi scan
         else:
             self.coverage_info_panel.set_no_wifi_scan_error_message()
+
+    # Provide interface for save pane to call common function
+    def update_save_path(self, path):
+        self.save_dir_path = path
+
+    # Provide interface for save pane to call common function
+    def handle_save(self):
+        self.controller.save_current_heatmap(self.save_dir_path)

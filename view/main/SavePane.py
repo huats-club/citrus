@@ -4,7 +4,7 @@ from tkinter import ttk
 
 
 class SavePane(ttk.Frame):
-    def __init__(self, parent, controller, owner, side, *args, **kwargs):
+    def __init__(self, parent, controller, owner, side, pady=(20, 0), *args, **kwargs):
 
         self.parent = parent
         self.owner = owner
@@ -20,7 +20,7 @@ class SavePane(ttk.Frame):
             side=side,  # TBC
             anchor=tk.CENTER,
             padx=10,
-            pady=(20, 0)
+            pady=pady
         )
 
         # Label to prompt user to enter path to save to

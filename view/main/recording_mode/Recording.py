@@ -146,6 +146,7 @@ class RecordingPage(ttk.Frame):
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
 
+    # Provide interface for save pane to call common function
     def update_save_path(self, path):
         self.save_path = path
 

@@ -1,19 +1,20 @@
 import tkinter as tk
 from tkinter import ttk
 
+from view.main.SavePane import SavePane
+
 
 class CoverageBar(ttk.Frame):
-    def __init__(self, parent, controller, * args, **kwargs):
+    def __init__(self, parent, controller, owner, * args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.owner = owner
 
         super().__init__(
             self.parent,
             *args, **kwargs
         )
         self.pack(
-            padx=5,
-            pady=5,
             side=tk.BOTTOM,
             fill=tk.X
         )
@@ -39,18 +40,8 @@ class CoverageBar(ttk.Frame):
             anchor=tk.NE
         )
 
-        # Create plot button
-        self.plot_button = ttk.Button(
-            self.plot_container,
-            style="primary.Outline.TButton",
-            text="Save Plot".center(self.STRING_LENGTH, ' '),
-            command=self.controller.save_current_heatmap
-        )
-        self.plot_button.pack(
-            side=tk.LEFT,
-            padx=10,
-            pady=5
-        )
+        # Create save pane
+        self.save_pane = SavePane(self, self.controller, self.owner, tk.RIGHT, pady=(0, 0))
 
         # Create combine button
         self.combine_button = ttk.Button(

@@ -208,7 +208,8 @@ class Controller(tk.Frame):
             elif not self.scan_done:
                 self.main_page.coverage_page.coverage_info_panel.set_no_wifi_scan_error_message()
 
-            self.session.set_no_need_to_save()
+            if not forceSave:
+                self.session.set_no_need_to_save()
 
     # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
@@ -225,6 +226,9 @@ class Controller(tk.Frame):
             # Set no need to save
             self.session.set_no_need_to_save()
 
+        else:
+            return
+
         # Display heatmap in tkinter canvas
         # don't display if no previous
         if self.session.get_prev_coverage_plot_num() > 0:
@@ -240,10 +244,10 @@ class Controller(tk.Frame):
             anchor=tk.NW
         )
 
-    def save_current_heatmap(self):
+    def save_current_heatmap(self, dir):
         # Display only if dxf file opened and wifi scan done
         if self.dxf_opened and self.scan_done:
             output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
-            output_file = f"{self.session.get_session_workspace_path()}/{output_file_name}"
+            output_file = f"{dir}/{output_file_name}"
             self.save_heatmap_plot(output_file, True)
             self.session.increment_coverage_save_num()
