@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from app_util.app_util import resource_path
+from PIL import Image, ImageTk
 from view.main.SavePane import SavePane
 
 
@@ -51,6 +53,40 @@ class CoverageBar(ttk.Frame):
             command=self.controller.display_heatmap
         )
         self.combine_button.pack(
+            side=tk.RIGHT,
+            padx=10,
+            pady=5
+        )
+
+        # Create left button
+        left_arrow_image = ImageTk.PhotoImage(
+            Image.open(resource_path("assets/left-arrow.png")).resize((35, 35)))
+        self.left_arrow_button = tk.Button(
+            self.plot_container,
+            text="",
+            image=left_arrow_image,
+            compound=tk.RIGHT
+        )
+        self.left_arrow_button.photo = left_arrow_image
+        self.left_arrow_button.pack(
+            expand=True,
+            side=tk.LEFT,
+            padx=10,
+            pady=5
+        )
+
+        # Create right button
+        right_arrow_image = ImageTk.PhotoImage(
+            Image.open(resource_path("assets/right-arrow.png")).resize((35, 35)))
+        self.right_arrow_button = tk.Button(
+            self.plot_container,
+            text="",
+            image=right_arrow_image,
+            compound=tk.RIGHT
+        )
+        self.right_arrow_button.photo = right_arrow_image
+        self.right_arrow_button.pack(
+            expand=True,
             side=tk.RIGHT,
             padx=10,
             pady=5
