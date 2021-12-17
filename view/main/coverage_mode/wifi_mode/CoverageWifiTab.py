@@ -20,10 +20,13 @@ class CoverageWifiTab(ttk.Frame):
         self.current_selected_from_display_all = {}
 
         # Currently selected row of data from list of selected
-        self.current_selected_from_display_selected = {}
+        self.current_item_in_selected_panel = ""
 
         # String length for button
         self.STRING_LENGTH = 10
+
+        # uuid for selected
+        self.iid = 0
 
         # Create main container
         self.container = ttk.Frame(self)
@@ -101,8 +104,7 @@ class CoverageWifiTab(ttk.Frame):
         for column_name in self.column_names:
             self.display_selected_panel.column(
                 column_name,
-                width=self.column_width[column_name],
-                anchor=tk.W
+                width=self.column_width[column_name]
             )
             self.display_selected_panel.heading(
                 column_name,
@@ -121,7 +123,7 @@ class CoverageWifiTab(ttk.Frame):
         # Create scan button
         self.scan_button = ttk.Button(
             self.button_container,
-            style="primary.Outline.TButton",
+            style="primary.TButton",
             text="Scan".center(self.STRING_LENGTH, ' '),
             command=self.controller.do_scan
         )
@@ -134,10 +136,36 @@ class CoverageWifiTab(ttk.Frame):
         # Create clear button
         self.clear_button = ttk.Button(
             self.button_container,
-            style="primary.Outline.TButton",
+            style="secondary.TButton",
             text="Clear".center(self.STRING_LENGTH, ' ')
         )
         self.clear_button.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=(0, 10)
+        )
+
+        # Create down button
+        self.track_button = ttk.Button(
+            self.button_container,
+            style="success.TButton",
+            text="Track".center(self.STRING_LENGTH, ' '),
+            command=self.move_item_to_selected
+        )
+        self.track_button.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=(0, 10)
+        )
+
+        # Create down button
+        self.untrack_button = ttk.Button(
+            self.button_container,
+            style="danger.TButton",
+            text="Untrack".center(self.STRING_LENGTH, ' '),
+            command=self.remove_item_from_selected
+        )
+        self.untrack_button.pack(
             side=tk.RIGHT,
             padx=10,
             pady=(0, 10)
@@ -161,15 +189,18 @@ class CoverageWifiTab(ttk.Frame):
         print(self.current_selected_from_display_all)
 
     def select_item_from_display_selected(self, a):
-        curItem = self.display_selected_panel.focus()
-        data = self.display_selected_panel.item(curItem)['values']
+        self.current_item_in_selected_panel = self.display_selected_panel.focus()
 
-        if len(data) == 0:
+    def move_item_to_selected(self):
+        self.display_selected_panel.insert(
+            parent='', index=self.iid, iid=self.iid,
+            values=tuple(self.current_selected_from_display_all.values())
+        )
+        self.iid += 1
+
+    def remove_item_from_selected(self):
+
+        if not self.display_selected_panel.focus():
             return
 
-        idx = 0
-        for name in self.column_names:
-            self.current_selected_from_display_selected[name] = data[idx]
-            idx += 1
-
-        print(self.current_selected_from_display_selected)
+        self.display_selected_panel.delete(self.display_selected_panel.focus())
