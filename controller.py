@@ -188,6 +188,7 @@ class Controller(tk.Frame):
             self.main_page.coverage_page.set_no_dxf_error_message()
             self.main_page.coverage_page.disable_scan_button()
 
+    # TODO: update wrt to sdr/wifi dbm
     def configure_rssi_sensitivity(self):
         # TODO: set rssi filtering
         print("configure rssi sensitivity")
