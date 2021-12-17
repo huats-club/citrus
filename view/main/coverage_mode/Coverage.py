@@ -6,7 +6,7 @@ from model.dxf2tk import dxf2tk
 from model.WifiHeatmapPlotter import WifiHeatmapPlotter
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
-from view.main.coverage_mode.CoverageDataDisplay import CoverageDataDisplay
+from view.main.coverage_mode.CoverageDataScanner import CoverageDataScanner
 from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
 from view.main.coverage_mode.CoverageInfoPanel import CoverageInfoPanel
 from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
@@ -73,11 +73,11 @@ class CoveragePage(ttk.Frame):
         # Create coverage menu to upload file
         self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
 
-        # Create coverage menu bar for right top container
-        self.coverage_display_data = CoverageDataDisplay(self.right_container, self.controller)
-
-        # Create coverage value menu for right top container
+        # Create coverage value menu for rssi filtering
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
+
+        # Create coverage menu bar for right top container
+        self.coverage_display_data = CoverageDataScanner(self.right_container, self.controller)
 
         # Create error message bar
         self.coverage_info_panel = CoverageInfoPanel(self.right_container, self.controller)
@@ -137,18 +137,18 @@ class CoveragePage(ttk.Frame):
         self.coverage_info_panel.set_load_dxf_error_message()
 
     def disable_scan_button(self):
-        self.coverage_display_data.disable_scan_button()
+        self.coverage_display_data.disable_scan_button()  # TODO: change later
 
     def enable_scan_button(self):
-        self.coverage_display_data.enable_scan_button()
+        self.coverage_display_data.enable_scan_button()  # TODO: change later
 
     def populate_wifi_scan_results(self, json_list):
-        self.coverage_display_data.populate_wifi_scan_results(json_list)
+        self.coverage_display_data.populate_wifi_scan_results(json_list)  # TODO: change later
 
     def clear_wifi_scan_results(self):
         self.recorded_points = []
         self.has_points = False
-        self.coverage_display_data.clear_wifi_scan_results()
+        self.coverage_display_data.clear_wifi_scan_results()  # TODO: change later
 
     def enable_canvas_click(self):
         self.coverage_canvas.enable_click()
@@ -158,7 +158,7 @@ class CoveragePage(ttk.Frame):
 
     def add_point_data(self, x, y):
         # Get currently select wifi data
-        wifi_selected = self.coverage_display_data.get_current_selected()
+        wifi_selected = self.coverage_display_data.get_current_selected()  # TODO: change later
 
         # Prepared dictionary
         data = {

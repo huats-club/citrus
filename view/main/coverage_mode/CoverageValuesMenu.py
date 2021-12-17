@@ -96,8 +96,8 @@ class CoverageValuesMenu(ttk.LabelFrame):
             command=self.controller.configure_rssi_sensitivity
         )
         self.button.pack(
-            padx=10,
-            pady=10,
+            padx=5,
+            pady=(0, 10),
             side=tk.TOP,
             anchor=tk.CENTER
         )
