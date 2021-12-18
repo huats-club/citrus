@@ -137,12 +137,6 @@ class CoveragePage(ttk.Frame):
     def set_load_dxf_error_message(self):
         self.coverage_info_panel.set_load_dxf_error_message()
 
-    def disable_scan_button(self):
-        self.coverage_display_data.disable_scan_button()  # TODO: change later
-
-    def enable_scan_button(self):
-        self.coverage_display_data.enable_scan_button()  # TODO: change later
-
     def populate_wifi_scan_results(self, json_list):
         self.coverage_display_data.populate_wifi_scan_results(json_list)  # TODO: change later
 
@@ -196,9 +190,12 @@ class CoveragePage(ttk.Frame):
 
             wifi_heatmap_plotter.save(output_path)
 
+            return True
+
         # No points from wifi scan
         else:
             self.coverage_info_panel.set_no_wifi_scan_error_message()
+            return False
 
     # Provide interface for save pane to call common function
     def update_save_path(self, path):

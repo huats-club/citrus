@@ -72,14 +72,6 @@ class CoverageDataScanner(ttk.Frame):
         # Select wifi as main tab
         self.interfaces_selection.select(self.wifi_tab)
 
-    def disable_scan_button(self):
-        pass
-        # self.scan_button.state = tk.DISABLED
-
-    def enable_scan_button(self):
-        pass
-        # self.scan_button.state = tk.NORMAL
-
     def populate_wifi_scan_results(self, json_list):
         for json in json_list:
             ssid = json['ssid']

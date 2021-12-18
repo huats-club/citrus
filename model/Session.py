@@ -1,3 +1,5 @@
+import os
+
 from app_parameters import app_parameters
 
 
@@ -11,8 +13,8 @@ class Session:
 
         # session data
         self.session_name = session_name
-        self.session_workspace_folder = app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
-        self.session_private_folder = app_parameters.PRIVATE_FOLDER + f"/{session_name}"
+        self.session_workspace_folder = os.getcwd() + '/' + app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
+        self.session_private_folder = os.getcwd() + '/' + app_parameters.PRIVATE_FOLDER + f"/{session_name}"
 
     def get_current_spectrum_plot_num(self):
         return self.current_spectrum_plot_num

@@ -1,6 +1,7 @@
 import datetime as datetime
 import tkinter as tk
 from multiprocessing import Pipe
+from tkinter.constants import FALSE
 
 import ezdxf
 
@@ -185,25 +186,33 @@ class Controller(tk.Frame):
         # Else, prompt dxf to be loaded
         else:
             self.main_page.coverage_page.set_no_dxf_error_message()
-            self.main_page.coverage_page.disable_scan_button()
 
     # Save whatever plot is on the tkinter if valid heatmap
     def save_heatmap_plot(self, output_path, forceSave=False):
+
+        status = False
 
         if self.session.is_need_to_save() or forceSave:
 
             # Display only if dxf file opened and wifi scan done
             if self.dxf_opened and self.scan_done:
-                self.main_page.coverage_page.save_heatmap_plot(output_path)
+                status = self.main_page.coverage_page.save_heatmap_plot(output_path)
+                print("Scan done and dxf open")
 
             elif not self.dxf_opened:
                 self.main_page.coverage_page.coverage_info_panel.set_no_dxf_error_message()
+                print("dxf not open")
+                status = False
 
             elif not self.scan_done:
                 self.main_page.coverage_page.coverage_info_panel.set_no_wifi_scan_error_message()
+                print("scan not done")
+                status = False
 
             if not forceSave:
                 self.session.set_no_need_to_save()
+
+        return status
 
     # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
@@ -214,8 +223,12 @@ class Controller(tk.Frame):
             # Rebuild heatmap first
             output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
             saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
-            self.save_heatmap_plot(saved_heatmap_path)
             self.session.increment_coverage_plot_num()
+
+            status = self.save_heatmap_plot(saved_heatmap_path, True)
+
+            if status == False:
+                return
 
             # Set no need to save
             self.session.set_no_need_to_save()
