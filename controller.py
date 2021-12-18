@@ -49,7 +49,7 @@ class Controller(tk.Frame):
         # Scan results done
         self.scan_done = False
 
-        # TODO: remove later
+        # Indicate current interface
         self.current_interface = app_parameters.INTERFACE_WIFI
 
         # Current wifi log
@@ -158,7 +158,7 @@ class Controller(tk.Frame):
         return self.loaded_floorplan_saved_image_path
 
     # TODO: update with new coverage workflow
-    def do_scan(self):
+    def do_coverage_wifi_scan(self):
 
         # clear scan first
         self.main_page.coverage_page.clear_wifi_scan_results()
@@ -170,33 +170,22 @@ class Controller(tk.Frame):
                 self.main_page.coverage_page.clear_wifi_scan_results()
                 self.scan_done = False
 
-            # If wifi, run lswifi scan
-            if self.current_interface == app_parameters.INTERFACE_WIFI:
-                wifi_scanner = WifiScanner()
+            wifi_scanner = WifiScanner()
+            results = wifi_scanner.scan()
+
+            # if only one or none wifi then scan again
+            if len(results) == 1 or len(results) == 2 or len(results) == 0:
                 results = wifi_scanner.scan()
 
-                # if only one or none wifi then scan again
-                if len(results) == 1 or len(results) == 2 or len(results) == 0:
-                    results = wifi_scanner.scan()
+            self.main_page.coverage_page.populate_wifi_scan_results(results)
 
-                self.main_page.coverage_page.populate_wifi_scan_results(results)
-
-                # Indicate scan is done
-                self.scan_done = True
-
-            # If limesdr, run limesdr scan
-            if self.current_interface == app_parameters.INTERFACE_SDR:
-                print("scan sdr")
+            # Indicate scan is done
+            self.scan_done = True
 
         # Else, prompt dxf to be loaded
         else:
             self.main_page.coverage_page.set_no_dxf_error_message()
             self.main_page.coverage_page.disable_scan_button()
-
-    # TODO: update wrt to sdr/wifi dbm
-    def configure_rssi_sensitivity(self):
-        # TODO: set rssi filtering
-        print("configure rssi sensitivity")
 
     # Save whatever plot is on the tkinter if valid heatmap
     def save_heatmap_plot(self, output_path, forceSave=False):

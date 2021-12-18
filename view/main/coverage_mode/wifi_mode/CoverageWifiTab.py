@@ -150,7 +150,7 @@ class CoverageWifiTab(ttk.Frame):
             self.button_container,
             style="primary.TButton",
             text="Scan".center(self.STRING_LENGTH, ' '),
-            command=self.controller.do_scan
+            command=self.controller.do_coverage_wifi_scan
         )
         self.scan_button.pack(
             side=tk.LEFT,

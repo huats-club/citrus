@@ -73,6 +73,7 @@ class CoveragePage(ttk.Frame):
         # Create coverage menu to upload file
         self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
 
+        # TODO: fix this later
         # Create coverage value menu for rssi filtering
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
 

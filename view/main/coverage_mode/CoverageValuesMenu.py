@@ -88,12 +88,12 @@ class CoverageValuesMenu(ttk.LabelFrame):
         self.button_containers = tk.Frame(self)
         self.button_containers.pack(side=tk.BOTTOM)
 
+        # TODO: fix the command
         # Configure rssi sensitivity button
         self.button = ttk.Button(
             self.button_containers,
             style="primary.Outline.TButton",
-            text="Configure",
-            command=self.controller.configure_rssi_sensitivity
+            text="Configure"
         )
         self.button.pack(
             padx=5,
