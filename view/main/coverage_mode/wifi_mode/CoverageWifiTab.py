@@ -3,9 +3,10 @@ from tkinter import ttk
 
 
 class CoverageWifiTab(ttk.Frame):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, coverage, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.coverage = coverage
 
         super().__init__(
             self.parent,
@@ -28,16 +29,6 @@ class CoverageWifiTab(ttk.Frame):
         # uuid for selected
         self.iid = 0
 
-        # Create main container
-        self.container = ttk.Frame(self)
-        self.container.pack(
-            padx=4,
-            pady=4,
-            side=tk.TOP,
-            anchor=tk.NW,
-            fill=tk.BOTH
-        )
-
         # Create column name list to select active wifi
         self.column_names = [
             'ssid',
@@ -52,6 +43,28 @@ class CoverageWifiTab(ttk.Frame):
             'freq': 50,
             'channel[#@MHz]': 120
         }
+
+        # Create main container
+        self.container = ttk.Frame(self)
+        self.container.pack(
+            padx=4,
+            pady=4,
+            side=tk.TOP,
+            anchor=tk.NW,
+            fill=tk.BOTH
+        )
+
+        # Label to inform display ALL ssid scanned
+        self.display_all_panel_label = ttk.Label(
+            self.container,
+            text="All SSID available:"
+        )
+        self.display_all_panel_label.pack(
+            side=tk.TOP,
+            anchor=tk.NW,
+            padx=10,
+            pady=5
+        )
 
         # Create display treeview panel to show wifi ALL ssid scanned
         self.display_all_panel = ttk.Treeview(
@@ -82,6 +95,18 @@ class CoverageWifiTab(ttk.Frame):
                 text=column_name,
                 anchor=tk.CENTER
             )
+
+        # Label to inform display ALL ssid scanned
+        self.display_selected_panel_label = ttk.Label(
+            self.container,
+            text="SSID selected:"
+        )
+        self.display_selected_panel_label.pack(
+            side=tk.TOP,
+            anchor=tk.NW,
+            padx=10,
+            pady=5
+        )
 
         # Create display treeview panel to show SELECTED SSID
         self.display_selected_panel = ttk.Treeview(
@@ -137,7 +162,8 @@ class CoverageWifiTab(ttk.Frame):
         self.clear_button = ttk.Button(
             self.button_container,
             style="secondary.TButton",
-            text="Clear".center(self.STRING_LENGTH, ' ')
+            text="Clear".center(self.STRING_LENGTH, ' '),
+            command=self.coverage.clear_wifi_scan_results
         )
         self.clear_button.pack(
             side=tk.LEFT,
@@ -204,3 +230,9 @@ class CoverageWifiTab(ttk.Frame):
             return
 
         self.display_selected_panel.delete(self.display_selected_panel.focus())
+
+    def get_rssi_data(self):
+        pass
+
+    def clear_all_wifi_panel(self):
+        self.display_all_panel.delete(*self.display_all_panel.get_children())

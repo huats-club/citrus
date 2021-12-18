@@ -174,6 +174,11 @@ class Controller(tk.Frame):
             if self.current_interface == app_parameters.INTERFACE_WIFI:
                 wifi_scanner = WifiScanner()
                 results = wifi_scanner.scan()
+
+                # if only one or none wifi then scan again
+                if len(results) == 1 or len(results) == 2 or len(results) == 0:
+                    results = wifi_scanner.scan()
+
                 self.main_page.coverage_page.populate_wifi_scan_results(results)
 
                 # Indicate scan is done

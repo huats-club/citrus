@@ -77,7 +77,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
 
         # Create coverage menu bar for right top container
-        self.coverage_display_data = CoverageDataScanner(self.right_container, self.controller)
+        self.coverage_display_data = CoverageDataScanner(self.right_container, self.controller, self)
 
         # Create error message bar
         self.coverage_info_panel = CoverageInfoPanel(self.right_container, self.controller)

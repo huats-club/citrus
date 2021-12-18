@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 import tkinter.ttk as ttk
 
@@ -6,9 +7,10 @@ from view.main.coverage_mode.wifi_mode.CoverageWifiTab import CoverageWifiTab
 
 
 class CoverageDataScanner(ttk.Frame):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, coverage, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.coverage = coverage
 
         # iid for entries
         self.idx = 0
@@ -54,7 +56,8 @@ class CoverageDataScanner(ttk.Frame):
         # Add Wifi tab
         self.wifi_tab = CoverageWifiTab(
             self.interfaces_selection,
-            self.controller
+            self.controller,
+            self.coverage
         )
 
         self.interfaces_selection.add(
@@ -94,9 +97,18 @@ class CoverageDataScanner(ttk.Frame):
             self.idx += 1
 
     def clear_wifi_scan_results(self):
-        pass
-        # self.panel.delete(*self.panel.get_children())
+        self.wifi_tab.clear_all_wifi_panel()
 
     def get_current_selected(self):
+
+        if self.interfaces_selection.tab(self.interfaces_selection.select(), 'text') == 'WIFI':
+
+            # prepare wifi scan data into list
+            self.wifi_tab.get_rssi_data()
+
+            # return copy.deepcopy(self.current_selected)
+
+        else:  # SDR
+            pass
+
         return ""
-        # return copy.deepcopy(self.current_selected)
