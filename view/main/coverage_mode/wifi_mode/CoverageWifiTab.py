@@ -97,11 +97,11 @@ class CoverageWifiTab(ttk.Frame):
             )
 
         # Label to inform display ALL ssid scanned
-        self.display_selected_panel_label = ttk.Label(
+        self.display_tracked_panel_label = ttk.Label(
             self.container,
-            text="SSID selected:"
+            text="SSID tracked:"
         )
-        self.display_selected_panel_label.pack(
+        self.display_tracked_panel_label.pack(
             side=tk.TOP,
             anchor=tk.NW,
             padx=10,
@@ -109,14 +109,14 @@ class CoverageWifiTab(ttk.Frame):
         )
 
         # Create display treeview panel to show SELECTED SSID
-        self.display_selected_panel = ttk.Treeview(
+        self.display_tracked_panel = ttk.Treeview(
             self.container,
             show='headings',
             style='primary.Treeview',
             columns=self.column_names,
             height=5
         )
-        self.display_selected_panel.pack(
+        self.display_tracked_panel.pack(
             padx=4,
             pady=4,
             fill=tk.BOTH,
@@ -127,11 +127,11 @@ class CoverageWifiTab(ttk.Frame):
 
         # Setup columns and headings
         for column_name in self.column_names:
-            self.display_selected_panel.column(
+            self.display_tracked_panel.column(
                 column_name,
                 width=self.column_width[column_name]
             )
-            self.display_selected_panel.heading(
+            self.display_tracked_panel.heading(
                 column_name,
                 text=column_name,
                 anchor=tk.CENTER
@@ -201,8 +201,9 @@ class CoverageWifiTab(ttk.Frame):
         self.display_all_panel.bind('<ButtonRelease-1>', self.select_item_from_display_all)
 
         # Allow clicking of treeview items
-        self.display_selected_panel.bind('<ButtonRelease-1>', self.select_item_from_display_selected)
+        self.display_tracked_panel.bind('<ButtonRelease-1>', self.select_item_from_display_tracked)
 
+    # Store clicked item in the ALL pane corresponding to click action
     def select_item_from_display_all(self, a):
         curItem = self.display_all_panel.focus()
         data = self.display_all_panel.item(curItem)['values']
@@ -214,25 +215,35 @@ class CoverageWifiTab(ttk.Frame):
 
         print(self.current_selected_from_display_all)
 
-    def select_item_from_display_selected(self, a):
-        self.current_item_in_selected_panel = self.display_selected_panel.focus()
+    # Store clicked item in the Selected pane corresponding to click action
+    def select_item_from_display_tracked(self, a):
+        self.current_item_in_selected_panel = self.display_tracked_panel.focus()
 
     def move_item_to_selected(self):
-        self.display_selected_panel.insert(
+        self.display_tracked_panel.insert(
             parent='', index=self.iid, iid=self.iid,
             values=tuple(self.current_selected_from_display_all.values())
         )
         self.iid += 1
 
-    def remove_item_from_selected(self):
+    def clear_all_wifi_panel(self):
+        self.get_tracked_ssid_list()
+        self.display_all_panel.delete(*self.display_all_panel.get_children())
 
-        if not self.display_selected_panel.focus():
+    def remove_item_from_selected(self):
+        # If no items clicked, ignore
+        if not self.display_tracked_panel.focus():
             return
 
-        self.display_selected_panel.delete(self.display_selected_panel.focus())
+        self.display_tracked_panel.delete(self.display_tracked_panel.focus())
 
-    def get_rssi_data(self):
-        pass
+    # Get list of selected ssid in SELECTED panel
+    def get_tracked_ssid_list(self):
 
-    def clear_all_wifi_panel(self):
-        self.display_all_panel.delete(*self.display_all_panel.get_children())
+        ssid_list = []
+
+        for child in self.display_tracked_panel.get_children():
+            all_data = self.display_tracked_panel.item(child)["values"]
+            ssid_list.append(all_data[0])  # assumes first item is ssid
+
+        return ssid_list

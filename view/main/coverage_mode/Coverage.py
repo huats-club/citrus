@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 
-from app_parameters import app_parameters
+import app_parameters as app_parameters
 from model.dxf2tk import dxf2tk
+from model.Point import Point
 from model.WifiHeatmapPlotter import WifiHeatmapPlotter
 from view.main.coverage_mode.CoverageBar import CoverageBar
 from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
@@ -24,8 +25,8 @@ class CoveragePage(ttk.Frame):
         self.x_bound = -1
         self.y_bound = -1
 
-        # Collect point (x,y) data
-        self.recorded_points = []
+        # Collect point (x,y) data in a dict/hashmap of (x,y) as key
+        self.recorded_points = dict()
         self.has_points = False
 
         super().__init__(self.parent,  *args, **kwargs)
@@ -85,7 +86,7 @@ class CoveragePage(ttk.Frame):
 
     def display_dxf(self, dxf):
         # Clear all recorded points if not already empty
-        self.recorded_points = []
+        self.recorded_points = {}
 
         # Create converter
         dxf2tk_converter = dxf2tk(self)
@@ -141,7 +142,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_display_data.populate_wifi_scan_results(json_list)  # TODO: change later
 
     def clear_wifi_scan_results(self):
-        self.recorded_points = []
+        self.recorded_points = {}
         self.has_points = False
         self.coverage_display_data.clear_wifi_scan_results()  # TODO: change later
 
@@ -151,39 +152,54 @@ class CoveragePage(ttk.Frame):
     def disable_canvas_click(self):
         self.coverage_canvas.disable_click()
 
+    # TODO: amend
     def add_point_data(self, x, y):
-        # Get currently select wifi data
-        wifi_selected = self.coverage_display_data.get_current_selected()  # TODO: change later
+
+        # create key to put inside maps
+        key = (x, y)
+
+        # get signal strength data of current mode tracked
+        if self.coverage_display_data.get_current_tab_name() == "WIFI":
+            wifi_list_json = self.coverage_display_data.get_wifi_data_tracked()
+
+            # preprocess wifi data to Point
+            point = Point(x, y, wifi_list_json)
+            self.recorded_points[key] = point
+
+            # Indicate flag that points exist
+            self.has_points = True
+
+            # return created point for recording
+            return point
 
         # Prepared dictionary
-        data = {
-            app_parameters.POINT_KEY_TK_X: x,
-            app_parameters.POINT_KEY_TK_Y: y,
-            app_parameters.POINT_KEY_WIFI_DATA: wifi_selected
-        }
+        # data = {
+        #     app_parameters.POINT_KEY_TK_X: x,
+        #     app_parameters.POINT_KEY_TK_Y: y,
+        #     app_parameters.POINT_KEY_WIFI_DATA: wifi_selected
+        # }
 
-        # Add to list
-        self.recorded_points.append(
-            data
-        )
+        # put data into map
 
-        # Indicate flag that points exist
-        self.has_points = True
+        # # Add to list
+        # self.recorded_points.append(data)
 
-        # Save coordinates in log
-        with open(self.controller.log_name, 'a+') as f:
-            conv_x = data[app_parameters.POINT_KEY_TK_X]
-            conv_y = data[app_parameters.POINT_KEY_TK_Y]
-            f.write(f"x: {conv_x} | y: {conv_y}\n")
+        # # Save coordinates in log
+        # with open(self.controller.log_name, 'a+') as f:
+        #     conv_x = data[app_parameters.POINT_KEY_TK_X]
+        #     conv_y = data[app_parameters.POINT_KEY_TK_Y]
+        #     f.write(f"x: {conv_x} | y: {conv_y}\n")
 
-        # Save wifi data in json log
-        with open(self.controller.log_json, 'a+') as f:
-            f.write(f"{wifi_selected}\n")
+        # # Save wifi data in json log
+        # with open(self.controller.log_json, 'a+') as f:
+        #     f.write(f"{wifi_selected}\n")
 
-    # Save whatever plot is on the tkinter if valid heatmap
+        # Save whatever plot is on the tkinter if valid heatmap
+
     def save_heatmap_plot(self, output_path):
 
         # Save plot if points available
+        # TODO: fix this
         if self.has_points:
             wifi_heatmap_plotter = WifiHeatmapPlotter(
                 self.recorded_points, self.controller.get_floorplan_image_path())

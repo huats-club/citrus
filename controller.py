@@ -1,7 +1,6 @@
 import datetime as datetime
 import tkinter as tk
 from multiprocessing import Pipe
-from tkinter.constants import FALSE
 
 import ezdxf
 

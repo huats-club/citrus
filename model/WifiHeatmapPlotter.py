@@ -10,6 +10,8 @@ from scipy.interpolate import Rbf
 
 
 class WifiHeatmapPlotter:
+
+    # TODO: fix this to generalize to sdr
     def __init__(self, x_y_wifidata, floorplan_image_path):
 
         self.floorplan_image_path = floorplan_image_path

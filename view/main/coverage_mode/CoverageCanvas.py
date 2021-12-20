@@ -4,6 +4,18 @@ from app_parameters import app_parameters
 from PIL import ImageGrab
 
 
+# Binding hovers
+def on_start_hover(event, point):
+    # What you do when the mouse hovers
+    print(f"{point.x} {point.y} {point.map.items()}")
+    pass
+
+
+def on_end_hover(event):
+    # What to do when the mouse stops hovering
+    pass
+
+
 class CoverageCanvas(tk.Canvas):
     def __init__(self, parent, controller, coverage, *args, **kwargs):
         self.parent = parent
@@ -51,11 +63,14 @@ class CoverageCanvas(tk.Canvas):
         x1, y1 = (event.x - 5), (event.y - 5)
         x2, y2 = (event.x + 5), (event.y + 5)
 
-        # Display oval drawing
-        self.create_oval(x1, y1, x2, y2, fill=python_green)
+        # Record point and associated signal
+        # Returns created Point object
+        point = self.coverage.add_point_data(event.x, event.y)
 
-        # Record point and associate with current selected wifi
-        self.coverage.add_point_data(event.x, event.y)
+        # Display oval drawing
+        oval_ui = self.create_oval(x1, y1, x2, y2, fill=python_green)
+        self.tag_bind(oval_ui, '<Enter>', lambda event: on_start_hover(event, point))
+        self.tag_bind(oval_ui, '<Leave>', on_end_hover)
 
         # Set that new wifi heatmap needs to be regenerated
         self.controller.session.set_need_to_save()

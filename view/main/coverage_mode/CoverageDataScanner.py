@@ -2,6 +2,7 @@ import copy
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from model.WifiScanner import WifiScanner
 from view.main.coverage_mode.sdr_mode.CoverageSdrTab import CoverageSdrTab
 from view.main.coverage_mode.wifi_mode.CoverageWifiTab import CoverageWifiTab
 
@@ -91,16 +92,15 @@ class CoverageDataScanner(ttk.Frame):
     def clear_wifi_scan_results(self):
         self.wifi_tab.clear_all_wifi_panel()
 
-    def get_current_selected(self):
+    def get_wifi_data_tracked(self):
+        # Get list of ssid tracked
+        ssid_selected = self.wifi_tab.get_tracked_ssid_list()
 
-        if self.interfaces_selection.tab(self.interfaces_selection.select(), 'text') == 'WIFI':
+        wifi_scanner = WifiScanner(filter=ssid_selected)
+        wifi_list_json = wifi_scanner.scan()
 
-            # prepare wifi scan data into list
-            self.wifi_tab.get_rssi_data()
+        return copy.deepcopy(wifi_list_json)
 
-            # return copy.deepcopy(self.current_selected)
-
-        else:  # SDR
-            pass
-
-        return ""
+    # Returns WIFI or SDR
+    def get_current_tab_name(self):
+        return self.interfaces_selection.tab(self.interfaces_selection.select(), 'text')
