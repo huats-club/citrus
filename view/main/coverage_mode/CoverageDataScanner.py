@@ -94,9 +94,13 @@ class CoverageDataScanner(ttk.Frame):
 
     def get_wifi_data_tracked(self):
         # Get list of ssid tracked
-        ssid_selected = self.wifi_tab.get_tracked_ssid_list()
+        tracked_list_mac = self.wifi_tab.get_tracked_list()
 
-        wifi_scanner = WifiScanner(filter=ssid_selected)
+        # If no ssid, return empty list
+        if len(tracked_list_mac) == 0:
+            return []
+
+        wifi_scanner = WifiScanner(filter=tracked_list_mac)
         wifi_list_json = wifi_scanner.scan()
 
         return copy.deepcopy(wifi_list_json)

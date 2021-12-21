@@ -162,6 +162,11 @@ class CoveragePage(ttk.Frame):
         if self.coverage_display_data.get_current_tab_name() == "WIFI":
             wifi_list_json = self.coverage_display_data.get_wifi_data_tracked()
 
+            # if no wifi tracked, dont add point
+            # TODO: add error message
+            if len(wifi_list_json) == 0:
+                return None
+
             # preprocess wifi data to Point
             point = Point(x, y, wifi_list_json)
             self.recorded_points[key] = point

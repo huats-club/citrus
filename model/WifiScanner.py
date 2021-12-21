@@ -28,9 +28,9 @@ class WifiScanner:
             for bss in wireless_network_bss_list:
                 json = self.bss2json(bss, self.args)
 
-                # append to json list only if ssid matches
+                # append to json list only if bssid matches
                 if self.hasFilter:
-                    if json['ssid'] in self.filter:
+                    if json['bssid'] in self.filter:
                         self.json_list += [json]
 
                 else:

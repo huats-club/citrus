@@ -227,7 +227,6 @@ class CoverageWifiTab(ttk.Frame):
         self.iid += 1
 
     def clear_all_wifi_panel(self):
-        self.get_tracked_ssid_list()
         self.display_all_panel.delete(*self.display_all_panel.get_children())
 
     def remove_item_from_selected(self):
@@ -237,13 +236,13 @@ class CoverageWifiTab(ttk.Frame):
 
         self.display_tracked_panel.delete(self.display_tracked_panel.focus())
 
-    # Get list of selected ssid in SELECTED panel
-    def get_tracked_ssid_list(self):
+    # Get list of selected MAC/bssid addr in SELECTED panel
+    def get_tracked_list(self):
 
         ssid_list = []
 
         for child in self.display_tracked_panel.get_children():
             all_data = self.display_tracked_panel.item(child)["values"]
-            ssid_list.append(all_data[0])  # assumes first item is ssid
+            ssid_list.append(all_data[1])  # assumes first item is bssid
 
         return ssid_list

@@ -67,6 +67,10 @@ class CoverageCanvas(tk.Canvas):
         # Returns created Point object
         point = self.coverage.add_point_data(event.x, event.y)
 
+        # If no wifi tracked
+        if point == None:
+            return
+
         # Display oval drawing
         oval_ui = self.create_oval(x1, y1, x2, y2, fill=python_green)
         self.tag_bind(oval_ui, '<Enter>', lambda event: on_start_hover(event, point))
