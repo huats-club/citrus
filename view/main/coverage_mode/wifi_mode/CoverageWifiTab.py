@@ -213,8 +213,6 @@ class CoverageWifiTab(ttk.Frame):
             self.current_selected_from_display_all[name] = data[idx]
             idx += 1
 
-        print(self.current_selected_from_display_all)
-
     # Store clicked item in the Selected pane corresponding to click action
     def select_item_from_display_tracked(self, a):
         self.current_item_in_selected_panel = self.display_tracked_panel.focus()
