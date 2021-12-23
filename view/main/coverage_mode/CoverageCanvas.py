@@ -2,18 +2,7 @@ import tkinter as tk
 
 from app_parameters import app_parameters
 from PIL import ImageGrab
-
-
-# Binding hovers
-def on_start_hover(event, point):
-    # What you do when the mouse hovers
-    print(f"{point.x} {point.y} {point.map.items()}")
-    pass
-
-
-def on_end_hover(event):
-    # What to do when the mouse stops hovering
-    pass
+from view.CanvasTooltip import CanvasTooltip
 
 
 class CoverageCanvas(tk.Canvas):
@@ -73,8 +62,8 @@ class CoverageCanvas(tk.Canvas):
 
         # Display oval drawing
         oval_ui = self.create_oval(x1, y1, x2, y2, fill=python_green)
-        self.tag_bind(oval_ui, '<Enter>', lambda event: on_start_hover(event, point))
-        self.tag_bind(oval_ui, '<Leave>', on_end_hover)
+        self.tag_bind(oval_ui, '<Enter>', lambda event: self.on_start_hover(event, point))
+        CanvasTooltip(self, oval_ui, text=point)
 
         # Set that new wifi heatmap needs to be regenerated
         self.controller.session.set_need_to_save()
@@ -90,3 +79,8 @@ class CoverageCanvas(tk.Canvas):
         )
         grab = ImageGrab.grab(bbox=box)
         grab.save(self.controller.get_floorplan_image_path())
+
+    # Binding hovers
+    def on_start_hover(self, event, point):
+        # What you do when the mouse hovers
+        print(f"{point.x} {point.y} {point.map.items()}")
