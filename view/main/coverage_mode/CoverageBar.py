@@ -21,6 +21,9 @@ class CoverageBar(ttk.Frame):
             fill=tk.X
         )
 
+        # list of heatmaps
+        self.heatmaps = ["".center(30, ' ')]
+
         # String length for button
         self.STRING_LENGTH = 10
 
@@ -45,49 +48,34 @@ class CoverageBar(ttk.Frame):
         # Create save pane
         self.save_pane = SavePane(self, self.controller, self.owner, tk.RIGHT, pady=(0, 0))
 
-        # Create combine button
-        self.combine_button = ttk.Button(
+        # Create toggle button for Create heatmap
+        self.create_text = tk.StringVar()
+        self.create_text.set('Create'.center(self.STRING_LENGTH, ' '))
+
+        self.create_button = ttk.Button(
             self.plot_container,
             style="primary.Outline.TButton",
-            text="Combine".center(self.STRING_LENGTH, ' '),
+            textvariable=self.create_text,
             command=self.controller.display_heatmap
         )
-        self.combine_button.pack(
-            side=tk.RIGHT,
-            padx=10,
-            pady=5
-        )
-
-        # Create left button
-        left_arrow_image = ImageTk.PhotoImage(
-            Image.open(resource_path("assets/left-arrow.png")).resize((35, 35)))
-        self.left_arrow_button = tk.Button(
-            self.plot_container,
-            text="",
-            image=left_arrow_image,
-            compound=tk.RIGHT
-        )
-        self.left_arrow_button.photo = left_arrow_image
-        self.left_arrow_button.pack(
-            expand=True,
+        self.create_button.pack(
             side=tk.LEFT,
             padx=10,
             pady=5
         )
 
-        # Create right button
-        right_arrow_image = ImageTk.PhotoImage(
-            Image.open(resource_path("assets/right-arrow.png")).resize((35, 35)))
-        self.right_arrow_button = tk.Button(
-            self.plot_container,
-            text="",
-            image=right_arrow_image,
-            compound=tk.RIGHT
-        )
-        self.right_arrow_button.photo = right_arrow_image
-        self.right_arrow_button.pack(
-            expand=True,
-            side=tk.RIGHT,
+        # label to indicate which heatmap to choose
+        self.heatmap_choose_label = tk.Label(
+            self.plot_container, text="View:")
+        self.heatmap_choose_label.pack(
+            side=tk.LEFT,
             padx=10,
             pady=5
         )
+
+        # Option to choose which heatmap to view
+        self.heatmap_value_menu = tk.StringVar()
+        self.heatmap_value_menu.set(self.heatmaps[0])
+        self.heatmap_menu = tk.OptionMenu(
+            self.plot_container, self.heatmap_value_menu, *self.heatmaps)
+        self.heatmap_menu.pack(side=tk.RIGHT)

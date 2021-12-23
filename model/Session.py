@@ -11,6 +11,8 @@ class Session:
         self.current_recording_plot_num = 1
         self.need_to_save = True
 
+        self.dxf_name = ""
+
         # session data
         self.session_name = session_name
         self.session_workspace_folder = os.getcwd() + '/' + app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
@@ -44,10 +46,10 @@ class Session:
         self.current_recording_plot_num += 1
 
     def save_dxf_name(self, name):
-        self.name = name
+        self.dxf_name = name
 
     def get_dxf_prefix(self):
-        return self.name
+        return self.dxf_name
 
     def is_need_to_save(self):
         return self.need_to_save

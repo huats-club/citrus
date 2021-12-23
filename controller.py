@@ -157,7 +157,6 @@ class Controller(tk.Frame):
     def get_floorplan_image_path(self):
         return self.loaded_floorplan_saved_image_path
 
-    # TODO: update with new coverage workflow
     def do_coverage_wifi_scan(self):
 
         # clear scan first
