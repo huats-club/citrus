@@ -103,6 +103,26 @@ class CoverageDataScanner(ttk.Frame):
         wifi_scanner = WifiScanner(filter=tracked_list_mac)
         wifi_list_json = wifi_scanner.scan()
 
+        # fill up with fake entry if bssid not found
+        for bssid in tracked_list_mac:
+            has_entry = False
+
+            # check if exists at least 1 json entry for bssid
+            for json in wifi_list_json:
+                if bssid == json['bssid']:
+                    has_entry = True
+                    break
+
+            if not has_entry:
+                wifi_list_json.append({
+                    "bssid": bssid,
+                    "channel_frequency": 0,
+                    "channel_number": 0,
+                    "channel_width": 0,
+                    "rssi": -100,
+                    "ssid": self.wifi_tab.bssid2ssid(bssid)
+                })
+
         return copy.deepcopy(wifi_list_json)
 
     # Returns WIFI or SDR

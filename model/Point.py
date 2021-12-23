@@ -38,4 +38,6 @@ class Point:
         for idx in range(len(ssids)):
             ret.append([ssids[idx], rssis[idx]])
 
+        ret = sorted(ret, key=lambda x: x[0])
+
         return tabulate(ret, tablefmt="plain")
