@@ -177,30 +177,6 @@ class CoveragePage(ttk.Frame):
             # return created point for recording
             return point
 
-        # Prepared dictionary
-        # data = {
-        #     app_parameters.POINT_KEY_TK_X: x,
-        #     app_parameters.POINT_KEY_TK_Y: y,
-        #     app_parameters.POINT_KEY_WIFI_DATA: wifi_selected
-        # }
-
-        # put data into map
-
-        # # Add to list
-        # self.recorded_points.append(data)
-
-        # # Save coordinates in log
-        # with open(self.controller.log_name, 'a+') as f:
-        #     conv_x = data[app_parameters.POINT_KEY_TK_X]
-        #     conv_y = data[app_parameters.POINT_KEY_TK_Y]
-        #     f.write(f"x: {conv_x} | y: {conv_y}\n")
-
-        # # Save wifi data in json log
-        # with open(self.controller.log_json, 'a+') as f:
-        #     f.write(f"{wifi_selected}\n")
-
-        # Save whatever plot is on the tkinter if valid heatmap
-
     def save_heatmap_plot(self, output_path):
 
         # Save plot if points available
