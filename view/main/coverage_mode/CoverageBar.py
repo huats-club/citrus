@@ -76,6 +76,9 @@ class CoverageBar(ttk.Frame):
         # Option to choose which heatmap to view
         self.heatmap_value_menu = tk.StringVar()
         self.heatmap_value_menu.set(self.heatmaps[0])
-        self.heatmap_menu = tk.OptionMenu(
-            self.plot_container, self.heatmap_value_menu, *self.heatmaps)
+        self.heatmap_menu = ttk.OptionMenu(
+            self.plot_container,
+            self.heatmap_value_menu,
+            *self.heatmaps
+        )
         self.heatmap_menu.pack(side=tk.RIGHT)
