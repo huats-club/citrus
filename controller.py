@@ -6,6 +6,7 @@ import ezdxf
 
 from app_parameters import app_parameters
 from model.CoverageHandler import CoverageHandler
+from model.PointsDataConverter import PointsDataConverter
 from model.RecordingHandler import RecordingHandler
 from model.Session import Session
 from model.WifiScanner import WifiScanner
@@ -186,7 +187,7 @@ class Controller(tk.Frame):
             self.main_page.coverage_page.set_no_dxf_error_message()
 
     # Save whatever plot is on the tkinter if valid heatmap
-    def save_heatmap_plot(self, output_path, forceSave=False):
+    def save_heatmap_plot(self, output_path, data, forceSave=False):
 
         status = False
 
@@ -194,7 +195,7 @@ class Controller(tk.Frame):
 
             # Display only if dxf file opened and wifi scan done
             if self.dxf_opened and self.scan_done:
-                status = self.main_page.coverage_page.save_heatmap_plot(output_path)
+                status = self.main_page.coverage_page.save_heatmap_plot(output_path, data)
                 print("Scan done and dxf open")
 
             elif not self.dxf_opened:
@@ -212,21 +213,32 @@ class Controller(tk.Frame):
 
         return status
 
+    # TODO: break down this HUGE method into smaller (separate prep and display )
     # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
 
-        # If require to resave
         if self.session.is_need_to_save():
 
-            # Rebuild heatmap first
-            output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
-            saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
-            self.session.increment_coverage_plot_num()
+            # Now, all data is encapsulated in dict: (x,y)->Point objects
+            # Use converter to convert all Points object to format for use
+            points = self.main_page.coverage_page.get_points()
 
-            status = self.save_heatmap_plot(saved_heatmap_path, True)
+            converter = PointsDataConverter(points)
+            processed_all_data = converter.process()
 
-            if status == False:
-                return
+            for ssid, data in processed_all_data.items():
+                # output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
+                # saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
+                output_file_name = f"{ssid}.png"
+                saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
+                self.session.increment_coverage_plot_num()
+
+                print(saved_heatmap_path)
+
+                status = self.save_heatmap_plot(saved_heatmap_path, data, True)
+
+                if status == False:
+                    return
 
             # Set no need to save
             self.session.set_no_need_to_save()
@@ -234,25 +246,47 @@ class Controller(tk.Frame):
         else:
             return
 
-        # Display heatmap in tkinter canvas
-        # don't display if no previous
-        if self.session.get_prev_coverage_plot_num() > 0:
-            self.image = tk.PhotoImage(file=saved_heatmap_path)
+    # # Generate and display created heatmap on tkinter canvas
+    # def display_heatmap_old(self):
 
-        else:
-            self.image = tk.PhotoImage()
+    #     # If require to resave
+    #     if self.session.is_need_to_save():
 
-        self.main_page.coverage_page.coverage_canvas.create_image(
-            0,
-            0,
-            image=self.image,
-            anchor=tk.NW
-        )
+    #         # Rebuild heatmap first
+    #         output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
+    #         saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
+    #         self.session.increment_coverage_plot_num()
 
-    def save_current_heatmap(self, dir):
+    #         status = self.save_heatmap_plot(saved_heatmap_path, True)
+
+    #         if status == False:
+    #             return
+
+    #         # Set no need to save
+    #         self.session.set_no_need_to_save()
+
+    #     else:
+    #         return
+
+    #     # Display heatmap in tkinter canvas
+    #     # don't display if no previous
+    #     if self.session.get_prev_coverage_plot_num() > 0:
+    #         self.image = tk.PhotoImage(file=saved_heatmap_path)
+
+    #     else:
+    #         self.image = tk.PhotoImage()
+
+    #     self.main_page.coverage_page.coverage_canvas.create_image(
+    #         0,
+    #         0,
+    #         image=self.image,
+    #         anchor=tk.NW
+    #     )
+
+    def save_current_heatmap(self, dir, data):
         # Display only if dxf file opened and wifi scan done
         if self.dxf_opened and self.scan_done:
             output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
             output_file = f"{dir}/{output_file_name}"
-            self.save_heatmap_plot(output_file, True)
+            self.save_heatmap_plot(output_file, data, True)
             self.session.increment_coverage_save_num()

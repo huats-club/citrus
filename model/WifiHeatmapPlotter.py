@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 import matplotlib
 import matplotlib.cm as cm
 import matplotlib.pyplot as plot
@@ -11,45 +9,10 @@ from scipy.interpolate import Rbf
 
 class WifiHeatmapPlotter:
 
-    # TODO: fix this to generalize to sdr
-    def __init__(self, x_y_wifidata, floorplan_image_path):
-
+    # Takes in pre-processed data points to save and plot
+    def __init__(self, survey_points, floorplan_image_path):
+        self.survey_points = survey_points
         self.floorplan_image_path = floorplan_image_path
-
-        # Prepare data into plottable format
-        self.survey_points = defaultdict(list)
-        store = []
-        for entry in x_y_wifidata:
-            temp = {}
-
-            for k, v in entry.items():
-                if k == app_parameters.POINT_KEY_TK_X:
-                    temp[app_parameters.WIFI_HEATMAP_PLOT_X] = int(v)
-
-                elif k == app_parameters.POINT_KEY_TK_Y:
-                    temp[app_parameters.WIFI_HEATMAP_PLOT_Y] = int(v)
-
-                elif k == app_parameters.POINT_KEY_WIFI_DATA:
-                    temp = {**temp, **v}
-
-            store.append(temp)
-
-        for item in store:
-            for k, v in item.items():
-                self.survey_points[k].append(item[k])
-
-        # convert list of string to int
-        self.survey_points[app_parameters.WIFI_HEATMAP_PLOT_X] = [
-            int(x) for x in self.survey_points[app_parameters.WIFI_HEATMAP_PLOT_X]
-        ]
-
-        self.survey_points[app_parameters.WIFI_HEATMAP_PLOT_Y] = [
-            int(x) for x in self.survey_points[app_parameters.WIFI_HEATMAP_PLOT_Y]
-        ]
-
-        self.survey_points['rssi'] = [
-            int(x) for x in self.survey_points['rssi']
-        ]
 
         # Prepare for plot
         self.prepare_plot()
@@ -66,12 +29,11 @@ class WifiHeatmapPlotter:
 
         # Add in corner plot points
         for x, y in self.floorplan_corner_coord:
-            self.survey_points['x'].append(x)
-            self.survey_points['y'].append(y)
+            self.survey_points[app_parameters.HEATMAP_PLOT_X].append(x)
+            self.survey_points[app_parameters.HEATMAP_PLOT_Y].append(y)
             for k in self.survey_points.keys():
                 if k in ['x', 'y', 'ssid']:
                     continue
-                self.survey_points['ssid'].append(None)
                 self.survey_points[k] = [0 if x is None else x for x in self.survey_points[k]]
                 self.survey_points[k].append(min(self.survey_points[k]))
 
@@ -106,14 +68,14 @@ class WifiHeatmapPlotter:
             item.patch.set_visible(False)
 
         # Fix plot threshold max and min
-        self.vmin = min(self.survey_points['rssi'])
-        self.vmax = max(self.survey_points['rssi'])
+        self.vmin = min(self.survey_points[app_parameters.HEATMAP_PLOT_SIGNAL])
+        self.vmax = max(self.survey_points[app_parameters.HEATMAP_PLOT_SIGNAL])
 
         if self.vmin != self.vmax:
             self.rbf = Rbf(
-                self.survey_points['x'],
-                self.survey_points['y'],
-                self.survey_points['rssi'],
+                self.survey_points[app_parameters.HEATMAP_PLOT_X],
+                self.survey_points[app_parameters.HEATMAP_PLOT_Y],
+                self.survey_points[app_parameters.HEATMAP_PLOT_SIGNAL],
                 function='linear'
             )
             z = self.rbf(gx, gy)
@@ -162,19 +124,19 @@ class WifiHeatmapPlotter:
         )
 
         # Show points
-        for idx in range(0, len(self.survey_points['x'])):
-            if(self.survey_points['x'][idx], self.survey_points['y'][idx]) in self.floorplan_corner_coord:
+        for idx in range(0, len(self.survey_points[app_parameters.HEATMAP_PLOT_X])):
+            if(self.survey_points[app_parameters.HEATMAP_PLOT_X][idx], self.survey_points[app_parameters.HEATMAP_PLOT_Y][idx]) in self.floorplan_corner_coord:
                 continue
 
             self.ax.plot(
-                self.survey_points['x'][idx],
-                self.survey_points['y'][idx],
+                self.survey_points[app_parameters.HEATMAP_PLOT_X][idx],
+                self.survey_points[app_parameters.HEATMAP_PLOT_Y][idx],
                 zorder=200,
                 marker='o',
                 # markeredgecolor='black',
                 markeredgewidth=0.4,
                 markersize=2.5,
-                markerfacecolor=self.mapper.to_rgba(self.survey_points['rssi'][idx])
+                markerfacecolor=self.mapper.to_rgba(self.survey_points[app_parameters.HEATMAP_PLOT_SIGNAL][idx])
             )
 
         # Save plot

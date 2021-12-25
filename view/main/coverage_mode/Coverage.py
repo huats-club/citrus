@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-import app_parameters as app_parameters
 from model.dxf2tk import dxf2tk
 from model.Point import Point
 from model.WifiHeatmapPlotter import WifiHeatmapPlotter
@@ -174,16 +173,26 @@ class CoveragePage(ttk.Frame):
             # Indicate flag that points exist
             self.has_points = True
 
+            # DEBUG
+            print(point)
+
             # return created point for recording
             return point
 
-    def save_heatmap_plot(self, output_path):
+    # Provide interface for save pane to call common function
+    def update_save_path(self, path):
+        self.save_dir_path = path
+
+    # Provide interface for save pane to call common function
+    def handle_save(self):
+        self.controller.save_current_heatmap(self.save_dir_path)
+
+    def save_heatmap_plot(self, output_path, data):
 
         # Save plot if points available
-        # TODO: fix this
         if self.has_points:
             wifi_heatmap_plotter = WifiHeatmapPlotter(
-                self.recorded_points, self.controller.get_floorplan_image_path())
+                data, self.controller.get_floorplan_image_path())
 
             wifi_heatmap_plotter.save(output_path)
 
@@ -194,10 +203,5 @@ class CoveragePage(ttk.Frame):
             self.coverage_info_panel.set_no_wifi_scan_error_message()
             return False
 
-    # Provide interface for save pane to call common function
-    def update_save_path(self, path):
-        self.save_dir_path = path
-
-    # Provide interface for save pane to call common function
-    def handle_save(self):
-        self.controller.save_current_heatmap(self.save_dir_path)
+    def get_points(self):
+        return self.recorded_points
