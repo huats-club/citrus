@@ -154,7 +154,6 @@ class CoveragePage(ttk.Frame):
     def disable_canvas_click(self):
         self.coverage_canvas.disable_click()
 
-    # TODO: amend
     def add_point_data(self, x, y):
 
         # create key to put inside maps

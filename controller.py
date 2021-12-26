@@ -6,6 +6,7 @@ import ezdxf
 
 from app_parameters import app_parameters
 from model.CoverageHandler import CoverageHandler
+from model.PointsDataAggregator import PointDataAggregator
 from model.PointsDataConverter import PointsDataConverter
 from model.RecordingHandler import RecordingHandler
 from model.Session import Session
@@ -228,12 +229,15 @@ class Controller(tk.Frame):
             converter = PointsDataConverter(points)
             processed_all_data = converter.process()
 
+            # create a combined heatmap and add to map
+            aggregator = PointDataAggregator(points)
+            combined_heatmap_data = aggregator.process()
+            processed_all_data['Combined'] = combined_heatmap_data
+
             # map (ssid)->(path)
             self.map_ssid_path = {}
 
             for ssid, data in processed_all_data.items():
-                # output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
-                # saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
 
                 # generate name of path
                 output_file_name = f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}.png"
