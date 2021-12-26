@@ -234,8 +234,10 @@ class CoveragePage(ttk.Frame):
             self.image = tk.PhotoImage(file=path)
 
         self.coverage_canvas.create_image(
-            0,
-            0,
+            -30,
+            -30,
             image=self.image,
             anchor=tk.NW
         )
+
+        self.coverage_canvas.canvas_put_point_again(self.recorded_points)

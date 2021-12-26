@@ -266,13 +266,5 @@ class Controller(tk.Frame):
 
         self.main_page.coverage_page.put_image(first_ssid_to_plot)
 
-    # def save_current_heatmap(self, dir, data):
-    #     # Display only if dxf file opened and wifi scan done
-    #     if self.dxf_opened and self.scan_done:
-    #         output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
-    #         output_file = f"{dir}/{output_file_name}"
-    #         self.save_heatmap_plot(output_file, data, True)
-    #         self.session.increment_coverage_save_num()
-
     def isValid(self):
         return self.dxf_opened and self.scan_done
