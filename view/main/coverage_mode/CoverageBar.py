@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-from app_util.app_util import resource_path
-from PIL import Image, ImageTk
 from view.main.SavePane import SavePane
 
 
@@ -11,6 +9,7 @@ class CoverageBar(ttk.Frame):
         self.parent = parent
         self.controller = controller
         self.owner = owner
+        self.coverage = owner
 
         super().__init__(
             self.parent,
@@ -102,7 +101,8 @@ class CoverageBar(ttk.Frame):
             self.plot_container,
             self.selected_ssid_value,
             self.ssids[0],
-            *self.ssids
+            *self.ssids,
+            command=lambda a: self.coverage.put_image(self.selected_ssid_value.get())
         )
         self.heatmap_menu.configure(width=20)
         self.heatmap_menu.pack(side=tk.RIGHT)

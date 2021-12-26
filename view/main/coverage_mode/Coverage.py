@@ -212,3 +212,22 @@ class CoveragePage(ttk.Frame):
 
         # populate ssid name to option menu
         self.coverage_bar.set_heatmap_selection(list(map.keys()))
+
+    # Put up image to canvas, given path to image
+    def put_image(self, ssid):
+
+        # plot nothing if nothing
+        if ssid == "":
+            return
+
+        else:
+            # get path of ssid
+            path = self.map_ssid_heatmap_path[ssid]
+            self.image = tk.PhotoImage(file=path)
+
+        self.coverage_canvas.create_image(
+            0,
+            0,
+            image=self.image,
+            anchor=tk.NW
+        )

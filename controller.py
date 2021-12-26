@@ -257,55 +257,12 @@ class Controller(tk.Frame):
 
         # Etch and populate all saved files onto menu
         if self.session.get_prev_coverage_plot_num() > 0:
-            first_heatmap = list(self.map_ssid_path.values())[0]
-            self.image = tk.PhotoImage(file=first_heatmap)
+            first_ssid_to_plot = list(self.map_ssid_path.keys())[0]
 
         else:
-            self.image = tk.PhotoImage()
+            first_ssid_to_plot = ""
 
-        self.main_page.coverage_page.coverage_canvas.create_image(
-            0,
-            0,
-            image=self.image,
-            anchor=tk.NW
-        )
-
-    # # Generate and display created heatmap on tkinter canvas
-    # def display_heatmap_old(self):
-
-    #     # If require to resave
-    #     if self.session.is_need_to_save():
-
-    #         # Rebuild heatmap first
-    #         output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
-    #         saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
-    #         self.session.increment_coverage_plot_num()
-
-    #         status = self.save_heatmap_plot(saved_heatmap_path, True)
-
-    #         if status == False:
-    #             return
-
-    #         # Set no need to save
-    #         self.session.set_no_need_to_save()
-
-    #     else:
-    #         return
-
-    #     # Display heatmap in tkinter canvas
-    #     # don't display if no previous
-    #     if self.session.get_prev_coverage_plot_num() > 0:
-    #         self.image = tk.PhotoImage(file=saved_heatmap_path)
-
-    #     else:
-    #         self.image = tk.PhotoImage()
-
-    #     self.main_page.coverage_page.coverage_canvas.create_image(
-    #         0,
-    #         0,
-    #         image=self.image,
-    #         anchor=tk.NW
-    #     )
+        self.main_page.coverage_page.put_image(first_ssid_to_plot)
 
     def save_current_heatmap(self, dir, data):
         # Display only if dxf file opened and wifi scan done
