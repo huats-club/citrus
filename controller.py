@@ -134,7 +134,10 @@ class Controller(tk.Frame):
             # Cache the image of display on tkinter canvas after display
             # This is to create an image to etch up to tkinter canvas
             self.loaded_floorplan_saved_image_path = fr"{self.session.get_session_private_folder_path()}\{self.dxf_filename}_tkinter.png"
-            self.main_page.coverage_page.after(500, self.main_page.coverage_page.capture_canvas)
+            self.main_page.coverage_page.after(
+                500,
+                lambda: self.main_page.coverage_page.capture_canvas(self.loaded_floorplan_saved_image_path)
+            )
 
             # Enable plotting of points
             self.main_page.coverage_page.enable_canvas_click()
@@ -213,7 +216,6 @@ class Controller(tk.Frame):
 
         return status
 
-    # TODO: break down this HUGE method into smaller (separate prep and display )
     # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
 
@@ -264,10 +266,13 @@ class Controller(tk.Frame):
 
         self.main_page.coverage_page.put_image(first_ssid_to_plot)
 
-    def save_current_heatmap(self, dir, data):
-        # Display only if dxf file opened and wifi scan done
-        if self.dxf_opened and self.scan_done:
-            output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
-            output_file = f"{dir}/{output_file_name}"
-            self.save_heatmap_plot(output_file, data, True)
-            self.session.increment_coverage_save_num()
+    # def save_current_heatmap(self, dir, data):
+    #     # Display only if dxf file opened and wifi scan done
+    #     if self.dxf_opened and self.scan_done:
+    #         output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
+    #         output_file = f"{dir}/{output_file_name}"
+    #         self.save_heatmap_plot(output_file, data, True)
+    #         self.session.increment_coverage_save_num()
+
+    def isValid(self):
+        return self.dxf_opened and self.scan_done

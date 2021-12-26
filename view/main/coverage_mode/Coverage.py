@@ -131,8 +131,8 @@ class CoveragePage(ttk.Frame):
                 arc["extent"]
             )
 
-    def capture_canvas(self):
-        self.coverage_canvas.capture()
+    def capture_canvas(self, path=""):
+        self.coverage_canvas.capture(path)
 
     def set_no_dxf_error_message(self):
         self.coverage_info_panel.set_no_dxf_error_message()
@@ -185,7 +185,7 @@ class CoveragePage(ttk.Frame):
 
     # Provide interface for save pane to call common function
     def handle_save(self):
-        self.controller.save_current_heatmap(self.save_dir_path)
+        self.save_current_heatmap(self.save_dir_path)
 
     def save_heatmap_plot(self, output_path, data):
 
@@ -202,6 +202,14 @@ class CoveragePage(ttk.Frame):
         else:
             self.coverage_info_panel.set_no_wifi_scan_error_message()
             return False
+
+    # Save by grabbing current screen
+    def save_current_heatmap(self, dir):
+        if self.controller.isValid():
+            output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
+            output_file = f"{dir}/{output_file_name}"
+            self.capture_canvas(output_file)
+            self.session.increment_coverage_save_num()
 
     def get_points(self):
         return self.recorded_points

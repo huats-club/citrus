@@ -69,7 +69,12 @@ class CoverageCanvas(tk.Canvas):
 
     # Create image to save canvas to
     # Reason: wifi heatmap plotter needed this to etch the heatmap onto it
-    def capture(self):
+    def capture(self, path=""):
+
+        # if no path supplied, means save to a default image path
+        if path == "":
+            self.controller.get_floorplan_image_path()
+
         box = (
             self.winfo_rootx(),
             self.winfo_rooty(),
@@ -77,4 +82,4 @@ class CoverageCanvas(tk.Canvas):
             self.winfo_rooty() + self.winfo_height()
         )
         grab = ImageGrab.grab(bbox=box)
-        grab.save(self.controller.get_floorplan_image_path())
+        grab.save(path)
