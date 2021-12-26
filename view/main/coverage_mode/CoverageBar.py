@@ -21,8 +21,12 @@ class CoverageBar(ttk.Frame):
             fill=tk.X
         )
 
-        # list of heatmaps
-        self.heatmaps = ["".center(30, ' ')]
+        # SSID selected in optionmenu
+        self.selected_ssid_value = tk.StringVar()
+        self.selected_ssid_value.set("")
+
+        # list of ssids
+        self.ssids = ["".center(30, ' ')]
 
         # String length for button
         self.STRING_LENGTH = 10
@@ -75,10 +79,30 @@ class CoverageBar(ttk.Frame):
 
         # Option to choose which heatmap to view
         self.heatmap_value_menu = tk.StringVar()
-        self.heatmap_value_menu.set(self.heatmaps[0])
+        self.heatmap_value_menu.set(self.ssids[0])
         self.heatmap_menu = ttk.OptionMenu(
             self.plot_container,
             self.heatmap_value_menu,
-            *self.heatmaps
+            *self.ssids
         )
+        self.heatmap_menu.pack(side=tk.RIGHT)
+
+    # Populate optionmenu with list_ssid
+    def set_heatmap_selection(self, list_ssid):
+        self.ssids = list_ssid
+
+        # update option menu listings
+        self.heatmap_menu.pack_forget()
+
+        # set first value
+        self.heatmap_value_menu.set(list_ssid[0])
+
+        # TODO: issue callback each time menu selection is clicked
+        self.heatmap_menu = ttk.OptionMenu(
+            self.plot_container,
+            self.selected_ssid_value,
+            self.ssids[0],
+            *self.ssids
+        )
+        self.heatmap_menu.configure(width=20)
         self.heatmap_menu.pack(side=tk.RIGHT)

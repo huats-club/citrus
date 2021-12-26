@@ -226,14 +226,20 @@ class Controller(tk.Frame):
             converter = PointsDataConverter(points)
             processed_all_data = converter.process()
 
+            # map (ssid)->(path)
+            self.map_ssid_path = {}
+
             for ssid, data in processed_all_data.items():
                 # output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_plot_num()}.png"
                 # saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
-                output_file_name = f"{ssid}.png"
+
+                # generate name of path
+                output_file_name = f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}.png"
                 saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
                 self.session.increment_coverage_plot_num()
 
-                print(saved_heatmap_path)
+                # save to map
+                self.map_ssid_path[ssid] = saved_heatmap_path
 
                 status = self.save_heatmap_plot(saved_heatmap_path, data, True)
 
@@ -245,6 +251,24 @@ class Controller(tk.Frame):
 
         else:
             return
+
+        # Save map to coverage
+        self.main_page.coverage_page.set_ssid_heatmap_path(self.map_ssid_path)
+
+        # Etch and populate all saved files onto menu
+        if self.session.get_prev_coverage_plot_num() > 0:
+            first_heatmap = list(self.map_ssid_path.values())[0]
+            self.image = tk.PhotoImage(file=first_heatmap)
+
+        else:
+            self.image = tk.PhotoImage()
+
+        self.main_page.coverage_page.coverage_canvas.create_image(
+            0,
+            0,
+            image=self.image,
+            anchor=tk.NW
+        )
 
     # # Generate and display created heatmap on tkinter canvas
     # def display_heatmap_old(self):

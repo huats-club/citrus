@@ -28,6 +28,9 @@ class CoveragePage(ttk.Frame):
         self.recorded_points = dict()
         self.has_points = False
 
+        # Collect map of name of ssid's heatmap and path
+        self.map_ssid_heatmap_path = {}
+
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
             padx=10,
@@ -173,9 +176,6 @@ class CoveragePage(ttk.Frame):
             # Indicate flag that points exist
             self.has_points = True
 
-            # DEBUG
-            print(point)
-
             # return created point for recording
             return point
 
@@ -205,3 +205,10 @@ class CoveragePage(ttk.Frame):
 
     def get_points(self):
         return self.recorded_points
+
+    def set_ssid_heatmap_path(self, map):
+        # save map
+        self.map_ssid_heatmap_path = map
+
+        # populate ssid name to option menu
+        self.coverage_bar.set_heatmap_selection(list(map.keys()))

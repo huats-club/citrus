@@ -15,8 +15,16 @@ class WifiScanner:
 
     def scan(self):
 
+        isTryAgain = False
+
         # get all interfaces
-        self.interfaces = WLAN.get_wireless_interfaces()
+        try:
+            self.interfaces = WLAN.get_wireless_interfaces()
+        except ValueError:
+            isTryAgain = True
+
+        if isTryAgain:
+            self.interfaces = WLAN.get_wireless_interfaces()
 
         # for all interface, scan for wlan
         for interface in self.interfaces:
