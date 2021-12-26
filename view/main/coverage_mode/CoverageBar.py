@@ -96,7 +96,7 @@ class CoverageBar(ttk.Frame):
         # set first value
         self.heatmap_value_menu.set(list_ssid[0])
 
-        # TODO: issue callback each time menu selection is clicked
+        # recreated optionmenu
         self.heatmap_menu = ttk.OptionMenu(
             self.plot_container,
             self.selected_ssid_value,
