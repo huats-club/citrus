@@ -3,6 +3,8 @@
 
 block_cipher = None
 
+# Info: if ttkbootstrap causes error:
+# https://stackoverflow.com/questions/67850998/ttkbootstrap-not-working-with-pyinstaller
 
 a = Analysis(["main.py"],
              pathex=["C:\\Users\\65844\\Desktop\\citrus"],
