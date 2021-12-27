@@ -205,7 +205,8 @@ class CoveragePage(ttk.Frame):
     # Save by grabbing current screen
     def save_current_heatmap(self, dir):
         if self.controller.isValid():
-            output_file_name = f"{self.session.get_dxf_prefix()}_{self.session.get_current_coverage_save_num()}.png"
+            current_ssid_type = self.get_current_heatmap_name()
+            output_file_name = f"{self.session.get_dxf_prefix()}_{current_ssid_type}_{self.session.get_current_coverage_save_num()}.png"
             output_file = f"{dir}/{output_file_name}"
             self.capture_canvas(output_file)
             self.session.increment_coverage_save_num()
@@ -240,3 +241,6 @@ class CoveragePage(ttk.Frame):
         )
 
         self.coverage_canvas.canvas_put_point_again(self.recorded_points)
+
+    def get_current_heatmap_name(self):
+        return self.coverage_bar.get_current_heatmap_name()

@@ -106,3 +106,6 @@ class CoverageBar(ttk.Frame):
         )
         self.heatmap_menu.configure(width=20)
         self.heatmap_menu.pack(side=tk.RIGHT)
+
+    def get_current_heatmap_name(self):
+        return self.heatmap_value_menu.get()
