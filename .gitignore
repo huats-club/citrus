@@ -10,3 +10,5 @@ todo.txt
 exploration/3dplot_data/*.png
 exploration/3dplot_data/*.gif
 exploration/citrus_plots/*.png
+dist/*
+build/*
