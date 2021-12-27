@@ -1,0 +1,13 @@
+ezdxf==0.16.6
+lswifi==0.1.17
+matplotlib @ file:///C:/ci/matplotlib-suite_1628011511716/work
+matplotlib-inline @ file:///tmp/build/80754af9/matplotlib-inline_1628242447089/work
+numpy @ file:///C:/ci/numpy_and_numpy_base_1626271861146/work
+pandas @ file:///C:/ci/pandas_1629682639137/work
+Pillow @ file:///C:/ci/pillow_1625663286921/work
+pyinstaller==4.7
+pyinstaller-hooks-contrib==2021.4
+scikit-learn==1.0
+seaborn==0.11.2
+tabulate==0.8.9
+ttkbootstrap==0.5.1
