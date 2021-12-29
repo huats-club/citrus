@@ -21,7 +21,11 @@ class CoverageSdrTab(ttk.Frame):
         self.iid = 0
 
         # Currently selected row of data from list of tracked freq
+        # map (col_name->val)
         self.current_selected = {}
+
+        # for clearing purposes
+        self.current_selected_focus = ""
 
         # Create column name list to show tracked freq
         self.column_names = [
@@ -184,6 +188,20 @@ class CoverageSdrTab(ttk.Frame):
         )
 
         # TODO: fix the command
+        self.untrack_button = ttk.Button(
+            self.button_containers,
+            style="primary.Outline.TButton",
+            text="Untrack",
+            command=self.untrack_item
+        )
+        self.untrack_button.pack(
+            padx=5,
+            pady=(0, 10),
+            side=tk.LEFT,
+            anchor=tk.CENTER
+        )
+
+        # TODO: fix the command
         self.clear_button = ttk.Button(
             self.button_containers,
             style="primary.Outline.TButton",
@@ -197,22 +215,32 @@ class CoverageSdrTab(ttk.Frame):
             anchor=tk.CENTER
         )
 
-    # Store clicked item in the ALL pane corresponding to click action
-    def select_item(self):
-        curItem = self.tracking_panel.focus()
-        data = self.tracking_panel.item(curItem)['values']
-        print(data)
+    # # Store clicked item in the ALL pane corresponding to click action
+    # def get_items(self):
+    #     curItem = self.tracking_panel.focus()
+    #     data = self.tracking_panel.item(curItem)['values']
+    #     print(data)
 
-        try:
-            idx = 0
-            for name in self.column_names:
-                self.current_selected[name] = data[idx]
-                idx += 1
-        except IndexError:
+    #     try:
+    #         idx = 0
+    #         for name in self.column_names:
+    #             self.current_selected[name] = data[idx]
+    #             idx += 1
+    #     except IndexError:
+    #         return
+
+    def select_item(self, a):
+        self.current_selected_focus = self.tracking_panel.focus()
+
+    def untrack_item(self):
+        # If no items clicked, ignore
+        if not self.tracking_panel.focus():
             return
 
+        self.tracking_panel.delete(self.tracking_panel.focus())
+
     def clear_all_sdr_panel(self):
-        pass
+        self.tracking_panel.delete(*self.tracking_panel.get_children())
 
     def add_to_tracked(self):
 
@@ -228,3 +256,7 @@ class CoverageSdrTab(ttk.Frame):
             values=tuple((name, freq))
         )
         self.iid += 1
+
+        # clear value after get
+        self.tracked_name_text.set("")
+        self.tracked_freq_text.set("")
