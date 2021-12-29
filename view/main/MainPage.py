@@ -4,6 +4,7 @@ from tkinter import ttk
 from app_parameters import app_parameters
 from view.main.coverage_mode.Coverage import CoveragePage
 from view.main.recording_mode.Recording import RecordingPage
+from view.main.replay_mode.Replay import ReplayPage
 from view.main.spectrum_mode.Spectrum import SpectrumPage
 
 
@@ -54,6 +55,14 @@ class MainPage(ttk.Notebook):
             height=app_parameters.APP_HEIGHT
         )
 
+        # Add replay tab
+        self.replay_page = ReplayPage(
+            self,
+            self.controller,
+            width=app_parameters.APP_WIDTH,
+            height=app_parameters.APP_HEIGHT
+        )
+
         self.add(
             self.coverage_page,
             text=app_parameters.MODE_COVERAGE
@@ -65,6 +74,10 @@ class MainPage(ttk.Notebook):
         self.add(
             self.recording_page,
             text=app_parameters.MODE_RECORDING
+        )
+        self.add(
+            self.replay_page,
+            text=app_parameters.MODE_REPLAY
         )
 
         # Temporarily select spectrum analyzer as main
