@@ -51,7 +51,8 @@ class CoverageDataScanner(ttk.Frame):
         # Add SDR tab
         self.sdr_tab = CoverageSdrTab(
             self.interfaces_selection,
-            self.controller
+            self.controller,
+            self.coverage
         )
 
         # Add Wifi tab
@@ -91,6 +92,9 @@ class CoverageDataScanner(ttk.Frame):
 
     def clear_wifi_scan_results(self):
         self.wifi_tab.clear_all_wifi_panel()
+
+    def clear_sdr_scan_results(self):
+        self.sdr_tab.clear_all_sdr_panel()
 
     def get_wifi_data_tracked(self):
         # Get list of ssid tracked

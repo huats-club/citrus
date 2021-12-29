@@ -3,9 +3,10 @@ from tkinter import ttk
 
 
 class CoverageSdrTab(ttk.Frame):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, coverage, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.coverage = coverage
 
         super().__init__(
             self.parent,
@@ -15,6 +16,12 @@ class CoverageSdrTab(ttk.Frame):
             side=tk.BOTTOM,
             fill=tk.X
         )
+
+        # uuid for selected
+        self.iid = 0
+
+        # Currently selected row of data from list of tracked freq
+        self.current_selected = {}
 
         # Create column name list to show tracked freq
         self.column_names = [
@@ -72,13 +79,16 @@ class CoverageSdrTab(ttk.Frame):
             self.tracking_panel.column(
                 column_name,
                 width=self.column_width[column_name],
-                anchor=tk.W
+                anchor=tk.CENTER
             )
             self.tracking_panel.heading(
                 column_name,
                 text=column_name,
                 anchor=tk.CENTER
             )
+
+        # Allow clicking of treeview items
+        self.tracking_panel.bind('<ButtonRelease-1>', self.select_item)
 
         # ---------------------------------------------
 
@@ -163,7 +173,8 @@ class CoverageSdrTab(ttk.Frame):
         self.track_button = ttk.Button(
             self.button_containers,
             style="primary.Outline.TButton",
-            text="Track"
+            text="Track",
+            command=self.add_to_tracked
         )
         self.track_button.pack(
             padx=5,
@@ -176,7 +187,8 @@ class CoverageSdrTab(ttk.Frame):
         self.clear_button = ttk.Button(
             self.button_containers,
             style="primary.Outline.TButton",
-            text="Clear"
+            text="Clear",
+            command=self.coverage.clear_sdr_scan_results
         )
         self.clear_button.pack(
             padx=5,
@@ -184,3 +196,35 @@ class CoverageSdrTab(ttk.Frame):
             side=tk.RIGHT,
             anchor=tk.CENTER
         )
+
+    # Store clicked item in the ALL pane corresponding to click action
+    def select_item(self):
+        curItem = self.tracking_panel.focus()
+        data = self.tracking_panel.item(curItem)['values']
+        print(data)
+
+        try:
+            idx = 0
+            for name in self.column_names:
+                self.current_selected[name] = data[idx]
+                idx += 1
+        except IndexError:
+            return
+
+    def clear_all_sdr_panel(self):
+        pass
+
+    def add_to_tracked(self):
+
+        name = self.tracked_name_text.get()
+        try:
+            freq = float(self.tracked_freq_text.get())
+        except ValueError:
+            # TODO: show error message
+            return
+
+        self.tracking_panel.insert(
+            parent='', index=self.iid, iid=self.iid,
+            values=tuple((name, freq))
+        )
+        self.iid += 1

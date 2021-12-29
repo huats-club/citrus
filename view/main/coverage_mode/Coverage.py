@@ -148,6 +148,11 @@ class CoveragePage(ttk.Frame):
         self.has_points = False
         self.coverage_display_data.clear_wifi_scan_results()  # TODO: change later
 
+    def clear_sdr_scan_results(self):
+        self.recorded_points = {}
+        self.has_points = False
+        self.coverage_display_data.clear_sdr_scan_results()  # TODO: change later
+
     def enable_canvas_click(self):
         self.coverage_canvas.enable_click()
 
