@@ -52,7 +52,7 @@ class CoverageSdrTab(ttk.Frame):
         # Label to inform display tracking
         self.tracking_label = ttk.Label(
             self.container,
-            text="Tracking:"
+            text="Tracking Frequencies:"
         )
         self.tracking_label.pack(
             side=tk.TOP,
@@ -97,7 +97,7 @@ class CoverageSdrTab(ttk.Frame):
         # ---------------------------------------------
 
         # Create container for form to input tracked freq
-        self.form_container = ttk.LabelFrame(self, text="Add new tracked")
+        self.form_container = ttk.LabelFrame(self, text="Add New Tracked")
         self.form_container.pack(
             padx=10,
             pady=10,
@@ -145,7 +145,7 @@ class CoverageSdrTab(ttk.Frame):
         # Input tracked freq label and entry box
         self.tracked_freq_label = tk.Label(
             self.form_internal_container,
-            text="Tracked Freq",
+            text="Tracked Frequency",
             width=15,
             anchor=tk.NW
         )
