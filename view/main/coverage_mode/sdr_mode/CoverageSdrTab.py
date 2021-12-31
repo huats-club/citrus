@@ -17,6 +17,9 @@ class CoverageSdrTab(ttk.Frame):
             fill=tk.X
         )
 
+        # String length for button
+        self.STRING_LENGTH = 10
+
         # uuid for selected
         self.iid = 0
 
@@ -97,7 +100,7 @@ class CoverageSdrTab(ttk.Frame):
         # ---------------------------------------------
 
         # Create container for form to input tracked freq
-        self.form_container = ttk.LabelFrame(self, text="Add New Tracked")
+        self.form_container = ttk.LabelFrame(self, text="Add New Frequency")
         self.form_container.pack(
             padx=10,
             pady=10,
@@ -168,16 +171,41 @@ class CoverageSdrTab(ttk.Frame):
             padx=5,
             pady=5
         )
+        # TODO: toggle units?
+        self.freq_units = ttk.Label(
+            self.form_internal_container,
+            width=5,
+            text="MHz"
+        )
+        self.freq_units.grid(
+            row=1,
+            column=7,
+            columnspan=2,
+            padx=5,
+            pady=5
+        )
 
         # Button Containers
         self.button_containers = tk.Frame(self)
         self.button_containers.pack(side=tk.TOP)
 
         # TODO: fix the command
+        self.scan_button = ttk.Button(
+            self.button_containers,
+            style="primary.TButton",
+            text="Scan".center(self.STRING_LENGTH, ' ')
+        )
+        self.scan_button.pack(
+            padx=5,
+            pady=(0, 10),
+            side=tk.LEFT,
+            anchor=tk.CENTER
+        )
+
         self.track_button = ttk.Button(
             self.button_containers,
-            style="primary.Outline.TButton",
-            text="Track",
+            style="success.TButton",
+            text="Track".center(self.STRING_LENGTH, ' '),
             command=self.add_to_tracked
         )
         self.track_button.pack(
@@ -187,11 +215,10 @@ class CoverageSdrTab(ttk.Frame):
             anchor=tk.CENTER
         )
 
-        # TODO: fix the command
         self.untrack_button = ttk.Button(
             self.button_containers,
-            style="primary.Outline.TButton",
-            text="Untrack",
+            style="secondary.TButton",
+            text="Untrack".center(self.STRING_LENGTH, ' '),
             command=self.untrack_item
         )
         self.untrack_button.pack(
@@ -201,11 +228,10 @@ class CoverageSdrTab(ttk.Frame):
             anchor=tk.CENTER
         )
 
-        # TODO: fix the command
         self.clear_button = ttk.Button(
             self.button_containers,
-            style="primary.Outline.TButton",
-            text="Clear",
+            style="danger.TButton",
+            text="Clear".center(self.STRING_LENGTH, ' '),
             command=self.coverage.clear_sdr_scan_results
         )
         self.clear_button.pack(
