@@ -1,4 +1,5 @@
 import copy
+import random
 import tkinter as tk
 import tkinter.ttk as ttk
 
@@ -128,6 +129,27 @@ class CoverageDataScanner(ttk.Frame):
                 })
 
         return copy.deepcopy(wifi_list_json)
+
+    # TODO: finish up the logic to conform to wifi data input
+    def get_sdr_data_tracked(self):
+
+        # get dict of { (name, freq), ... } tracked
+        tracked_freq_names = self.sdr_tab.get_tracked_list()
+
+        # run sdr scan
+
+        # track if each has freq to be tracked
+
+        # pack into dict ("wifi": name, "rssi": dbm)
+        # MOCK DATA to run test interface
+        ans = []
+        for dic in tracked_freq_names:
+            temp = {}
+            temp['ssid'] = list(dic.keys())[0]
+            temp['rssi'] = random.randrange(-50, -5)
+            ans.append(temp)
+
+        return ans
 
     # Returns WIFI or SDR
     def get_current_tab_name(self):

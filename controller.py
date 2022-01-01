@@ -272,3 +272,9 @@ class Controller(tk.Frame):
 
     def isValid(self):
         return self.dxf_opened and self.scan_done
+
+    def set_scan_done(self):
+        self.scan_done = True
+
+    def set_scan_not_done(self):
+        self.scan_done = False

@@ -167,6 +167,7 @@ class CoveragePage(ttk.Frame):
         # get signal strength data of current mode tracked
         if self.coverage_display_data.get_current_tab_name() == "WIFI":
             wifi_list_json = self.coverage_display_data.get_wifi_data_tracked()
+            print(wifi_list_json)
 
             # if no wifi tracked, dont add point
             # TODO: add error message
@@ -175,6 +176,23 @@ class CoveragePage(ttk.Frame):
 
             # preprocess wifi data to Point
             point = Point(x, y, wifi_list_json)
+            self.recorded_points[key] = point
+
+            # Indicate flag that points exist
+            self.has_points = True
+
+            # return created point for recording
+            return point
+
+        # SDR
+        # TODO: finish up sdr side of logic
+        else:
+            # get dict (name->freq)
+            sdr_name_freq_dict = self.coverage_display_data.get_sdr_data_tracked()
+            print(sdr_name_freq_dict)
+
+            # add freq and name to point
+            point = Point(x, y, sdr_name_freq_dict)
             self.recorded_points[key] = point
 
             # Indicate flag that points exist

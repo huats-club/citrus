@@ -1,3 +1,5 @@
+import random
+import string
 import tkinter as tk
 from tkinter import ttk
 
@@ -189,19 +191,6 @@ class CoverageSdrTab(ttk.Frame):
         self.button_containers = tk.Frame(self)
         self.button_containers.pack(side=tk.TOP)
 
-        # TODO: fix the command
-        self.scan_button = ttk.Button(
-            self.button_containers,
-            style="primary.TButton",
-            text="Scan".center(self.STRING_LENGTH, ' ')
-        )
-        self.scan_button.pack(
-            padx=5,
-            pady=(0, 10),
-            side=tk.LEFT,
-            anchor=tk.CENTER
-        )
-
         self.track_button = ttk.Button(
             self.button_containers,
             style="success.TButton",
@@ -241,19 +230,32 @@ class CoverageSdrTab(ttk.Frame):
             anchor=tk.CENTER
         )
 
-    # # Store clicked item in the ALL pane corresponding to click action
-    # def get_items(self):
-    #     curItem = self.tracking_panel.focus()
-    #     data = self.tracking_panel.item(curItem)['values']
-    #     print(data)
+    # Get dict of tracked (name->freq)
+    # so that the sdr can run scan/extract check against this list
+    def get_tracked_list(self):
 
-    #     try:
-    #         idx = 0
-    #         for name in self.column_names:
-    #             self.current_selected[name] = data[idx]
-    #             idx += 1
-    #     except IndexError:
-    #         return
+        tracked = []
+        temp_keys = []
+
+        for child in self.tracking_panel.get_children():
+            all_data = self.tracking_panel.item(child)["values"]
+
+            name = all_data[0]
+            freq = float(all_data[1]) * 1e6  # convert to mhz
+            print(name, freq)
+
+            # temp
+            temp = {}
+
+            temp[name] = freq
+
+            # record
+            temp_keys.append(name)
+
+            # append
+            tracked.append(temp)
+
+        return tracked
 
     def select_item(self, a):
         self.current_selected_focus = self.tracking_panel.focus()
@@ -265,8 +267,13 @@ class CoverageSdrTab(ttk.Frame):
 
         self.tracking_panel.delete(self.tracking_panel.focus())
 
+        # set scan not done if no items on list
+        if len(self.tracking_panel.get_children()) == 0:
+            self.controller.set_scan_not_done()
+
     def clear_all_sdr_panel(self):
         self.tracking_panel.delete(*self.tracking_panel.get_children())
+        self.controller.set_scan_not_done()
 
     def add_to_tracked(self):
 
@@ -275,6 +282,11 @@ class CoverageSdrTab(ttk.Frame):
             freq = float(self.tracked_freq_text.get())
         except ValueError:
             # TODO: show error message
+            return
+
+        # check if name entered already exists, if so then reject and put error message
+        # TODO: put error message
+        if name in self.get_all_names_entered():
             return
 
         self.tracking_panel.insert(
@@ -286,3 +298,19 @@ class CoverageSdrTab(ttk.Frame):
         # clear value after get
         self.tracked_name_text.set("")
         self.tracked_freq_text.set("")
+
+        # set scan done
+        self.controller.set_scan_done()
+
+    def get_all_names_entered(self):
+
+        names = []
+
+        for child in self.tracking_panel.get_children():
+            all_data = self.tracking_panel.item(child)["values"]
+
+            name = all_data[0]
+
+            names.append(name)
+
+        return names
