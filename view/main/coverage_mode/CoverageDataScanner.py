@@ -205,16 +205,6 @@ class CoverageDataScanner(ttk.Frame):
             ans.append(temp)
 
         print(ans)
-
-        # # MOCK DATA to run test interface
-        # if IS_TESTING:
-        #     ans.clear()
-        #     for dic in tracked_freq_names:
-        #         temp = {}
-        #         temp['ssid'] = list(dic.keys())[0]
-        #         temp['rssi'] = random.randrange(-50, -5)
-        #         ans.append(temp)
-
         return ans
 
     # Returns WIFI or SDR
