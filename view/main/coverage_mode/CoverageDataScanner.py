@@ -195,8 +195,10 @@ class CoverageDataScanner(ttk.Frame):
             # find the max dbm
             max_dbm_found = -100
             for idx2 in range(left_bound_idx, right_bound_idx+1):
-                if dbm_data[idx2] > max_dbm_found:
+                if idx2 < len(dbm_data) and dbm_data[idx2] > max_dbm_found:
                     max_dbm_found = dbm_data[idx2]
+                else:
+                    max_dbm_found = -100
             # print(f"found max: {max_dbm_found:.5f}")
 
             temp = {}
