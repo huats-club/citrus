@@ -44,3 +44,5 @@ HEATMAP_PLOT_SIGNAL = 'rssi'
 WATERFALL_PLOT_LEGEND_X = 'freq_bins'
 WATERFALL_PLOT_LEGEND_Y = 'timestamps'
 WATERFALL_PLOT_LEGEND_Z = 'strength'
+
+COVERAGE_SDR_TEST_DATA_PATH = resource_path('assets/test/spectrum_test_data.npy')

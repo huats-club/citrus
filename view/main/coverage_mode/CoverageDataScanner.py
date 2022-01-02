@@ -1,9 +1,12 @@
 import copy
+import math
 import random
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from model.CoverageHandler import CoverageSingleHandler
 from model.WifiScanner import WifiScanner
+from testing import IS_TESTING
 from view.main.coverage_mode.sdr_mode.CoverageSdrTab import CoverageSdrTab
 from view.main.coverage_mode.wifi_mode.CoverageWifiTab import CoverageWifiTab
 
@@ -136,18 +139,81 @@ class CoverageDataScanner(ttk.Frame):
         # get dict of { (name, freq), ... } tracked
         tracked_freq_names = self.sdr_tab.get_tracked_list()
 
+        # store names and freqs
+        names = []
+        freqs = []
+
+        # calculate best range
+        bandwidth = 13e6
+        min_freq = 100e9
+        max_freq = 0
+        for pair in tracked_freq_names:
+            name, freq = list(pair.items())[0]
+            # print(f"current freq: {freq}")
+
+            names.append(name)
+            freqs.append(freq)
+
+            if freq > max_freq:
+                max_freq = freq
+
+            if freq < min_freq:
+                min_freq = freq
+
+        # print(f"min freq: {min_freq}, max_freq: {max_freq}")
+        scan_center_freq = (min_freq + max_freq) / 2
+
         # run sdr scan
+        sdr_handler = CoverageSingleHandler()
+        sdr_handler.start(scan_center_freq, bandwidth)
+        dbm_data = sdr_handler.get_result()
 
         # track if each has freq to be tracked
+        # TODO: verify if tracked freqs are in this range
+        scan_freq_inc = bandwidth / len(dbm_data)
+        start_freq = scan_center_freq - 0.5*bandwidth
+        end_freq = scan_center_freq + 0.5*bandwidth
+        print(f"start freq: {start_freq}, center_freq: {scan_center_freq}, end_freq: {end_freq}")
+        print(f"freq increment: {scan_freq_inc:.5f}")
 
         # pack into dict ("wifi": name, "rssi": dbm)
-        # MOCK DATA to run test interface
         ans = []
-        for dic in tracked_freq_names:
+        for idx in range(len(freqs)):
+            # compute idx to search
+            located_center_idx = math.ceil((freqs[idx] - start_freq) / scan_freq_inc)
+            left_bound_idx = located_center_idx - 3
+            right_bound_idx = located_center_idx + 3
+
+            # prevent out of bounds
+            if left_bound_idx < 0:
+                left_bound_idx = 0
+            if right_bound_idx > len(dbm_data):
+                right_bound_idx = len(dbm_data)
+
+            # print(f"searching: {left_bound_idx} -> {right_bound_idx}")
+
+            # find the max dbm
+            max_dbm_found = -100
+            for idx2 in range(left_bound_idx, right_bound_idx+1):
+                if dbm_data[idx2] > max_dbm_found:
+                    max_dbm_found = dbm_data[idx2]
+            # print(f"found max: {max_dbm_found:.5f}")
+
             temp = {}
-            temp['ssid'] = list(dic.keys())[0]
-            temp['rssi'] = random.randrange(-50, -5)
+            temp['ssid'] = names[idx]
+            temp['rssi'] = max_dbm_found
             ans.append(temp)
+
+        print(ans)
+
+        # # MOCK DATA to run test interface
+        # if IS_TESTING:
+        #     ans.clear()
+        #     for dic in tracked_freq_names:
+        #         temp = {}
+        #         temp['ssid'] = list(dic.keys())[0]
+        #         temp['rssi'] = random.randrange(-50, -5)
+        #         ans.append(temp)
 
         return ans
 
