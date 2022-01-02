@@ -74,4 +74,5 @@ class CoverageSingleHandler:
     # TODO
     def close(self):
         self.stop_pipe_coverage_data_scanner.send("")
-        pass
+        self.process_spectrum_analyzer.join()
+        self.process_spectrum_analyzer.close()

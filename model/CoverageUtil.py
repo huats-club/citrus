@@ -25,7 +25,6 @@ def process_spectrum(pipe, center_freq, bandwidth, stop_pipe):
 
         if stop_pipe.poll(timeout=0):
             print("stop in process")
-            stop_pipe.recv()
             isRun = False
             p.close()
 

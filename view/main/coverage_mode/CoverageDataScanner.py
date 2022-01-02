@@ -19,7 +19,8 @@ class CoverageDataScanner(ttk.Frame):
         self.idx = 0
 
         # is first run
-        self.isFirstScan = True
+        self.is_first_scan = True
+        self.sdr_handler = None
 
         super().__init__(
             self.parent,
@@ -78,6 +79,18 @@ class CoverageDataScanner(ttk.Frame):
 
         # Select wifi as main tab
         self.interfaces_selection.select(self.wifi_tab)
+
+        # note when notebook tab change
+        self.interfaces_selection.bind('<<NotebookTabChanged>>', self.switch_SDR_2_wifi_tab)
+
+    def switch_SDR_2_wifi_tab(self, a):
+        if self.get_current_tab_name() == "WIFI":
+            self.is_first_scan = True
+
+            if self.sdr_handler != None:
+                self.sdr_handler.close()
+                self.sdr_handler = None
+            print("switch from SDR to Wifi tab")
 
     def populate_wifi_scan_results(self, json_list):
         for json in json_list:
@@ -164,11 +177,11 @@ class CoverageDataScanner(ttk.Frame):
         scan_center_freq = (min_freq + max_freq) / 2
 
         # run sdr scan
-        if self.isFirstScan:
+        if self.is_first_scan:
             self.sdr_handler = CoverageSingleHandler()
             self.sdr_handler.start(scan_center_freq, bandwidth)
             dbm_data = self.sdr_handler.get_result()
-            self.isFirstScan = False
+            self.is_first_scan = False
         else:
             dbm_data = self.sdr_handler.get_result()
 
