@@ -1,8 +1,6 @@
 import time
 
-import numpy as np
 import pycitrus
-from app_parameters import app_parameters
 
 
 def process_spectrum(pipe, center_freq, bandwidth, stop_pipe):
@@ -47,11 +45,4 @@ def process_once_spectrum(center_freq, bandwidth, output_queue):
     output_queue.put(out)
 
     print("Exiting process_once_spectrum...")
-    return
-
-
-def process_once_spectrum_test(center_freq, bandwidth, output_queue):
-    data = np.load(app_parameters.COVERAGE_SDR_TEST_DATA_PATH)
-    output_queue.put(data.tolist())
-    print("Exiting process_once_spectrum_test...")
     return

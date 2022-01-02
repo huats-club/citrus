@@ -1,10 +1,10 @@
 import random
 from multiprocessing import Pipe, Process, Queue
 
-from testing import IS_TESTING, process_test_coverage
+from testing import (IS_TESTING, process_once_spectrum_test,
+                     process_test_coverage)
 
-from model.CoverageUtil import (process_once_spectrum,
-                                process_once_spectrum_test, process_spectrum)
+from model.CoverageUtil import process_once_spectrum, process_spectrum
 
 
 class CoverageHandler:

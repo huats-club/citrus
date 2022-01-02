@@ -1,6 +1,10 @@
 import math
 import time
 
+import numpy as np
+
+from app_parameters import app_parameters
+
 # IS_TESTING = True
 IS_TESTING = False
 
@@ -41,3 +45,10 @@ def process_test_recording(pipe, center_freq, stop_pipe):
                 stop_pipe.recv()
                 return
             time.sleep(3)
+
+
+def process_once_spectrum_test(center_freq, bandwidth, output_queue):
+    data = np.load(app_parameters.COVERAGE_SDR_TEST_DATA_PATH)
+    output_queue.put(data.tolist())
+    print("Exiting process_once_spectrum_test...")
+    return
