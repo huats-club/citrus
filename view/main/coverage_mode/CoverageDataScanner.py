@@ -2,7 +2,6 @@ import copy
 import math
 import tkinter as tk
 import tkinter.ttk as ttk
-from multiprocessing import Pipe
 
 from model.CoverageHandler import CoverageSingleHandler
 from model.WifiScanner import WifiScanner
