@@ -1,4 +1,3 @@
-import datetime as datetime
 import tkinter as tk
 from multiprocessing import Pipe
 
@@ -50,9 +49,6 @@ class Controller(tk.Frame):
 
         # Scan results done
         self.scan_done = False
-
-        # Indicate current interface
-        self.current_interface = app_parameters.INTERFACE_WIFI
 
         # # Current wifi log
         # ts = datetime.datetime.date(datetime.datetime.now())
