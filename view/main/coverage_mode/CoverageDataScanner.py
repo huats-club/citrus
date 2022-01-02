@@ -113,7 +113,14 @@ class CoverageDataScanner(ttk.Frame):
     def clear_sdr_scan_results(self):
         self.sdr_tab.clear_all_sdr_panel()
 
+        # clear sdr handler to prepare new
+        if self.sdr_handler != None:
+            self.sdr_handler.close()
+            self.sdr_handler = None
+            self.is_first_scan = True
+
     def get_wifi_data_tracked(self):
+
         # Get list of ssid tracked
         tracked_list_mac = self.wifi_tab.get_tracked_list()
 
