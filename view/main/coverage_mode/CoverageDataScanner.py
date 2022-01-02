@@ -135,7 +135,6 @@ class CoverageDataScanner(ttk.Frame):
 
         return copy.deepcopy(wifi_list_json)
 
-    # TODO: finish up the logic to conform to wifi data input
     def get_sdr_data_tracked(self):
 
         # get dict of { (name, freq), ... } tracked
