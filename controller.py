@@ -86,16 +86,16 @@ class Controller(tk.Frame):
         self.main_page = MainPage(self.parent, self, spectrum_pipe, recording_pipe,
                                   self.session)  # parent of main page is root
 
-    def start_spectrum_process(self, center_freq, bandwidth):
+    def start_spectrum_process(self, driver_name, center_freq, bandwidth):
         # Create sdr handler
-        self.sdr_handler = CoverageHandler()
+        self.sdr_handler = CoverageHandler(driver_name)
         self.sdr_handler.start(self.pipe_spectrum_process, center_freq, bandwidth)
 
     def stop_spectrum_process(self):
         self.sdr_handler.stop()
 
-    def start_recording_process(self, center_freq, bandwidth):
-        self.recording_handler = RecordingHandler()
+    def start_recording_process(self, driver_name, center_freq, bandwidth):
+        self.recording_handler = RecordingHandler(driver_name)
         self.recording_handler.start(self.pipe_recording_process, center_freq, bandwidth)
 
     def stop_recording_process(self):

@@ -8,18 +8,20 @@ from model.CoverageUtil import process_once_spectrum, process_spectrum
 
 
 class CoverageHandler:
-    def __init__(self):
+    def __init__(self, driver_name):
         # Create stop pipes for process
         stop_pipe_handler, stop_pipe_process = Pipe(True)
         self.stop_pipe_process = stop_pipe_process
         self.stop_pipe_handler = stop_pipe_handler
+
+        self.driver_name = driver_name
 
     def start(self, pipe, center_freq, bandwidth):
         if not IS_TESTING:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
                 target=process_spectrum, daemon=True,
-                args=(pipe, center_freq, bandwidth, self.stop_pipe_process,))
+                args=(self.driver_name, pipe, center_freq, bandwidth, self.stop_pipe_process,))
         else:
             # Define mock process
             self.process_spectrum_analyzer = Process(

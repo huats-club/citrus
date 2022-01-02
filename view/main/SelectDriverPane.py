@@ -60,5 +60,4 @@ class SelectDriverPane(ttk.LabelFrame):
 
     # Returns the driver input entered
     def get_driver_input(self):
-        print(self.select_driver_text.get())
         return self.select_driver_text.get()

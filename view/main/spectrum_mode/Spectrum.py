@@ -95,7 +95,8 @@ class SpectrumPage(ttk.Frame):
             self.spectrum_plot.set_X_axis_freq(start_freq, center_freq, end_freq, units)
 
             # Start spectrum
-            self.controller.start_spectrum_process(center_freq, bandwidth)
+            driver_name = self.spectrum_select_driver_pane.get_driver_input()
+            self.controller.start_spectrum_process(driver_name, center_freq, bandwidth)
 
             # Disable setting of frequency in frequency pane
             self.spectrum_setting_container.disable_frequency_pane()

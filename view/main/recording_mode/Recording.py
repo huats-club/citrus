@@ -113,7 +113,8 @@ class RecordingPage(ttk.Frame):
             bandwidth = self.recording_setting.get_bandwidth()
 
             # Start process
-            self.controller.start_recording_process(center_freq, bandwidth)
+            driver_name = self.select_driver_pane.get_driver_input()
+            self.controller.start_recording_process(driver_name, center_freq, bandwidth)
 
         # Else display error message
         else:
