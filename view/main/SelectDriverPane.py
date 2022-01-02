@@ -30,28 +30,28 @@ class SelectDriverPane(ttk.LabelFrame):
             fill=tk.BOTH
         )
 
-        # Start freq label
+        # Driver label
         self.select_driver_label = tk.Label(
             self.panel_container,
-            text="Select driver",
-            width=8,
+            text="Input driver",
+            width=15,
             anchor=tk.NW
         )
         self.select_driver_label.grid(
             row=0,
             column=0,
-            columnspan=2,
+            columnspan=4,
             padx=5,
             pady=5
         )
         self.select_driver_text = tk.StringVar()
-        self.select_driver_entry = ttk.Entry(
+        self.select_driver = ttk.Entry(
             self.panel_container,
             textvariable=self.select_driver_text
         )
-        self.select_driver_entry.grid(
+        self.select_driver.grid(
             row=0,
-            column=2,
+            column=5,
             columnspan=2,
             padx=5,
             pady=5
