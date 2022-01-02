@@ -9,7 +9,6 @@ from view.main.coverage_mode.CoverageCanvas import CoverageCanvas
 from view.main.coverage_mode.CoverageDataScanner import CoverageDataScanner
 from view.main.coverage_mode.CoverageFileMenu import CoverageFileMenu
 from view.main.coverage_mode.CoverageInfoPanel import CoverageInfoPanel
-from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
 
 
 class CoveragePage(ttk.Frame):
@@ -75,10 +74,6 @@ class CoveragePage(ttk.Frame):
 
         # Create coverage menu to upload file
         self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
-
-        # TODO: fix this later
-        # Create coverage value menu for rssi filtering
-        self.coverage_value_menu = CoverageValuesMenu(self.right_container, self.controller)
 
         # Create coverage menu bar for right top container
         self.coverage_display_data = CoverageDataScanner(self.right_container, self.controller, self)

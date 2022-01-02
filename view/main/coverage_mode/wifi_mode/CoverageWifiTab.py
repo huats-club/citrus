@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
+
 
 class CoverageWifiTab(ttk.Frame):
     def __init__(self, parent, controller, coverage, *args, **kwargs):
@@ -53,6 +55,9 @@ class CoverageWifiTab(ttk.Frame):
             anchor=tk.NW,
             fill=tk.BOTH
         )
+
+        # # Create coverage value menu for rssi filtering
+        # self.coverage_value_menu = CoverageValuesMenu(self.container, self.controller)
 
         # Label to inform display ALL ssid scanned
         self.display_all_panel_label = ttk.Label(

@@ -65,8 +65,8 @@ class CoverageValuesMenu(ttk.LabelFrame):
             anchor=tk.NW
         )
         self.min_sensitivity_label.grid(
-            row=1,
-            column=0,
+            row=0,
+            column=7,
             columnspan=4,
             padx=5,
             pady=5
@@ -77,27 +77,26 @@ class CoverageValuesMenu(ttk.LabelFrame):
             textvariable=self.min_sensitivity_text
         )
         self.min_sensitivity.grid(
-            row=1,
-            column=5,
+            row=0,
+            column=11,
             columnspan=2,
             padx=5,
             pady=5
         )
 
-        # Button Containers
-        self.button_containers = tk.Frame(self)
-        self.button_containers.pack(side=tk.BOTTOM)
+    def has_valid_dbm_settings(self):
+        flag = True
 
-        # TODO: fix the command
-        # Configure rssi sensitivity button
-        self.button = ttk.Button(
-            self.button_containers,
-            style="primary.Outline.TButton",
-            text="Configure"
-        )
-        self.button.pack(
-            padx=5,
-            pady=(0, 10),
-            side=tk.TOP,
-            anchor=tk.CENTER
-        )
+        try:
+            float(self.max_sensitivity_text.get())
+            float(self.min_sensitivity_text.get())
+        except ValueError:
+            flag = False
+
+        return flag
+
+    def get_max_dbm(self):
+        pass
+
+    def get_min_dbm(self):
+        pass
