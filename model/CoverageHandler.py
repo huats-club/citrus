@@ -39,10 +39,21 @@ class CoverageSingleHandler:
     def start(self, center_freq, bandwidth):
         self.queue = Queue()
 
+        # Create pipes for coverage process
+        get_pipe_coverage_data_scanner, get_pipe_process = Pipe(True)
+        self.get_pipe_coverage_data_scanner = get_pipe_coverage_data_scanner
+        self.get_pipe_process = get_pipe_process
+
+        # Create pipes for coverage process
+        stop_pipe_coverage_data_scanner, stop_pipe_process = Pipe(True)
+        self.stop_pipe_coverage_data_scanner = stop_pipe_coverage_data_scanner
+        self.stop_pipe_process = stop_pipe_process
+
         if not IS_TESTING:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
-                target=process_once_spectrum, daemon=True, args=(center_freq, bandwidth, self.queue,))
+                target=process_once_spectrum, daemon=True,
+                args=(center_freq, bandwidth, self.queue, self.get_pipe_process, self.stop_pipe_process,))
         else:
             # Define mock process
             self.process_spectrum_analyzer = Process(
@@ -52,6 +63,15 @@ class CoverageSingleHandler:
 
     def get_result(self):
         if not IS_TESTING:
-            return self.queue.get()
+
+            # send signal to process to get data
+            self.get_pipe_coverage_data_scanner.send("")
+
+            return self.queue.get(timeout=100)
         else:
             return [random.randrange(-50, -5)for _ in range(2048)]
+
+    # TODO
+    def close(self):
+        self.stop_pipe_coverage_data_scanner.send("")
+        pass

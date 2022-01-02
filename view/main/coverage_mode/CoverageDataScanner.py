@@ -1,12 +1,11 @@
 import copy
 import math
-import random
 import tkinter as tk
 import tkinter.ttk as ttk
+from multiprocessing import Pipe
 
 from model.CoverageHandler import CoverageSingleHandler
 from model.WifiScanner import WifiScanner
-from testing import IS_TESTING
 from view.main.coverage_mode.sdr_mode.CoverageSdrTab import CoverageSdrTab
 from view.main.coverage_mode.wifi_mode.CoverageWifiTab import CoverageWifiTab
 
@@ -19,6 +18,9 @@ class CoverageDataScanner(ttk.Frame):
 
         # iid for entries
         self.idx = 0
+
+        # is first run
+        self.isFirstScan = True
 
         super().__init__(
             self.parent,
@@ -164,9 +166,13 @@ class CoverageDataScanner(ttk.Frame):
         scan_center_freq = (min_freq + max_freq) / 2
 
         # run sdr scan
-        sdr_handler = CoverageSingleHandler()
-        sdr_handler.start(scan_center_freq, bandwidth)
-        dbm_data = sdr_handler.get_result()
+        if self.isFirstScan:
+            self.sdr_handler = CoverageSingleHandler()
+            self.sdr_handler.start(scan_center_freq, bandwidth)
+            dbm_data = self.sdr_handler.get_result()
+            self.isFirstScan = False
+        else:
+            dbm_data = self.sdr_handler.get_result()
 
         # track if each has freq to be tracked
         # TODO: verify if tracked freqs are in this range

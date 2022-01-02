@@ -33,16 +33,29 @@ def process_spectrum(pipe, center_freq, bandwidth, stop_pipe):
     return
 
 
-def process_once_spectrum(center_freq, bandwidth, output_queue):
+def process_once_spectrum(center_freq, bandwidth, output_queue, get_pipe, stop_pipe):
+
+    # flag to check if run should occur
+    isRun = True
 
     # create citrus processor
     p = pycitrus.CitrusProcessor(center_freq, bandwidth)
     p.init("lime")
-    out = p.run()
-    p.close()
 
-    # queue the output data back
-    output_queue.put(out)
+    while isRun:
+
+        if get_pipe.poll(timeout=0):
+            out = p.run()
+
+            # queue the output data back
+            output_queue.put(out)
+
+            # remove signal
+            get_pipe.recv()
+
+        if stop_pipe.poll(timeout=0):
+            p.close()
+            isRun = False
 
     print("Exiting process_once_spectrum...")
     return
