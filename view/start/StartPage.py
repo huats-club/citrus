@@ -45,15 +45,6 @@ class StartPage(tk.Frame):
             expand=True
         )
 
-        # # Select Interface panel
-        # self.interface_container = tk.Frame(self.container)
-        # self.interface_container.pack(
-        #     side=tk.TOP,
-        #     fill=tk.BOTH,
-        #     expand=True  # ensures that the panel file out the the parent
-        # )
-        # self.interface_frame = InterfaceFrame(self.interface_container)
-
         # Load project panel
         self.project_container = tk.Frame(self.container)
         self.project_container.pack(
@@ -97,9 +88,6 @@ class StartPage(tk.Frame):
             anchor=tk.NW,
             side=tk.RIGHT
         )
-
-    # def get_interface(self):
-    #     return self.interface_frame.get_interface_selected()
 
     def get_project_settings(self):
         return self.project_frame.get_selection()
