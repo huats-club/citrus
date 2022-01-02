@@ -90,7 +90,6 @@ class CoverageDataScanner(ttk.Frame):
             if self.sdr_handler != None:
                 self.sdr_handler.close()
                 self.sdr_handler = None
-            print("switch from SDR to Wifi tab")
 
     def populate_wifi_scan_results(self, json_list):
         for json in json_list:
