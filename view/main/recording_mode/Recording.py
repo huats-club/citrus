@@ -6,6 +6,7 @@ from view.main.recording_mode.RecordingSettingPane import RecordingSettingPane
 from view.main.recording_mode.RecordingSpecPlot import RecordingSpecPlot
 from view.main.recording_mode.RecordingWaterfallPlot import \
     RecordingWaterfallPlot
+from view.main.SelectDriverPane import SelectDriverPane
 
 
 class RecordingPage(ttk.Frame):
@@ -60,6 +61,9 @@ class RecordingPage(ttk.Frame):
             self,
             self.controller
         )
+
+        # Create select driver panel
+        self.select_driver_pane = SelectDriverPane(self.container, self.controller)
 
         # Create side panel
         self.recording_setting = FrequencyPane(

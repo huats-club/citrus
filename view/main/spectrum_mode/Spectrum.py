@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from app_parameters import app_parameters
 from view.main.FrequencyPane import FrequencyPane
+from view.main.SelectDriverPane import SelectDriverPane
 from view.main.spectrum_mode.SpectrumPlot import SpectrumPlot
 from view.main.spectrum_mode.SpectrumSettingPane import SpectrumSettingPane
 
@@ -55,6 +56,9 @@ class SpectrumPage(ttk.Frame):
 
         # Create bottom bar for start, stop and save
         self.bottom_container = SpectrumSettingPane(self.spectrum_plot_container, self, controller)
+
+        # Create select driver pane
+        self.spectrum_select_driver_pane = SelectDriverPane(self.container, self.controller)
 
         # Create settings pane container
         self.spectrum_setting_container = FrequencyPane(self.container, self.controller)
