@@ -45,6 +45,7 @@ class SelectDriverPane(ttk.LabelFrame):
             pady=5
         )
         self.select_driver_text = tk.StringVar()
+        self.select_driver_text.set("lime")  # set default
         self.select_driver = ttk.Entry(
             self.panel_container,
             textvariable=self.select_driver_text
@@ -56,3 +57,8 @@ class SelectDriverPane(ttk.LabelFrame):
             padx=5,
             pady=5
         )
+
+    # Returns the driver input entered
+    def get_driver_input(self):
+        print(self.select_driver_text.get())
+        return self.select_driver_text.get()
