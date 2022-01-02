@@ -7,6 +7,7 @@ from model.CoverageHandler import CoverageSingleHandler
 from model.WifiScanner import WifiScanner
 from view.main.coverage_mode.sdr_mode.CoverageSdrTab import CoverageSdrTab
 from view.main.coverage_mode.wifi_mode.CoverageWifiTab import CoverageWifiTab
+from view.main.SelectDriverPane import SelectDriverPane
 
 
 class CoverageDataScanner(ttk.Frame):
@@ -40,6 +41,9 @@ class CoverageDataScanner(ttk.Frame):
             anchor=tk.NW,
             fill=tk.BOTH
         )
+
+        # Create select driver
+        self.select_driver_pane = SelectDriverPane(self, self.controller)
 
         # create notebook to choose interface
         self.interfaces_selection = ttk.Notebook(

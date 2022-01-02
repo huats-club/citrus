@@ -72,7 +72,7 @@ class CoverageWifiTab(ttk.Frame):
             show='headings',
             style='primary.Treeview',
             columns=self.column_names,
-            height=7
+            height=5
         )
         self.display_all_panel.pack(
             padx=4,
@@ -114,7 +114,7 @@ class CoverageWifiTab(ttk.Frame):
             show='headings',
             style='primary.Treeview',
             columns=self.column_names,
-            height=7
+            height=5
         )
         self.display_tracked_panel.pack(
             padx=4,
@@ -141,7 +141,7 @@ class CoverageWifiTab(ttk.Frame):
         self.button_container = ttk.Frame(self)
         self.button_container.pack(
             padx=5,
-            side=tk.BOTTOM,
+            side=tk.TOP,
             anchor=tk.CENTER
         )
 

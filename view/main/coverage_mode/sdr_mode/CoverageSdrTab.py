@@ -72,7 +72,7 @@ class CoverageSdrTab(ttk.Frame):
             show='headings',
             style='primary.Treeview',
             columns=self.column_names,
-            # height=5
+            height=5
         )
         self.tracking_panel.pack(
             padx=4,
