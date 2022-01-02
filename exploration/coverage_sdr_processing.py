@@ -14,7 +14,7 @@ def read_sdr():
 
 def write_to_out(name):
     p = pycitrus.CitrusProcessor(743.3e6, 10e6)
-    p.init()
+    p.init("lime")
     data = p.run()
     p.close()
     with open(f"exploration/coverage_sdr_data/output_{name}.txt", "w") as f:
@@ -24,7 +24,7 @@ def write_to_out(name):
 
 def save_npy(name):
     p = pycitrus.CitrusProcessor(743.3e6, 10e6)
-    p.init()
+    p.init("lime")
     data = p.run()
     p.close()
     out = np.asarray(data)

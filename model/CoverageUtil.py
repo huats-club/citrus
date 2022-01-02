@@ -12,7 +12,7 @@ def process_spectrum(pipe, center_freq, bandwidth, stop_pipe):
 
     # create citrus processor
     p = pycitrus.CitrusProcessor(center_freq, bandwidth)
-    p.init()
+    p.init("lime")
 
     # time check
     prev = time.time()
@@ -39,7 +39,7 @@ def process_once_spectrum(center_freq, bandwidth, output_queue):
 
     # create citrus processor
     p = pycitrus.CitrusProcessor(center_freq, bandwidth)
-    p.init()
+    p.init("lime")
     out = p.run()
     p.close()
 
