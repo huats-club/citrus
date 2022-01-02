@@ -33,8 +33,8 @@ class CoverageValuesMenu(ttk.LabelFrame):
         # Max sensitivity
         self.max_sensitivity_label = tk.Label(
             self.panel_container,
-            text="Max sensitivity",
-            width=15,
+            text="Max dBm",
+            width=8,
             anchor=tk.NW
         )
         self.max_sensitivity_label.grid(
@@ -60,8 +60,8 @@ class CoverageValuesMenu(ttk.LabelFrame):
         # Min sensitivity
         self.min_sensitivity_label = tk.Label(
             self.panel_container,
-            text="Min sensitivity",
-            width=15,
+            text="Min dBm",
+            width=8,
             anchor=tk.NW
         )
         self.min_sensitivity_label.grid(

@@ -33,8 +33,8 @@ class SelectDriverPane(ttk.LabelFrame):
         # Driver label
         self.select_driver_label = tk.Label(
             self.panel_container,
-            text="Input driver",
-            width=15,
+            text="Driver",
+            width=8,
             anchor=tk.NW
         )
         self.select_driver_label.grid(
