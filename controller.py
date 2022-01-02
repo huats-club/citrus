@@ -54,10 +54,10 @@ class Controller(tk.Frame):
         # Indicate current interface
         self.current_interface = app_parameters.INTERFACE_WIFI
 
-        # Current wifi log
-        ts = datetime.datetime.date(datetime.datetime.now())
-        self.log_name = fr"{self.session.get_session_workspace_path()}/log_{ts}.txt"
-        self.log_json = fr"{self.session.get_session_workspace_path()}/{ts}.txt"
+        # # Current wifi log
+        # ts = datetime.datetime.date(datetime.datetime.now())
+        # self.log_name = fr"{self.session.get_session_workspace_path()}/log_{ts}.txt"
+        # self.log_json = fr"{self.session.get_session_workspace_path()}/{ts}.txt"
 
     # Function to create start (landing) page
     def make_start_page(self):
