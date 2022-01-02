@@ -90,7 +90,7 @@ class StartPage(tk.Frame):
         )
 
     def get_project_settings(self):
-        return self.project_frame.get_selection()
+        return self.project_frame.get_session_type_selection()
 
     def display_error_message(self):
         self.error_text.set("Error! Configurations incomplete.")

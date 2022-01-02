@@ -61,18 +61,22 @@ class Controller(tk.Frame):
 
     # Function to execute when start button pressed
     def on_start_button_press(self):
-        # is_valid_interface = (self.start.get_interface() != "")
-        is_valid_project_setting = (self.start.get_project_settings() != "")
+        type_session, filepath = self.start.get_project_settings()
+        print(type_session, filepath)
+        is_valid_project_setting = (filepath != "")
 
         # Valid user input
         if is_valid_project_setting:
-            self.is_valid_project_setting = self.start.get_project_settings()
 
             # Wipe out current window
             self.container.destroy()
 
             # Add notebook to original
             self.make_main_page(self.pipe_spectrum_gui, self.pipe_recording_gui)
+
+            # TODO: Set all the required if it is load
+            if type_session == app_parameters.PROJECT_LOAD:
+                pass
 
         else:  # invalid
             self.start.display_error_message()

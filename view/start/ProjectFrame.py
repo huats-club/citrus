@@ -91,8 +91,8 @@ class ProjectFrame(ttk.LabelFrame):
             side=tk.RIGHT
         )
 
-    def get_selection(self):
-        return self.selected.get()
+    def get_session_type_selection(self):
+        return self.selected.get(), self.filepath_text.get()
 
     def enable_loading_config(self):
         self.filepath_entry_button.configure(state="normal")
@@ -103,7 +103,7 @@ class ProjectFrame(ttk.LabelFrame):
 
     def get_filepath_from_radio_option(self):
         try:
-            self.path = tkfd.askopenfilename(initialdir="C:/")
+            self.path = tkfd.askdirectory(initialdir="C:/")
             self.filepath_text.set(self.path)
         except ValueError:
             self.filepath_text.set("")
