@@ -19,11 +19,11 @@ if __name__ == "__main__":
 
     # Check folder path for user data
     session_name = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
-    curr_workspace_path = app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
-    os.mkdir(curr_workspace_path)
+    app_parameters.WORKSPACE_FOLDER = app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
+    os.mkdir(app_parameters.WORKSPACE_FOLDER)
 
     # Generate private cached folder
-    app_parameters.PRIVATE_FOLDER = curr_workspace_path + f"/cached"
+    app_parameters.PRIVATE_FOLDER = app_parameters.WORKSPACE_FOLDER + f"/cached"
     os.mkdir(app_parameters.PRIVATE_FOLDER)
 
     # Initialize Tk GUI in main thread
