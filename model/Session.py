@@ -16,7 +16,7 @@ class Session:
         # session data
         self.session_name = session_name
         self.session_workspace_folder = os.getcwd() + '/' + app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
-        self.session_private_folder = os.getcwd() + '/' + app_parameters.PRIVATE_FOLDER + f"/{session_name}"
+        self.session_private_folder = os.getcwd() + '/' + app_parameters.PRIVATE_FOLDER
 
     def get_current_spectrum_plot_num(self):
         return self.current_spectrum_plot_num

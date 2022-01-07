@@ -17,14 +17,14 @@ class CoveragePage(ttk.Frame):
         self.controller = controller
         self.session = session
 
-        self.save_dir_path = self.session.get_session_workspace_path()
+        self.save_dir_path = self.session.get_session_workspace_path()  # TODO: log this down if new session
 
         # Save current canvas x and y bounds
         self.x_bound = -1
         self.y_bound = -1
 
         # Collect point (x,y) data in a dict/hashmap of (x,y) as key
-        self.recorded_points = dict()
+        self.recorded_points = dict()  # TODO: log this down if new session
         self.has_points = False
 
         # Collect map of name of ssid's heatmap and path
@@ -136,17 +136,17 @@ class CoveragePage(ttk.Frame):
         self.coverage_info_panel.set_load_dxf_error_message()
 
     def populate_wifi_scan_results(self, json_list):
-        self.coverage_display_data.populate_wifi_scan_results(json_list)  # TODO: change later
+        self.coverage_display_data.populate_wifi_scan_results(json_list)
 
     def clear_wifi_scan_results(self):
         self.recorded_points = {}
         self.has_points = False
-        self.coverage_display_data.clear_wifi_scan_results()  # TODO: change later
+        self.coverage_display_data.clear_wifi_scan_results()
 
     def clear_sdr_scan_results(self):
         self.recorded_points = {}
         self.has_points = False
-        self.coverage_display_data.clear_sdr_scan_results()  # TODO: change later
+        self.coverage_display_data.clear_sdr_scan_results()
 
     def enable_canvas_click(self):
         self.coverage_canvas.enable_click()
@@ -180,7 +180,6 @@ class CoveragePage(ttk.Frame):
             return point
 
         # SDR
-        # TODO: finish up sdr side of logic
         else:
             # get dict (name->freq)
             sdr_name_freq_dict = self.coverage_display_data.get_sdr_data_tracked()
