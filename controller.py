@@ -65,7 +65,8 @@ class Controller(tk.Frame):
 
         # Valid user input
         is_valid_project_setting = (
-            (filepath != "") and type_session != app_parameters.PROJECT_NEW)
+            (filepath != "") and type_session == app_parameters.PROJECT_LOAD) or (
+            type_session == app_parameters.PROJECT_NEW)
         if is_valid_project_setting:
 
             # Wipe out current window
