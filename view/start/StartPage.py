@@ -3,7 +3,6 @@ import tkinter.font as tkFont
 from tkinter import ttk
 
 from app_parameters import app_parameters
-from view.start.InterfaceFrame import InterfaceFrame
 from view.start.ProjectFrame import ProjectFrame
 
 

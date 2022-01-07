@@ -63,7 +63,9 @@ class Controller(tk.Frame):
     def on_start_button_press(self):
         type_session, filepath = self.start.get_project_settings()
         print(type_session, filepath)
-        is_valid_project_setting = (filepath != "")
+        is_valid_project_setting = (
+            (filepath != "") and type_session != app_parameters.PROJECT_NEW) or (
+            app_parameters.PROJECT_NEW and filepath == "")
 
         # Valid user input
         if is_valid_project_setting:
