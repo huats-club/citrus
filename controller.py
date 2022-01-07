@@ -279,3 +279,7 @@ class Controller(tk.Frame):
 
     def set_scan_not_done(self):
         self.scan_done = False
+
+    def on_exit(self, root):
+        print("Save session")
+        root.destroy()

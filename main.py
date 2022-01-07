@@ -29,7 +29,10 @@ if __name__ == "__main__":
     # Initialize Tk GUI in main thread
     root = tk.Tk()
     style = Style(theme=app_parameters.APP_THEME)  # https://ttkbootstrap.readthedocs.io/en/latest/themes.html
-    Controller(root, session_name)
+    controller = Controller(root, session_name)
+
+    # Handle save session when tkinter app exits gracefully
+    root.protocol("WM_DELETE_WINDOW", lambda: controller.on_exit(root))
 
     # Start Tk GUI in main thread
     root.mainloop()
