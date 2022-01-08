@@ -90,22 +90,27 @@ class Controller(tk.Frame):
                 self.dxf_opened = True
 
                 # Open config file
-                with open(filepath + "/config.yaml", "r") as f:
-                    data = yaml.load(f, Loader=yaml.SafeLoader)
+                try:
 
-                    # Extract coverage page data
-                    coverage_loaded_data = data[config_parameters.KEY_COVERAGE]
+                    with open(filepath + "/config.yaml", "r") as f:
+                        data = yaml.load(f, Loader=yaml.SafeLoader)
 
-                    # extract spectrum page data
-                    spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
+                        # Extract coverage page data
+                        coverage_loaded_data = data[config_parameters.KEY_COVERAGE]
 
-                    # TODO: extract recording page data
+                        # extract spectrum page data
+                        spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
-                # Setup coverage page
-                self.main_page.setup_coverage_from_config(coverage_loaded_data)
+                        # TODO: extract recording page data
 
-                # Setup spectrum
-                self.main_page.setup_spectrum_page_from_config(spectrum_loaded_data, filepath)
+                    # Setup coverage page
+                    self.main_page.setup_coverage_from_config(coverage_loaded_data)
+
+                    # Setup spectrum
+                    self.main_page.setup_spectrum_page_from_config(spectrum_loaded_data, filepath)
+
+                except FileNotFoundError:
+                    self.start.display_error_message()
 
         else:  # invalid
             self.start.display_error_message()
@@ -347,9 +352,14 @@ class Controller(tk.Frame):
             )
 
             # SAVE SPECTRUM DATA
-            start_freq = spectrum.spectrum_setting_container.get_start_freq()
-            center_freq = spectrum.spectrum_setting_container.get_center_freq()
-            end_freq = spectrum.spectrum_setting_container.get_stop_freq()
+            try:
+                start_freq = spectrum.spectrum_setting_container.get_start_freq()
+                center_freq = spectrum.spectrum_setting_container.get_center_freq()
+                end_freq = spectrum.spectrum_setting_container.get_stop_freq()
+            except ValueError:
+                start_freq = 0
+                center_freq = 0
+                end_freq = 0
             driver = spectrum.get_driver()
             spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
 
