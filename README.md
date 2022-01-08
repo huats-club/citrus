@@ -1,3 +1,3 @@
 # Citrus
 
-This repository contains GUI programs.
+For Maven, for better and more open softwares.
