@@ -6,66 +6,66 @@ coverage:
     SINGTEL-F772: workspace/01-08-2022_15-48-00/cached/scaled_SINGTEL-F772_2.png
   private: workspace/01-08-2022_15-48-00/cached
   recorded_points:
-    - data:
-        - rssi: -64
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 465
-      y: 312
-    - data:
-        - rssi: -68
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 694
-      y: 499
-    - data:
-        - rssi: -68
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 667
-      y: 251
-    - data:
-        - rssi: -68
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 544
-      y: 402
-    - data:
-        - rssi: -67
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 788
-      y: 136
-    - data:
-        - rssi: -67
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 255
-      y: 196
-    - data:
-        - rssi: -67
-          ssid: NOKIA-2291
-        - rssi: -100
-          ssid: SINGTEL-F772
-      x: 984
-      y: 519
-  tracked:
-    - bssid: 08:9b:b9:1c:22:9a
-      channel_frequency: "2462"
-      channel_number: "11"
-      channel_width: "20"
-      rssi: "-67"
+  - data:
+    - rssi: -64
       ssid: NOKIA-2291
-    - bssid: 4c:1b:86:6c:f7:72
-      channel_frequency: 0
-      channel_number: 0
-      channel_width: 0
-      rssi: -100
+    - rssi: -100
       ssid: SINGTEL-F772
+    x: 465
+    y: 312
+  - data:
+    - rssi: -68
+      ssid: NOKIA-2291
+    - rssi: -100
+      ssid: SINGTEL-F772
+    x: 694
+    y: 499
+  - data:
+    - rssi: -68
+      ssid: NOKIA-2291
+    - rssi: -100
+      ssid: SINGTEL-F772
+    x: 667
+    y: 251
+  - data:
+    - rssi: -68
+      ssid: NOKIA-2291
+    - rssi: -100
+      ssid: SINGTEL-F772
+    x: 544
+    y: 402
+  - data:
+    - rssi: -67
+      ssid: NOKIA-2291
+    - rssi: -100
+      ssid: SINGTEL-F772
+    x: 788
+    y: 136
+  - data:
+    - rssi: -67
+      ssid: NOKIA-2291
+    - rssi: -100
+      ssid: SINGTEL-F772
+    x: 255
+    y: 196
+  - data:
+    - rssi: -67
+      ssid: NOKIA-2291
+    - rssi: -100
+      ssid: SINGTEL-F772
+    x: 984
+    y: 519
+  tracked:
+  - bssid: 08:9b:b9:1c:22:9a
+    channel_frequency: '2462'
+    channel_number: '11'
+    channel_width: '20'
+    rssi: '-67'
+    ssid: NOKIA-2291
+  - bssid: 4c:1b:86:6c:f7:72
+    channel_frequency: 0
+    channel_number: 0
+    channel_width: 0
+    rssi: -100
+    ssid: SINGTEL-F772
   workspace: workspace/01-08-2022_15-48-00

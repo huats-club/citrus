@@ -5,6 +5,8 @@ import ezdxf
 import yaml
 
 from app_parameters import app_parameters
+from config_parameters import config_parameters
+from model.ConfigPacker import ConfigPacker
 from model.CoverageHandler import CoverageHandler
 from model.PointsDataAggregator import PointDataAggregator
 from model.PointsDataConverter import PointsDataConverter
@@ -22,7 +24,10 @@ class Controller(tk.Frame):
         self.parent.title(app_parameters.APP_TITLE)
         self.parent.iconbitmap(app_parameters.APP_ICO_PATH)
 
-        self.hasMainPage = False
+        self.has_main_page = False
+
+        # Config packer
+        self.config_packer = ConfigPacker()
 
         # Create new session object
         self.session = session
@@ -79,7 +84,10 @@ class Controller(tk.Frame):
 
             # TODO: Set all the required if it is load
             if type_session == app_parameters.PROJECT_LOAD:
-                pass
+
+                with open(filepath + "/config.yaml", "r") as f:
+                    data = yaml.load(f, Loader=yaml.SafeLoader)
+                    print(data)
 
         else:  # invalid
             self.start.display_error_message()
@@ -88,7 +96,7 @@ class Controller(tk.Frame):
     def make_main_page(self, spectrum_pipe, recording_pipe):
         self.main_page = MainPage(self.parent, self, spectrum_pipe, recording_pipe,
                                   self.session)  # parent of main page is root
-        self.hasMainPage = True
+        self.has_main_page = True
 
     def start_spectrum_process(self, driver_name, center_freq, bandwidth):
         # Create sdr handler
@@ -288,29 +296,37 @@ class Controller(tk.Frame):
 
     def on_exit(self, root):
 
-        if self.hasMainPage:
+        if self.has_main_page:
             # NOTE: differentiated saving measures/algo for new/load session!!
             coverage = self.main_page.coverage_page
             session = self.main_page.coverage_page.session
 
-            # TODO: save coverage window
             # for now, to process the strings, print out all fields that need to be saved
             workspace_path, private_path = session.get_relative_paths()
-            print(f"paths: {workspace_path} {private_path}")
-            print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
-            print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
-            print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
+            # print(f"paths: {workspace_path} {private_path}")
+            # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
+            # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
+            # print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
             if coverage.coverage_display_data.get_current_tab_name() == "WIFI":
-                print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
+                # print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
+                tracked_data = coverage.coverage_display_data.get_wifi_data_tracked()
             else:
-                print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
+                # print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
+                tracked_data = coverage.coverage_display_data.sdr_tab.get_tracked_list()
 
-            # TODO: add yaml packer
+            coverage_data = self.config_packer.pack_coverage_config(
+                workspace_path,
+                private_path,
+                coverage.map_ssid_heatmap_path,
+                coverage.recorded_points,
+                coverage.coverage_display_data.get_current_tab_name(),
+                tracked_data
+            )
 
             # Create data to save in yaml file
-            out = []
+            config = {config_parameters.KEY_COVERAGE: coverage_data}
             with open(f"{workspace_path}/config.yaml", 'w') as f:
-                yaml.dump(out, f)
+                yaml.dump(config, f)
 
             # Debug
             print("Exiting...")

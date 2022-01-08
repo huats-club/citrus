@@ -83,7 +83,7 @@ class ProjectFrame(ttk.LabelFrame):
         self.filepath_entry_button = ttk.Button(
             self.filepath_container,
             style="primary.Outline.TButton",
-            text="Select file",
+            text="Select",
             state="disabled",
             command=self.get_filepath_from_radio_option
         )
