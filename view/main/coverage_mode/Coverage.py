@@ -296,7 +296,9 @@ class CoveragePage(ttk.Frame):
         self.map_ssid_heatmap_path = map_ssid_heatmap_path
         if len(list(map_ssid_heatmap_path.keys())) > 0:
             self.coverage_bar.set_heatmap_selection(list(map_ssid_heatmap_path.keys()))
-            self.put_image("Combined")  # Put combined image as head
+
+            if "Conbined" in list(map_ssid_heatmap_path.keys()):
+                self.put_image("Combined")  # Put combined image as head
 
         # Set tracked data into GUI
         if current_tab == "WIFI":
