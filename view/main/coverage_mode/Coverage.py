@@ -29,7 +29,7 @@ class CoveragePage(ttk.Frame):
         self.has_points = False
 
         # Collect map of name of ssid's heatmap and path
-        self.map_ssid_heatmap_path = {}  # TODO: log this down if new session
+        self.map_ssid_heatmap_path = {}
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
