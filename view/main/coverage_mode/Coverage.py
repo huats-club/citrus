@@ -17,7 +17,8 @@ class CoveragePage(ttk.Frame):
         self.controller = controller
         self.session = session
 
-        self.save_dir_path = self.session.get_session_workspace_path()  # TODO: log this down if new session
+        # Get full resolved path to workspace
+        self.save_dir_path = self.session.get_session_workspace_path()
 
         # Save current canvas x and y bounds
         self.x_bound = -1
@@ -28,7 +29,7 @@ class CoveragePage(ttk.Frame):
         self.has_points = False
 
         # Collect map of name of ssid's heatmap and path
-        self.map_ssid_heatmap_path = {}
+        self.map_ssid_heatmap_path = {}  # TODO: log this down if new session
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(

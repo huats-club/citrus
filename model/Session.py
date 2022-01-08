@@ -15,6 +15,8 @@ class Session:
 
         # session data
         self.session_name = session_name
+        self.relative_workspace_folder_path = session_workspace_folder
+        self.relative_private_folder_path = session_workspace_private
         self.session_workspace_folder = os.getcwd() + '/' + session_workspace_folder
         self.session_private_folder = os.getcwd() + '/' + session_workspace_private
 
@@ -65,3 +67,9 @@ class Session:
 
     def get_session_private_folder_path(self):
         return self.session_private_folder
+
+    def get_session_private_folder_relative_path(self):
+        return self.relative_private_folder_path
+
+    def get_relative_paths(self):
+        return self.relative_workspace_folder_path, self.relative_private_folder_path

@@ -241,7 +241,10 @@ class Controller(tk.Frame):
 
                 # generate name of path
                 output_file_name = f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}.png"
-                saved_heatmap_path = f"{self.session.get_session_private_folder_path()}/{output_file_name}"
+
+                # Don't save entire path into coverage, so that easier to handle load session
+                saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"
+
                 self.session.increment_coverage_plot_num()
 
                 # save to map
@@ -282,11 +285,13 @@ class Controller(tk.Frame):
     def on_exit(self, root):
 
         # NOTE: differentiated saving measures/algo for new/load session!!
+        coverage = self.main_page.coverage_page
+        session = self.main_page.coverage_page.session
 
         # TODO: save coverage window
         # for now, to process the strings, print out all fields that need to be saved
-        coverage = self.main_page.coverage_page
-        print(coverage.save_dir_path)
+        print(f"paths: {session.get_relative_paths()}")
+        print(f"{coverage.map_ssid_heatmap_path}")
 
         # Debug
         print("Exiting...")
