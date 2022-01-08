@@ -77,12 +77,22 @@ class Controller(tk.Frame):
             # Add notebook to original
             self.make_main_page(self.pipe_spectrum_gui, self.pipe_recording_gui)
 
-            # TODO: Set all the required if it is load
+            # Set all the required if it is load
             if type_session == app_parameters.PROJECT_LOAD:
 
+                # Open config file
                 with open(filepath + "/config.yaml", "r") as f:
                     data = yaml.load(f, Loader=yaml.SafeLoader)
-                    print(data)
+
+                    # Extract coverage page data
+                    coverage_loaded_data = data[config_parameters.KEY_COVERAGE]
+
+                    # TODO: extract spectrum page data
+
+                    # TODO: extract recording page data
+
+                # Setup coverage page
+                self.main_page.setup_coverage_from_config(coverage_loaded_data)
 
         else:  # invalid
             self.start.display_error_message()

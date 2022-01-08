@@ -91,3 +91,6 @@ class MainPage(ttk.Notebook):
     def enable_toggle_tab(self):
         for tab_id in self.tabs():
             self.tab(tab_id, state='normal')
+
+    def setup_coverage_from_config(self, config_dict):
+        self.coverage_page.setup_page_from_config(config_dict)

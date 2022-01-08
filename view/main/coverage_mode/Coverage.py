@@ -262,3 +262,6 @@ class CoveragePage(ttk.Frame):
 
     def get_current_heatmap_name(self):
         return self.coverage_bar.get_current_heatmap_name()
+
+    def setup_page_from_config(self, config_dict):
+        print(config_dict)
