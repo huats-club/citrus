@@ -101,13 +101,17 @@ class Controller(tk.Frame):
                         # extract spectrum page data
                         spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
-                        # TODO: extract recording page data
+                        # extract recording page data
+                        recording_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
                     # Setup coverage page
                     self.main_page.setup_coverage_from_config(coverage_loaded_data)
 
-                    # Setup spectrum
-                    self.main_page.setup_spectrum_page_from_config(spectrum_loaded_data, filepath)
+                    # Setup spectrum page
+                    self.main_page.setup_spectrum_from_config(spectrum_loaded_data, filepath)
+
+                    # Setup recording page
+                    self.main_page.setup_recording_from_config(recording_loaded_data, filepath)
 
                 except FileNotFoundError:
                     self.start.display_error_message()

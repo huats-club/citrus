@@ -96,5 +96,8 @@ class MainPage(ttk.Notebook):
     def setup_coverage_from_config(self, config_dict):
         self.coverage_page.setup_page_from_config(config_dict)
 
-    def setup_spectrum_page_from_config(self, config, path):
+    def setup_spectrum_from_config(self, config, path):
         self.spectrum_page.setup_page_from_config(config, path)
+
+    def setup_recording_from_config(self, config, path):
+        self.recording_page.setup_page_from_config(config, path)
