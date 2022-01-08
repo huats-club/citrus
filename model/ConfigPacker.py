@@ -3,7 +3,7 @@ import copy
 from config_parameters import config_parameters
 
 
-class ConfigPacker:
+class ConfigParser:
     def __init__(self):
         pass
 
@@ -47,3 +47,18 @@ class ConfigPacker:
         base[config_parameters.KEY_COVERAGE_RECORDED_POINTS] = copy.deepcopy(packed_recorded_points)
 
         return base
+
+    def parse_coverage_config(self, data):
+
+        workspace_path = data[config_parameters.KEY_COVERAGE_WORKSPACE]
+        private_path = data[config_parameters.KEY_COVERAGE_PRIVATE_WORKSPACE]
+
+        map_ssid_heatmap_path = data[config_parameters.KEY_COVERAGE_PRIVATE_HEATMAPS]
+
+        recorded_points = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS]
+
+        current_tab = data[config_parameters.KEY_COVERAGE_COVERAGE_CURRENT_TAB]
+
+        tab_tracked_data = data[config_parameters.KEY_COVERAGE_CURRENT_TRACKED_DATA]
+
+        return workspace_path, private_path, map_ssid_heatmap_path, recorded_points, current_tab, tab_tracked_data

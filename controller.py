@@ -1,3 +1,5 @@
+import random
+import string
 import tkinter as tk
 from multiprocessing import Pipe
 
@@ -6,7 +8,7 @@ import yaml
 
 from app_parameters import app_parameters
 from config_parameters import config_parameters
-from model.ConfigPacker import ConfigPacker
+from model.ConfigPacker import ConfigParser
 from model.CoverageHandler import CoverageHandler
 from model.PointsDataAggregator import PointDataAggregator
 from model.PointsDataConverter import PointsDataConverter
@@ -27,9 +29,10 @@ class Controller(tk.Frame):
         self.has_main_page = False
 
         # Config packer
-        self.config_packer = ConfigPacker()
+        self.config_packer = ConfigParser()
 
         # Create new session object
+        self.is_load = False
         self.session = session
 
         # Create pipes for coverage process
@@ -79,6 +82,12 @@ class Controller(tk.Frame):
 
             # Set all the required if it is load
             if type_session == app_parameters.PROJECT_LOAD:
+
+                # Set status is loaded session
+                self.is_load = True
+
+                # Set that no need dxf
+                self.dxf_opened = True
 
                 # Open config file
                 with open(filepath + "/config.yaml", "r") as f:
@@ -257,7 +266,12 @@ class Controller(tk.Frame):
             for ssid, data in processed_all_data.items():
 
                 # generate name of path
-                output_file_name = f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}.png"
+                rand = ""
+                if self.is_load:
+                    rand = "_" + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
+
+                output_file_name = \
+                    f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}{rand}.png"
 
                 # Don't save entire path into coverage, so that easier to handle load session
                 saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"

@@ -73,3 +73,11 @@ class Session:
 
     def get_relative_paths(self):
         return self.relative_workspace_folder_path, self.relative_private_folder_path
+
+    def set_session_workspace_path(self, path):
+        self.session_workspace_folder = path
+        self.session_workspace_folder = os.getcwd() + '/' + path
+
+    def set_session_private_folder_path(self, path):
+        self.session_private_folder = path
+        self.session_private_folder = os.getcwd() + '/' + path

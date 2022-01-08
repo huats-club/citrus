@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-from view.main.coverage_mode.CoverageValuesMenu import CoverageValuesMenu
-
 
 class CoverageWifiTab(ttk.Frame):
     def __init__(self, parent, controller, coverage, *args, **kwargs):
@@ -268,3 +266,19 @@ class CoverageWifiTab(ttk.Frame):
             mapping[all_data[1]] = all_data[0]
 
         return mapping[bssid]
+
+    def insert(self, json):
+
+        # Prepare data
+        ssid = json["ssid"]
+        bssid = json["bssid"]
+        channel_freq = json["channel_frequency"]
+        channel = json['channel_number'] + "@" + json['channel_width']
+
+        data = (ssid, bssid, channel_freq, channel)
+
+        self.display_tracked_panel.insert(
+            parent='', index=self.iid, iid=self.iid,
+            values=tuple(data)
+        )
+        self.iid += 1

@@ -239,3 +239,9 @@ class CoverageDataScanner(ttk.Frame):
     # Returns WIFI or SDR
     def get_current_tab_name(self):
         return self.interfaces_selection.tab(self.interfaces_selection.select(), 'text')
+
+    def set_current_interface(self, is_wifi=True):
+        if is_wifi:
+            self.interfaces_selection.select(self.wifi_tab)
+        else:
+            self.interfaces_selection.select(self.sdr_tab)

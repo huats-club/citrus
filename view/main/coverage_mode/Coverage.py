@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from config_parameters import config_parameters
+from model.ConfigPacker import ConfigParser
 from model.dxf2tk import dxf2tk
 from model.Point import Point
 from model.WifiHeatmapPlotter import WifiHeatmapPlotter
@@ -25,7 +27,7 @@ class CoveragePage(ttk.Frame):
         self.y_bound = -1
 
         # Collect point (x,y) data in a dict/hashmap of (x,y) as key
-        self.recorded_points = dict()  # TODO: log this down if new session
+        self.recorded_points = dict()
         self.has_points = False
 
         # Collect map of name of ssid's heatmap and path
@@ -264,4 +266,46 @@ class CoveragePage(ttk.Frame):
         return self.coverage_bar.get_current_heatmap_name()
 
     def setup_page_from_config(self, config_dict):
-        print(config_dict)
+        workspace_path, private_path, map_ssid_heatmap_path, \
+            recorded_points, current_tab, tab_tracked_data = ConfigParser().parse_coverage_config(config_dict)
+        # print(f"paths: {workspace_path} {private_path}")
+        # print(f"heatmaps created: {map_ssid_heatmap_path}")
+        # print(f"recorded points: {recorded_points}")
+        # print(f"current tab: {current_tab}")
+        print(f"tracked data: {tab_tracked_data}")
+
+        # Save session workspace and private cached folder relative paths
+        self.save_dir_path = workspace_path
+        self.session.set_session_workspace_path(workspace_path)
+        self.session.set_session_private_folder_path(private_path)
+
+        # Plot points onto canvas
+        self.recorded_points = {}
+        for data in recorded_points:
+            x = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS_X]
+            y = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS_Y]
+            map_data = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS_DATA]
+            list_json = []
+            for ssid, rssi in map_data.items():
+                list_json.append({"ssid": ssid, "rssi": rssi})
+            self.recorded_points[(x, y)] = Point(x, y, list_json)
+        self.has_points = True
+        self.coverage_canvas.canvas_put_point_again(self.recorded_points)
+
+        # Put image and populate ssid list to select to put onto canvas
+        self.map_ssid_heatmap_path = map_ssid_heatmap_path
+        self.coverage_bar.set_heatmap_selection(list(map_ssid_heatmap_path.keys()))
+        self.put_image("Combined")  # Put combined image as head
+
+        # Set current tab
+        self.coverage_display_data.set_current_interface(is_wifi=True)
+
+        # TODO: Set tracked data into GUI
+        if current_tab == "WIFI":
+
+            # Tab's tracked data is wifi scanned data
+            for item in tab_tracked_data:
+                self.coverage_display_data.wifi_tab.insert(item)
+
+        else:
+            pass
