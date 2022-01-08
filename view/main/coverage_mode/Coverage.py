@@ -272,7 +272,7 @@ class CoveragePage(ttk.Frame):
         # print(f"heatmaps created: {map_ssid_heatmap_path}")
         # print(f"recorded points: {recorded_points}")
         # print(f"current tab: {current_tab}")
-        print(f"tracked data: {tab_tracked_data}")
+        # print(f"tracked data: {tab_tracked_data}")
 
         # Save session workspace and private cached folder relative paths
         self.save_dir_path = workspace_path
@@ -294,18 +294,24 @@ class CoveragePage(ttk.Frame):
 
         # Put image and populate ssid list to select to put onto canvas
         self.map_ssid_heatmap_path = map_ssid_heatmap_path
-        self.coverage_bar.set_heatmap_selection(list(map_ssid_heatmap_path.keys()))
-        self.put_image("Combined")  # Put combined image as head
+        if len(list(map_ssid_heatmap_path.keys())) > 0:
+            self.coverage_bar.set_heatmap_selection(list(map_ssid_heatmap_path.keys()))
+            self.put_image("Combined")  # Put combined image as head
 
-        # Set current tab
-        self.coverage_display_data.set_current_interface(is_wifi=True)
-
-        # TODO: Set tracked data into GUI
+        # Set tracked data into GUI
         if current_tab == "WIFI":
+
+            # Set current tab
+            self.coverage_display_data.set_current_interface(is_wifi=True)
 
             # Tab's tracked data is wifi scanned data
             for item in tab_tracked_data:
                 self.coverage_display_data.wifi_tab.insert(item)
 
         else:
-            pass
+            # Set current tab
+            self.coverage_display_data.set_current_interface(is_wifi=False)
+
+            for x in tab_tracked_data:
+                for name, freq in x.items():
+                    self.coverage_display_data.sdr_tab.insert(name, freq)

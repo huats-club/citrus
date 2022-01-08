@@ -242,7 +242,7 @@ class CoverageSdrTab(ttk.Frame):
 
             name = all_data[0]
             freq = float(all_data[1]) * 1e6  # convert to mhz
-            print(name, freq)
+            # print(name, freq)
 
             # temp
             temp = {}
@@ -314,3 +314,10 @@ class CoverageSdrTab(ttk.Frame):
             names.append(name)
 
         return names
+
+    def insert(self, name, freq):
+        self.tracking_panel.insert(
+            parent='', index=self.iid, iid=self.iid,
+            values=tuple((name, freq))
+        )
+        self.iid += 1
