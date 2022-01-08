@@ -2,6 +2,7 @@ import tkinter as tk
 from multiprocessing import Pipe
 
 import ezdxf
+import yaml
 
 from app_parameters import app_parameters
 from model.CoverageHandler import CoverageHandler
@@ -294,15 +295,22 @@ class Controller(tk.Frame):
 
             # TODO: save coverage window
             # for now, to process the strings, print out all fields that need to be saved
-            print(f"paths: {session.get_relative_paths()}")
+            workspace_path, private_path = session.get_relative_paths()
+            print(f"paths: {workspace_path} {private_path}")
             print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
-            # (x,y)-> Point object, TODO: may need to save differently
-            print(f"recorded points: {coverage.recorded_points}")
+            print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
             print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
             if coverage.coverage_display_data.get_current_tab_name() == "WIFI":
                 print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
             else:
                 print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
+
+            # TODO: add yaml packer
+
+            # Create data to save in yaml file
+            out = []
+            with open(f"{workspace_path}/config.yaml", 'w') as f:
+                yaml.dump(out, f)
 
             # Debug
             print("Exiting...")
