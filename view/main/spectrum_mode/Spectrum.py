@@ -142,11 +142,11 @@ class SpectrumPage(ttk.Frame):
             output_log_file = fr"{self.save_path}/spectrum_log_{self.run_count}.txt"
             with open(output_log_file, "w") as f:
                 start_freq = self.spectrum_setting_container.get_start_freq()
-                center_freq = self.spectrum_setting_container.get_center_freq() / 1e6
                 end_freq = self.spectrum_setting_container.get_stop_freq()
+                units = self.spectrum_setting_container.get_freq_units()
                 f.write(f"Start freq: {start_freq}\n")
-                f.write(f"Center freq: {center_freq}\n")
                 f.write(f"End freq: {end_freq}\n")
+                f.write(f"Units: {units}")
             self.data_store = []
             self.run_count += 1
 

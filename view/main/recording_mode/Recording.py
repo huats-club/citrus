@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+import numpy as np
 from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.recording_mode.RecordingSettingPane import RecordingSettingPane
@@ -17,6 +18,10 @@ class RecordingPage(ttk.Frame):
         self.pipe = pipe
 
         self.save_path = self.controller.session.get_session_workspace_path()
+
+        # Store data for logging later on end
+        self.run_count = 1
+        self.data_store = []
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -128,8 +133,12 @@ class RecordingPage(ttk.Frame):
     def get_process(self):
         if self.pipe.poll(timeout=0):
             data = self.pipe.recv()
+
             # do plot
             self.recording_plot.do_plot(data)
+
+            # append data for storage at end of run
+            self.data_store.append(data)
 
         self.parent.after(500, self.get_process)
 
@@ -151,6 +160,20 @@ class RecordingPage(ttk.Frame):
 
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
+
+            # Save data to file and log out freq used
+            output_data_file = fr"{self.save_path}/recording_data_{self.run_count}"
+            np.save(output_data_file, np.array(self.data_store))
+            output_log_file = fr"{self.save_path}/recording_log_{self.run_count}.txt"
+            with open(output_log_file, "w") as f:
+                start_freq = self.recording_setting.get_start_freq()
+                end_freq = self.recording_setting.get_stop_freq()
+                units = self.recording_setting.get_freq_units()
+                f.write(f"Start freq: {start_freq}\n")
+                f.write(f"End freq: {end_freq}\n")
+                f.write(f"Units: {units}")
+            self.data_store = []
+            self.run_count += 1
 
     # Provide interface for save pane to call common function
     def update_save_path(self, path):
