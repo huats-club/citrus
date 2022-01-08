@@ -49,3 +49,6 @@ class SpectrumSettingPane(tk.Frame):
             self.spectrum,
             tk.RIGHT
         )
+
+    def set_save_path(self, path):
+        self.save_pane.set_filepath(path)

@@ -81,3 +81,7 @@ class SavePane(ttk.Frame):
             self.owner.update_save_path(self.save_path)
         except ValueError:
             self.filepath_text.set(self.controller.session.get_session_workspace_path())
+
+    def set_filepath(self, path):
+        self.path = path
+        self.filepath_text.set(path)

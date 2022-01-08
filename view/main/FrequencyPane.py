@@ -291,3 +291,12 @@ class FrequencyPane(ttk.LabelFrame):
                 return False
 
             return True
+
+    def set_start_freq(self, freq):
+        return self.start_freq_text.set(freq)
+
+    def set_stop_freq(self, freq):
+        return self.stop_freq_text.set(freq)
+
+    def set_center_freq(self, freq):
+        self.center_freq_text.set(freq)

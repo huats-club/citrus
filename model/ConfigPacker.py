@@ -62,3 +62,21 @@ class ConfigParser:
         tab_tracked_data = data[config_parameters.KEY_COVERAGE_CURRENT_TRACKED_DATA]
 
         return workspace_path, private_path, map_ssid_heatmap_path, recorded_points, current_tab, tab_tracked_data
+
+    def pack_spectrum_config(self, start_freq, center_freq, end_freq, driver):
+
+        base = {}
+
+        base[config_parameters.KEY_SPECTRUM_DRIVER] = driver
+        base[config_parameters.KEY_SPECTRUM_START_FREQ] = float(start_freq)
+        base[config_parameters.KEY_SPECTRUM_CENTER_FREQ] = float(center_freq / 1e6)
+        base[config_parameters.KEY_SPECTRUM_END_FREQ] = float(end_freq)
+
+        return base
+
+    def parse_spectrum_config(self, data):
+        start_freq = data[config_parameters.KEY_SPECTRUM_START_FREQ]
+        center_freq = data[config_parameters.KEY_SPECTRUM_CENTER_FREQ]
+        end_freq = data[config_parameters.KEY_SPECTRUM_END_FREQ]
+        driver = data[config_parameters.KEY_SPECTRUM_DRIVER]
+        return str(start_freq), str(center_freq), str(end_freq), driver

@@ -96,7 +96,8 @@ class Controller(tk.Frame):
                     # Extract coverage page data
                     coverage_loaded_data = data[config_parameters.KEY_COVERAGE]
 
-                    # TODO: extract spectrum page data
+                    # extract spectrum page data
+                    spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
                     # TODO: extract recording page data
 
@@ -104,7 +105,7 @@ class Controller(tk.Frame):
                 self.main_page.setup_coverage_from_config(coverage_loaded_data)
 
                 # Setup spectrum
-                # self.main_page.setup_spectrum_page_from_config()
+                self.main_page.setup_spectrum_page_from_config(spectrum_loaded_data, filepath)
 
         else:  # invalid
             self.start.display_error_message()
@@ -319,11 +320,11 @@ class Controller(tk.Frame):
     def on_exit(self, root):
 
         if self.has_main_page:
-            # NOTE: differentiated saving measures/algo for new/load session!!
             coverage = self.main_page.coverage_page
+            spectrum = self.main_page.spectrum_page
             session = self.main_page.coverage_page.session
 
-            # for now, to process the strings, print out all fields that need to be saved
+            # SAVE COVERAGE DATA
             workspace_path, private_path = session.get_relative_paths()
             # print(f"paths: {workspace_path} {private_path}")
             # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
@@ -345,8 +346,19 @@ class Controller(tk.Frame):
                 tracked_data
             )
 
+            # SAVE SPECTRUM DATA
+            start_freq = spectrum.spectrum_setting_container.get_start_freq()
+            center_freq = spectrum.spectrum_setting_container.get_center_freq()
+            end_freq = spectrum.spectrum_setting_container.get_stop_freq()
+            driver = spectrum.get_driver()
+            spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
+
             # Create data to save in yaml file
-            config = {config_parameters.KEY_COVERAGE: coverage_data}
+            config = {
+                config_parameters.KEY_COVERAGE: coverage_data,
+                config_parameters.KEY_SPECTRUM: spectrum_data,
+                config_parameters.KEY_WORKSPACE_PATH: workspace_path
+            }
             with open(f"{workspace_path}/config.yaml", 'w') as f:
                 yaml.dump(config, f)
 

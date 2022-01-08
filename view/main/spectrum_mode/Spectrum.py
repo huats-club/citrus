@@ -3,6 +3,8 @@ from tkinter import ttk
 
 import numpy as np
 from app_parameters import app_parameters
+from config_parameters import config_parameters
+from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SelectDriverPane import SelectDriverPane
 from view.main.spectrum_mode.SpectrumPlot import SpectrumPlot
@@ -152,6 +154,9 @@ class SpectrumPage(ttk.Frame):
     def update_save_path(self, path):
         self.save_path = path
 
+    def get_driver(self):
+        return self.spectrum_select_driver_pane.get_driver_input()
+
     # Provide interface for save pane to call common function
     def handle_save(self):
         self.handle_spectrum_save()
@@ -162,6 +167,12 @@ class SpectrumPage(ttk.Frame):
         self.controller.session.increment_spectrum_plot_num()
         self.spectrum_plot.save(filepath)
 
-    # TODO
-    def setup_page_from_config(self):
-        pass
+    def setup_page_from_config(self, config, path):
+        start_freq, center_freq, end_freq, driver = ConfigParser().parse_spectrum_config(config)
+        self.spectrum_setting_container.set_start_freq(start_freq)
+        self.spectrum_setting_container.set_center_freq(center_freq)
+        self.spectrum_setting_container.set_stop_freq(end_freq)
+        self.spectrum_select_driver_pane.set_driver_input(driver)
+
+        self.bottom_container.set_save_path(path)
+        self.save_path = path
