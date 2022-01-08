@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-import matplotlib as mpl
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
 import numpy as np
