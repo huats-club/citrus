@@ -4,7 +4,7 @@ from app_parameters import app_parameters
 
 
 class Session:
-    def __init__(self, session_name):
+    def __init__(self, session_name, session_workspace_folder, session_workspace_private):
         self.current_coverage_plot_num = 1
         self.current_coverage_save_num = 1
         self.current_spectrum_plot_num = 1
@@ -15,8 +15,8 @@ class Session:
 
         # session data
         self.session_name = session_name
-        self.session_workspace_folder = os.getcwd() + '/' + app_parameters.WORKSPACE_FOLDER + f"/{session_name}"
-        self.session_private_folder = os.getcwd() + '/' + app_parameters.PRIVATE_FOLDER
+        self.session_workspace_folder = os.getcwd() + '/' + session_workspace_folder
+        self.session_private_folder = os.getcwd() + '/' + session_workspace_private
 
     def get_current_spectrum_plot_num(self):
         return self.current_spectrum_plot_num

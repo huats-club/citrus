@@ -8,14 +8,13 @@ from model.CoverageHandler import CoverageHandler
 from model.PointsDataAggregator import PointDataAggregator
 from model.PointsDataConverter import PointsDataConverter
 from model.RecordingHandler import RecordingHandler
-from model.Session import Session
 from model.WifiScanner import WifiScanner
 from view.main.MainPage import MainPage
 from view.start.StartPage import StartPage
 
 
 class Controller(tk.Frame):
-    def __init__(self, parent, session_name):
+    def __init__(self, parent, session):
         super().__init__(parent)
         self.parent = parent
         self.parent.resizable(width=False, height=False)    # Don't allow resizing
@@ -23,7 +22,7 @@ class Controller(tk.Frame):
         self.parent.iconbitmap(app_parameters.APP_ICO_PATH)
 
         # Create new session object
-        self.session = Session(session_name)
+        self.session = session
 
         # Create pipes for coverage process
         pipe_spectrum_process, pipe_spectrum_gui = Pipe(True)
@@ -281,5 +280,16 @@ class Controller(tk.Frame):
         self.scan_done = False
 
     def on_exit(self, root):
-        print("Save session")
+
+        # NOTE: differentiated saving measures/algo for new/load session!!
+
+        # TODO: save coverage window
+        # for now, to process the strings, print out all fields that need to be saved
+        coverage = self.main_page.coverage_page
+        print(coverage.save_dir_path)
+
+        # Debug
+        print("Exiting...")
+
+        # Destroy entire window after completed saving session
         root.destroy()
