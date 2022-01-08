@@ -57,11 +57,6 @@ class Controller(tk.Frame):
         # Scan results done
         self.scan_done = False
 
-        # # Current wifi log
-        # ts = datetime.datetime.date(datetime.datetime.now())
-        # self.log_name = fr"{self.session.get_session_workspace_path()}/log_{ts}.txt"
-        # self.log_json = fr"{self.session.get_session_workspace_path()}/{ts}.txt"
-
     # Function to create start (landing) page
     def make_start_page(self):
         self.start = StartPage(self.container, self)
