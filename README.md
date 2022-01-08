@@ -1,3 +1,3 @@
 # Citrus
 
-For Maven, for better and more open softwares.
+For Maven Solutions, for better and more open softwares.
