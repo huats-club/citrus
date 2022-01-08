@@ -103,6 +103,9 @@ class Controller(tk.Frame):
                 # Setup coverage page
                 self.main_page.setup_coverage_from_config(coverage_loaded_data)
 
+                # Setup spectrum
+                # self.main_page.setup_spectrum_page_from_config()
+
         else:  # invalid
             self.start.display_error_message()
             return

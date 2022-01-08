@@ -18,7 +18,7 @@ def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe):
     while isRun:
         now = time.time()
 
-        if now - prev > 0.8:
+        if now - prev > 0.4:
             out = p.run()
             pipe.send(out)
             prev = time.time()

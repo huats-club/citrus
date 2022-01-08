@@ -297,7 +297,7 @@ class CoveragePage(ttk.Frame):
         if len(list(map_ssid_heatmap_path.keys())) > 0:
             self.coverage_bar.set_heatmap_selection(list(map_ssid_heatmap_path.keys()))
 
-            if "Conbined" in list(map_ssid_heatmap_path.keys()):
+            if "Combined" in list(map_ssid_heatmap_path.keys()):
                 self.put_image("Combined")  # Put combined image as head
 
         # Set tracked data into GUI

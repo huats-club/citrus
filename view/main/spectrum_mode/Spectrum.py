@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+import numpy as np
 from app_parameters import app_parameters
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SelectDriverPane import SelectDriverPane
@@ -9,12 +10,17 @@ from view.main.spectrum_mode.SpectrumSettingPane import SpectrumSettingPane
 
 
 class SpectrumPage(ttk.Frame):
-    def __init__(self, parent, controller, pipe, *args, **kwargs):
+    def __init__(self, parent, controller, pipe, session, *args, **kwargs):
         self.parent = parent
         self.controller = controller
         self.pipe = pipe
+        self.session = session
 
-        self.save_path = self.controller.session.get_session_workspace_path()
+        self.save_path = self.session.get_session_workspace_path()
+
+        # Store data for logging later on end
+        self.run_count = 1
+        self.data_store = []
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -68,9 +74,14 @@ class SpectrumPage(ttk.Frame):
 
     def get_process(self):
         if self.pipe.poll(timeout=0):
+
             data = self.pipe.recv()
+
             # do plot
             self.spectrum_plot.do_plot(data)
+
+            # append data for storage at end of run
+            self.data_store.append(data)
 
         self.parent.after(500, self.get_process)
 
@@ -124,6 +135,20 @@ class SpectrumPage(ttk.Frame):
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
 
+            # Save data to file and log out freq used
+            output_data_file = fr"{self.save_path}/spectrum_data_{self.run_count}"
+            np.save(output_data_file, np.array(self.data_store))
+            output_log_file = fr"{self.save_path}/spectrum_log_{self.run_count}.txt"
+            with open(output_log_file, "w") as f:
+                start_freq = self.spectrum_setting_container.get_start_freq()
+                center_freq = self.spectrum_setting_container.get_center_freq() / 1e6
+                end_freq = self.spectrum_setting_container.get_stop_freq()
+                f.write(f"Start freq: {start_freq}\n")
+                f.write(f"Center freq: {center_freq}\n")
+                f.write(f"End freq: {end_freq}\n")
+            self.data_store = []
+            self.run_count += 1
+
     def update_save_path(self, path):
         self.save_path = path
 
@@ -136,3 +161,7 @@ class SpectrumPage(ttk.Frame):
         filepath = f"{self.save_path}/spectrum_{count}"
         self.controller.session.increment_spectrum_plot_num()
         self.spectrum_plot.save(filepath)
+
+    # TODO
+    def setup_page_from_config(self):
+        pass
