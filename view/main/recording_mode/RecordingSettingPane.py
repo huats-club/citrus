@@ -122,3 +122,6 @@ class RecordingSettingPane(tk.Frame):
         self.start_button["state"] = tk.NORMAL
         self.radio_2d.configure(state=tk.NORMAL)
         self.radio_3d.configure(state=tk.NORMAL)
+
+    def set_save_path(self, path):
+        self.save_pane.set_filepath(path)

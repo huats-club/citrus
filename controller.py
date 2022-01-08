@@ -327,6 +327,7 @@ class Controller(tk.Frame):
         if self.has_main_page:
             coverage = self.main_page.coverage_page
             spectrum = self.main_page.spectrum_page
+            recording = self.main_page.recording_page
             session = self.main_page.coverage_page.session
 
             # SAVE COVERAGE DATA
@@ -363,10 +364,23 @@ class Controller(tk.Frame):
             driver = spectrum.get_driver()
             spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
 
+            # SAVE RECORDING DATA
+            try:
+                start_freq = recording.recording_setting.get_start_freq()
+                center_freq = recording.recording_setting.get_center_freq()
+                end_freq = recording.recording_setting.get_stop_freq()
+            except ValueError:
+                start_freq = 0
+                center_freq = 0
+                end_freq = 0
+            driver = recording.get_driver()
+            recording_data = self.config_packer.pack_recording_config(start_freq, center_freq, end_freq, driver)
+
             # Create data to save in yaml file
             config = {
                 config_parameters.KEY_COVERAGE: coverage_data,
                 config_parameters.KEY_SPECTRUM: spectrum_data,
+                config_parameters.KEY_RECORDING: recording_data,
                 config_parameters.KEY_WORKSPACE_PATH: workspace_path
             }
             with open(f"{workspace_path}/config.yaml", 'w') as f:

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.recording_mode.RecordingSettingPane import RecordingSettingPane
 from view.main.recording_mode.RecordingSpecPlot import RecordingSpecPlot
@@ -164,3 +165,16 @@ class RecordingPage(ttk.Frame):
         filepath = f"{self.save_path}/recording_{count}"
         self.controller.session.increment_recording_plot_num()
         self.recording_plot.save(filepath)
+
+    def get_driver(self):
+        return self.select_driver_pane.get_driver_input()
+
+    def setup_page_from_config(self, config, path):
+        start_freq, center_freq, end_freq, driver = ConfigParser().parse_spectrum_config(config)
+        self.recording_setting.set_start_freq(start_freq)
+        self.recording_setting.set_center_freq(center_freq)
+        self.recording_setting.set_stop_freq(end_freq)
+        self.select_driver_pane.set_driver_input(driver)
+
+        self.bottom.set_save_path(path)
+        self.save_path = path

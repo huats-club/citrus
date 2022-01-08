@@ -20,7 +20,7 @@ class RecordingHandler:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
                 target=process_spectrum, daemon=True,
-                args=(pipe, center_freq, bandwidth, self.stop_pipe_process, self.driver_name,))
+                args=(self.driver_name, pipe, center_freq, bandwidth, self.stop_pipe_process,))
 
         else:
             # Define mock process

@@ -80,3 +80,21 @@ class ConfigParser:
         end_freq = data[config_parameters.KEY_SPECTRUM_END_FREQ]
         driver = data[config_parameters.KEY_SPECTRUM_DRIVER]
         return str(start_freq), str(center_freq), str(end_freq), driver
+
+    def pack_recording_config(self, start_freq, center_freq, end_freq, driver):
+
+        base = {}
+
+        base[config_parameters.KEY_RECORDING_DRIVER] = driver
+        base[config_parameters.KEY_RECORDING_START_FREQ] = float(start_freq)
+        base[config_parameters.KEY_RECORDING_CENTER_FREQ] = float(center_freq / 1e6)
+        base[config_parameters.KEY_RECORDING_END_FREQ] = float(end_freq)
+
+        return base
+
+    def parse_recording_config(self, data):
+        start_freq = data[config_parameters.KEY_RECORDING_START_FREQ]
+        center_freq = data[config_parameters.KEY_RECORDING_CENTER_FREQ]
+        end_freq = data[config_parameters.KEY_RECORDING_END_FREQ]
+        driver = data[config_parameters.KEY_RECORDING_DRIVER]
+        return str(start_freq), str(center_freq), str(end_freq), driver

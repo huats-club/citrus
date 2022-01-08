@@ -3,7 +3,6 @@ from tkinter import ttk
 
 import numpy as np
 from app_parameters import app_parameters
-from config_parameters import config_parameters
 from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SelectDriverPane import SelectDriverPane
