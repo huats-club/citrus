@@ -10,6 +10,9 @@ class ReplaySettingPane(tk.Frame):
         self.controller = controller
         self.replay = replay
 
+        self.data_filepath = ""
+
+        self.SELECTED_SPECTRUM = 2
         self.SELECTED_2D = 1
         self.SELECTED_3D = 0
 
@@ -23,7 +26,8 @@ class ReplaySettingPane(tk.Frame):
         self.start_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
-            text="Start"
+            text="Start",
+            command=self.start_replay
         )
         self.start_button.pack(
             side=tk.LEFT,
@@ -61,7 +65,8 @@ class ReplaySettingPane(tk.Frame):
             self.dimension_selector_frame,
             text="3D Recording",
             variable=self.dimension_selected,
-            value=self.SELECTED_3D
+            value=self.SELECTED_3D,
+            command=self.handle_switch_3d_plot
         )
         self.radio_3d.pack(
             side=tk.RIGHT,
@@ -74,7 +79,8 @@ class ReplaySettingPane(tk.Frame):
             self.dimension_selector_frame,
             text="2D Recording",
             variable=self.dimension_selected,
-            value=self.SELECTED_2D
+            value=self.SELECTED_2D,
+            command=self.handle_switch_2d_plot
         )
         self.radio_2d.pack(
             side=tk.RIGHT,
@@ -87,7 +93,8 @@ class ReplaySettingPane(tk.Frame):
             self.dimension_selector_frame,
             text="Spectrum",
             variable=self.dimension_selected,
-            value=self.SELECTED_2D
+            value=self.SELECTED_SPECTRUM,
+            command=self.handle_switch_spectrum_plot
         )
         self.radio_spectrum.pack(
             side=tk.RIGHT,
@@ -146,7 +153,20 @@ class ReplaySettingPane(tk.Frame):
 
     def get_filepath(self):
         try:
-            self.save_path = tkfd.askopenfilename(initialdir="C:/")
-            self.filepath_text.set(self.save_path)
+            self.data_filepath = tkfd.askopenfilename(initialdir="C:/")
+            self.filepath_text.set(self.data_filepath)
         except ValueError:
             self.filepath_text.set(self.controller.session.get_session_workspace_path())
+
+    def start_replay(self):
+        print("Start replay")
+        self.replay.start_replay(self.data_filepath)
+
+    def handle_switch_2d_plot(self):
+        self.replay.handle_switch_2d_plot()
+
+    def handle_switch_3d_plot(self):
+        self.replay.handle_switch_3d_plot()
+
+    def handle_switch_spectrum_plot(self):
+        self.replay.handle_switch_spectrum_plot()
