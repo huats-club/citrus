@@ -23,26 +23,25 @@ class PointsDataConverter:
             x_list.append(x)
             y_list.append(y)
 
-            for ssid, rssi in point.map.items():
+            for bssid, (ssid, rssi) in point.map.items():
 
-                if ssid not in heatmap_ssid_maps.keys():
-                    heatmap_ssid_maps[ssid] = [int(rssi)]
+                if bssid not in heatmap_ssid_maps.keys():
+                    heatmap_ssid_maps[bssid] = [int(rssi)]
 
                 else:
-                    heatmap_ssid_maps[ssid].append(int(rssi))
+                    heatmap_ssid_maps[bssid].append(int(rssi))
 
         # process all x,y to integer
         x_list = [int(n) for n in x_list]
         y_list = [int(n) for n in y_list]
 
         # populate to overall map
-        for ssid, _ in heatmap_ssid_maps.items():
-            self.all_heatmap_survey_points[ssid] = {
+        for bssid, _ in heatmap_ssid_maps.items():
+            self.all_heatmap_survey_points[bssid] = {
                 'x': copy.deepcopy(x_list),
                 'y': copy.deepcopy(y_list),
-                'rssi': copy.deepcopy(heatmap_ssid_maps[ssid])
+                'rssi': copy.deepcopy(heatmap_ssid_maps[bssid])
             }
-        print(self.all_heatmap_survey_points)
 
     def process(self):
         return self.all_heatmap_survey_points

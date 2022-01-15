@@ -1,8 +1,10 @@
 import tkinter as tk
+from multiprocessing import Pipe
 from tkinter import ttk
 
 import numpy as np
 from app_parameters import app_parameters
+from model.CalibrateHandler import CalibrateHandler
 from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.SelectDriverPane import SelectDriverPane
@@ -22,6 +24,9 @@ class SpectrumPage(ttk.Frame):
         # Store data for logging later on end
         self.run_count = 1
         self.data_store = []
+
+        # Calibrate data
+        self.calibrate_data = None
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -70,23 +75,48 @@ class SpectrumPage(ttk.Frame):
         # Create settings pane container
         self.spectrum_setting_container = FrequencyPane(self.container, self.controller)
 
-        # Start to retrieve data to plot
-        self.parent.after(100, self.get_process)
+    def handle_calibrate(self):
+        print("calibrate")
 
-    def get_process(self):
-        if self.pipe.poll(timeout=0):
+        # get centre freq
+        center_freq = self.spectrum_setting_container.get_center_freq()
 
-            data = self.pipe.recv()
+        # get bandwidth
+        bandwidth = self.spectrum_setting_container.get_bandwidth()
 
-            # do plot
-            self.spectrum_plot.do_plot(data)
+        # check if calibration can be done
+        if center_freq == "" or bandwidth == "":
+            self.spectrum_setting_container.display_error_message(isStarted=False)
+            return
 
-            # append data for storage at end of run
-            self.data_store.append(data)
+        # Start process
+        driver_name = self.spectrum_select_driver_pane.get_driver_input()
+        c = CalibrateHandler()
+        self.pipe_here, pipe_calibrate = Pipe(True)
+        c.start(driver_name, pipe_calibrate, center_freq, bandwidth)
 
-        self.parent.after(500, self.get_process)
+        self.isStop = False
+        self.parent.after(500, self.get_calibrate)
+        self.spectrum_setting_container.display_calibration_message()
+
+    def get_calibrate(self):
+        if self.pipe_here.poll(timeout=0):
+            data = self.pipe_here.recv()
+
+            self.calibrate_data = data
+
+            self.isStop = True
+
+        if self.isStop == False:
+            self.parent.after(500, self.get_calibrate)
+        else:
+            self.spectrum_setting_container.display_calibration_done()
 
     def handle_spectrum_start(self):
+
+        if self.calibrate_data == None:
+            self.spectrum_setting_container.display_calibration_error_message()
+            return
 
         # Start spectrum if frequency is valid and not already started
         if self.spectrum_setting_container.is_start_stop_freq_valid() and self.controller.is_spectrum_start == False:
@@ -116,10 +146,37 @@ class SpectrumPage(ttk.Frame):
             # Set controller state variable
             self.controller.is_spectrum_start = True
 
+            # Start to retrieve data to plot
+            self.parent.after(100, self.get_process)
+
         # Else display error message
         else:
             # display error
             self.spectrum_setting_container.display_error_message(self.controller.is_spectrum_start)
+
+    def get_process(self):
+        if self.pipe.poll(timeout=0):
+
+            data = self.pipe.recv()
+
+            average_of_all_calibrate = np.average(data)
+            data = np.subtract(data, self.calibrate_data)
+            data = data + average_of_all_calibrate
+
+            # do plot
+            x = data.tolist()
+
+            for idx in range(len(x)):
+                if x[idx] < 0:
+                    x[idx] = average_of_all_calibrate
+
+            # do plot
+            self.spectrum_plot.do_plot(x)
+
+            # append data for storage at end of run
+            self.data_store.append(x)
+
+        self.parent.after(500, self.get_process)
 
     def handle_spectrum_stop(self):
 

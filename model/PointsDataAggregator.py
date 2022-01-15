@@ -20,7 +20,7 @@ class PointDataAggregator:
 
             map = point.map
             temp_max = -1000
-            for _, rssi in map.items():
+            for bssid, (ssid, rssi) in map.items():
                 if int(rssi) > temp_max:
                     temp_max = int(rssi)
 

@@ -1,3 +1,4 @@
+import math
 import tkinter as tk
 import warnings
 from tkinter import ttk
@@ -14,9 +15,10 @@ first = False
 
 
 class RecordingSpecPlot(ttk.Frame):
-    def __init__(self, parent, controller, center_freq=740.3e6, bandwidth=20e6, *args, **kwargs):
+    def __init__(self, parent, controller, recording, center_freq=740.3e6, bandwidth=20e6, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.recording = recording
 
         super().__init__(self.parent, *args, **kwargs)
         self.pack(
@@ -47,12 +49,14 @@ class RecordingSpecPlot(ttk.Frame):
         first = False
 
     def do_plot(self, latest_signal_data):
+        # self.latest_signal_data = latest_signal_data
+        self.latest_signal_data = [20 * math.log((2*n)/1024, 10) for n in latest_signal_data]
 
         # if is first time plot, populate all data with it
         if self.isFirst:
             self.signal_datastore_np = np.zeros((0, 2048))
             for i in range(400):
-                self.signal_datastore_np = np.append(self.signal_datastore_np, [latest_signal_data], axis=0)
+                self.signal_datastore_np = np.append(self.signal_datastore_np, [self.latest_signal_data], axis=0)
             self.signal_datastore_np = np.asarray(self.signal_datastore_np)
 
             self.isFirst = False
@@ -63,8 +67,14 @@ class RecordingSpecPlot(ttk.Frame):
             curr_len = self.signal_datastore_np.shape[0]-1
 
             for i in range(12):
-                self.signal_datastore_np = np.insert(self.signal_datastore_np, 0, [latest_signal_data], axis=0)
+                self.signal_datastore_np = np.insert(self.signal_datastore_np, 0, [self.latest_signal_data], axis=0)
                 self.signal_datastore_np = np.delete(self.signal_datastore_np, curr_len, axis=0)
+
+            start_freq = self.recording.recording_setting.get_start_freq()
+            end_freq = self.recording.recording_setting.get_stop_freq()
+            center_freq = 0.5 * (float(start_freq) + float(end_freq))
+            self.xticks_label = [str(start_freq) + " MHz", str(center_freq) + " MHz", str(end_freq) + " MHz"]
+            self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.xticks_label)))
 
         self.draw()
 
@@ -74,7 +84,7 @@ class RecordingSpecPlot(ttk.Frame):
 
         global first
         if first:
-            self.fig.colorbar(
+            self.cb = self.fig.colorbar(
                 self.waterfall2d,
                 location="bottom",
                 orientation="horizontal",
@@ -85,16 +95,31 @@ class RecordingSpecPlot(ttk.Frame):
             )
             first = False
 
+        else:
+            self.cb.remove()
+            self.cb = self.fig.colorbar(
+                self.waterfall2d,
+                location="bottom",
+                orientation="horizontal",
+                ax=self.ax,
+                shrink=0.4,
+                aspect=30,
+                pad=0.08
+            )
+            # self.cb.set_clim(min(self.latest_signal_data), max(self.latest_signal_data))
+            try:
+                self.cb.mappable.set_clim(
+                    vmin=-120,
+                    vmax=-20)  # this works
+                self.cb.draw_all()
+            except AttributeError:
+                pass
+
         self.ax.set_yticks([])
         self.ax.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
         self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.xticks_label)))
 
         self.canvas.draw()
-
-        # debug
-        root = 'C:/Users/65844/Desktop/citrus/exploration/citrus_plots'
-        self.fig.savefig(f"{root}/2d_class_{self.incre}.png", bbox_inches='tight')
-        self.incre += 1
 
     def create_empty_plot(self):
 

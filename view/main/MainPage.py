@@ -56,13 +56,13 @@ class MainPage(ttk.Notebook):
             height=app_parameters.APP_HEIGHT
         )
 
-        # Add replay tab
-        self.replay_page = ReplayPage(
-            self,
-            self.controller,
-            width=app_parameters.APP_WIDTH,
-            height=app_parameters.APP_HEIGHT
-        )
+        # # Add replay tab
+        # self.replay_page = ReplayPage(
+        #     self,
+        #     self.controller,
+        #     width=app_parameters.APP_WIDTH,
+        #     height=app_parameters.APP_HEIGHT
+        # )
 
         self.add(
             self.coverage_page,
@@ -76,10 +76,10 @@ class MainPage(ttk.Notebook):
             self.recording_page,
             text=app_parameters.MODE_RECORDING
         )
-        self.add(
-            self.replay_page,
-            text=app_parameters.MODE_REPLAY
-        )
+        # self.add(
+        #     self.replay_page,
+        #     text=app_parameters.MODE_REPLAY
+        # )
 
         # Temporarily select spectrum analyzer as main
         self.select(self.coverage_page)

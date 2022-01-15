@@ -170,3 +170,6 @@ class ReplaySettingPane(tk.Frame):
 
     def handle_switch_spectrum_plot(self):
         self.replay.handle_switch_spectrum_plot()
+
+    def get_mode_selected(self):
+        return self.dimension_selected.get()

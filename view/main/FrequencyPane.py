@@ -199,14 +199,30 @@ class FrequencyPane(ttk.LabelFrame):
         self.start_entry["state"] = tk.NORMAL
         self.stop_entry["state"] = tk.NORMAL
 
+    # TODO: maybe abstract into another message container/class later
     def display_error_message(self, isStarted):
 
         if isStarted:
             self.error_message.set("Error! Spectrum Analyzer already started.")
         else:
-            self.error_message.set("Error! Check frequency before start.")
+            self.error_message.set("Error! Check frequency entered.")
         self.after(3000, self.clear_error_message)
 
+    # TODO: maybe abstract into another message container/class later
+    def display_calibration_message(self):
+        self.error_message.set("Calibration in progress.")
+
+    def display_calibration_done(self):
+        self.clear_error_message()
+        self.error_message.set("Calibration done.")
+        self.after(3000, self.clear_error_message)
+
+    # TODO: maybe abstract into another message container/class later
+    def display_calibration_error_message(self):
+        self.error_message.set("Error! Calibration not done.")
+        self.after(3000, self.clear_error_message)
+
+    # TODO: maybe abstract into another message container/class later
     def clear_error_message(self):
         self.error_message.set("")
 
@@ -254,6 +270,14 @@ class FrequencyPane(ttk.LabelFrame):
 
     def get_center_freq(self):
 
+        # validate if are numbers
+        try:
+            float(self.center_freq_text.get())
+        except ValueError:
+            # TODO: put some error message
+            print("Invalid frequencies entered")
+            return ""
+
         if self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
             mag = 10 ** 9
         elif self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_KILO_X:
@@ -264,6 +288,14 @@ class FrequencyPane(ttk.LabelFrame):
         return float(self.center_freq_text.get()) * mag
 
     def get_bandwidth(self):
+        # validate if are numbers
+        try:
+            float(self.stop_freq_text.get())
+            float(self.start_freq_text.get())
+        except ValueError:
+            # TODO: put some error message
+            print("Invalid frequencies entered")
+            return ""
 
         if self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:
             mag = 10 ** 9

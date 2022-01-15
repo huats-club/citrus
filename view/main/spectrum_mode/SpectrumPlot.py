@@ -99,8 +99,11 @@ class SpectrumPlot(ttk.Frame):
         self.ax.xaxis.set_major_locator(ticker.LinearLocator(numticks=3))
         self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.freq_label_list)))
 
-        # self.ax.set_autoscaley_on(True)
-        self.ax.set_ylim(-140, 0)
+        self.ax.set_autoscaley_on(False)
+        self.ax.set_ylim(0, 10)
+
+        self.ax.yaxis.set_major_locator(ticker.LinearLocator(numticks=3))
+        self.ax.yaxis.set_major_formatter(ticker.FixedFormatter((["-80", "-40", "-30"])))  # simulate log scale
 
     def set_X_axis_freq(self, start_freq, centre_freq, end_freq, units):
 

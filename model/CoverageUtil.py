@@ -9,7 +9,6 @@ def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe):
     isRun = True
 
     # create citrus processor
-    print(type(center_freq), type(bandwidth))
     p = pycitrus.CitrusProcessor(center_freq, bandwidth)
     p.init(driver_name)
 
@@ -19,8 +18,9 @@ def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe):
     while isRun:
         now = time.time()
 
-        if now - prev > 0.4:
+        if now - prev > 0.8:
             out = p.run()
+            # print(out)
             pipe.send(out)
             prev = time.time()
 

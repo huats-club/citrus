@@ -1,7 +1,9 @@
 import tkinter as tk
+from multiprocessing import Pipe, Value
 from tkinter import ttk
 
 import numpy as np
+from model.CalibrateHandler import CalibrateHandler
 from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.recording_mode.RecordingSettingPane import RecordingSettingPane
@@ -22,6 +24,9 @@ class RecordingPage(ttk.Frame):
         # Store data for logging later on end
         self.run_count = 1
         self.data_store = []
+
+        # Calibration data
+        self.calibrate_data = None
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -55,7 +60,8 @@ class RecordingPage(ttk.Frame):
         # Waterfall plot - display in first show
         self.recording_plot = RecordingWaterfallPlot(
             self.recording_plot_container,
-            self.controller
+            self.controller,
+            self
         )
 
         # Create empty plot of graph
@@ -77,12 +83,49 @@ class RecordingPage(ttk.Frame):
             self.controller
         )
 
+    def handle_calibrate(self):
+        print("calibrate")
+
+        # get centre freq
+        center_freq = self.recording_setting.get_center_freq()
+
+        # get bandwidth
+        bandwidth = self.recording_setting.get_bandwidth()
+
+        # check if calibration can be done
+        if center_freq == "" or bandwidth == "":
+            self.recording_setting.display_error_message(isStarted=False)
+            return
+
+        # Start process
+        driver_name = self.select_driver_pane.get_driver_input()
+        c = CalibrateHandler()
+        self.pipe_here, pipe_calibrate = Pipe(True)
+        c.start(driver_name, pipe_calibrate, center_freq, bandwidth)
+
+        self.isStop = False
+        self.parent.after(500, self.get_calibrate)
+        self.recording_setting.display_calibration_message()
+
+    def get_calibrate(self):
+        if self.pipe_here.poll(timeout=0):
+            data = self.pipe_here.recv()
+            self.calibrate_data = data
+
+            self.isStop = True
+
+        if self.isStop == False:
+            self.parent.after(500, self.get_calibrate)
+        else:
+            self.recording_setting.display_calibration_done()
+
     def handle_switch_spec_plot(self):
         self.recording_plot.destroy()
         # spec plot - display in first show
         self.recording_plot = RecordingSpecPlot(
             self.recording_plot_container,
-            self.controller
+            self.controller,
+            self
         )
         self.recording_plot.draw()
 
@@ -90,12 +133,18 @@ class RecordingPage(ttk.Frame):
         self.recording_plot.destroy()
         self.recording_plot = RecordingWaterfallPlot(
             self.recording_plot_container,
-            self.controller
+            self.controller,
+            self
         )
         self.recording_plot.create_empty_3d_plot()
 
     def handle_recording_start(self):
         print("start recording")
+
+        # If forget to run calibrate take 20secs to calibrate
+        if self.calibrate_data == None:
+            print("Never calibrate")
+            return
 
         # Start spectrum if frequency is valid and not already started
         if self.recording_setting.is_start_stop_freq_valid() and self.controller.is_recording_start == False:
@@ -128,19 +177,31 @@ class RecordingPage(ttk.Frame):
             self.recording_setting.display_error_message(self.controller.is_recording_start)
 
         # Start to retrieve data to plot
-        self.parent.after(100, self.get_process)
+        self.parent.after(50, self.get_process)
 
     def get_process(self):
         if self.pipe.poll(timeout=0):
             data = self.pipe.recv()
 
+            average_of_all_calibrate = np.average(data)
+
+            data = np.subtract(data, self.calibrate_data)
+
+            data = data + average_of_all_calibrate
+
             # do plot
-            self.recording_plot.do_plot(data)
+            x = data.tolist()
+
+            for idx in range(len(x)):
+                if x[idx] < 0:
+                    x[idx] = average_of_all_calibrate
+
+            self.recording_plot.do_plot(x)
 
             # append data for storage at end of run
-            self.data_store.append(data)
+            self.data_store.append(x)
 
-        self.parent.after(500, self.get_process)
+        self.parent.after(100, self.get_process)
 
     def handle_recording_stop(self):
         print("stop recording")

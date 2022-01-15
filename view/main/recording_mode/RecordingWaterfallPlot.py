@@ -1,3 +1,4 @@
+import math
 import tkinter as tk
 from tkinter import ttk
 
@@ -9,9 +10,10 @@ from matplotlib import cm
 
 
 class RecordingWaterfallPlot(ttk.Frame):
-    def __init__(self, parent, controller, center_freq=740.3e6, bandwidth=20e6, *args, **kwargs):
+    def __init__(self, parent, controller, recording, center_freq=740.3e6, bandwidth=20e6, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.recording = recording
 
         super().__init__(self.parent, *args, **kwargs)
         self.pack(
@@ -23,7 +25,8 @@ class RecordingWaterfallPlot(ttk.Frame):
         )
 
         # generate (initial) timestamp marker
-        ts_np = np.arange(20)
+        # FIX: more points, nearer the peaks, to form a continuous bar
+        ts_np = np.arange(500)
 
         # generate frequency bins
         freq_increment = bandwidth / 2048
@@ -85,6 +88,8 @@ class RecordingWaterfallPlot(ttk.Frame):
 
     def do_plot(self, latest_signal_data):
 
+        latest_signal_data = [20 * math.log((2*n)/1024, 10) for n in latest_signal_data]
+
         # if is first time plot, populate all data with it
         if self.isFirst:
 
@@ -96,8 +101,11 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         # else pop oldest data and append latest data
         else:
-            self.signal_np = np.delete(self.signal_np, 0, axis=0)
-            self.signal_np = np.append(self.signal_np, [latest_signal_data], axis=0)
+            for _ in range(25):
+                self.signal_np = np.delete(self.signal_np, 0, axis=0)
+
+            for _ in range(25):
+                self.signal_np = np.append(self.signal_np, [latest_signal_data], axis=0)
 
         # clear plot
         self.ax.clear()
@@ -111,18 +119,30 @@ class RecordingWaterfallPlot(ttk.Frame):
             antialiased=True
         )
 
-        # # remove the previous colorbar
-        # if not self.isFirst:
-        #     self.cb.remove()
+        # remove the previous colorbar
+        if not self.isFirst:
+            self.cb.remove()
 
-        # self.cb = self.fig.colorbar(
-        #     self.surf,
-        #     location="left",
-        #     orientation="vertical",
-        #     ax=self.ax,
-        #     shrink=0.4,
-        #     aspect=30
-        # )
+        self.cb = self.fig.colorbar(
+            self.surf,
+            location="left",
+            orientation="vertical",
+            ax=self.ax,
+            shrink=0.4,
+            aspect=30
+        )
+
+        # Recompute ticks for freq label
+        bandwidth = self.recording.recording_setting.get_bandwidth()
+        center_freq = self.recording.recording_setting.get_center_freq()
+        freq_increment = bandwidth / 2048
+        freq_bins = []
+        start_freq = center_freq - bandwidth/2
+        end_freq = center_freq + bandwidth/2
+        while start_freq < end_freq:
+            freq_bins.append("{:.2f}".format(start_freq / 1e6))
+            start_freq += freq_increment
+        self.ax.set_xticklabels(freq_bins)
 
         # set axis label
         self.ax.set_xlabel(app_parameters.WATERFALL_PLOT_LEGEND_X)

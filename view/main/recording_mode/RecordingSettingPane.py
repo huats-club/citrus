@@ -20,10 +20,23 @@ class RecordingSettingPane(tk.Frame):
             anchor=tk.CENTER
         )
 
+        # Calibrate button
+        self.calibrate_button = ttk.Button(
+            self,
+            style="primary.TButton",
+            text="Calibrate",
+            command=self.recording.handle_calibrate
+        )
+        self.calibrate_button.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=(20, 0)
+        )
+
         # Start button
         self.start_button = ttk.Button(
             self,
-            style="primary.Outline.TButton",
+            style="success.TButton",
             text="Start",
             command=self.recording.handle_recording_start
         )
@@ -36,7 +49,7 @@ class RecordingSettingPane(tk.Frame):
         # Stop button
         self.stop_button = ttk.Button(
             self,
-            style="primary.Outline.TButton",
+            style="danger.TButton",
             text="Stop",
             command=self.recording.handle_recording_stop
         )

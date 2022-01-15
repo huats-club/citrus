@@ -73,7 +73,6 @@ class CoverageSingleHandler:
         else:
             return [random.randrange(-50, -5)for _ in range(2048)]
 
-    # TODO
     def close(self):
         self.stop_pipe_coverage_data_scanner.send("")
         self.process_spectrum_analyzer.join()

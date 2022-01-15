@@ -16,33 +16,39 @@ class WifiScanner:
     def scan(self):
 
         isTryAgain = False
+        self.json_list = []
 
-        # get all interfaces
         try:
-            self.interfaces = WLAN.get_wireless_interfaces()
-        except ValueError:
-            isTryAgain = True
 
-        if isTryAgain:
-            self.interfaces = WLAN.get_wireless_interfaces()
+            # get all interfaces
+            try:
+                self.interfaces = WLAN.get_wireless_interfaces()
+            except ValueError:
+                return
 
-        # for all interface, scan for wlan
-        for interface in self.interfaces:
-            client = Client(self.args, interface)
-            WLAN.scan(client.iface.guid)
+            # if isTryAgain:
+            #     self.interfaces = WLAN.get_wireless_interfaces()
 
-            # process bss list
-            wireless_network_bss_list = client.get_bss_list(interface=interface)
-            for bss in wireless_network_bss_list:
-                json = self.bss2json(bss, self.args)
+            # for all interface, scan for wlan
+            for interface in self.interfaces:
+                client = Client(self.args, interface)
+                WLAN.scan(client.iface.guid)
 
-                # append to json list only if bssid matches
-                if self.hasFilter:
-                    if json['bssid'] in self.filter:
+                # process bss list
+                # wireless_network_bss_list = client.get_bss_list(interface=interface)
+                wireless_network_bss_list = WLAN.get_wireless_network_bss_list(interface=interface)
+                for bss in wireless_network_bss_list:
+                    json = self.bss2json(bss, self.args)
+
+                    # append to json list only if bssid matches
+                    if self.hasFilter:
+                        if json['bssid'] in self.filter:
+                            self.json_list += [json]
+
+                    else:
                         self.json_list += [json]
-
-                else:
-                    self.json_list += [json]
+        except Exception as e:
+            return
 
         return self.json_list
 

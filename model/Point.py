@@ -15,17 +15,14 @@ class Point:
 
         # preprocess the ssid and rssi into map of (ssid->rssi)
         for json in list_json:
+            bssid = json['bssid']  # using mac address
             ssid = json['ssid']
             rssi = json['rssi']
 
-            if ssid not in self.map:
-                self.map[ssid] = rssi
+            print(f"{bssid} {ssid} {rssi}")
 
-            # for now, generate a random string to append
-            # if ssid exists
-            else:
-                rand = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
-                self.map[ssid+rand] = rssi
+            # if bssid not in list(self.map.keys()):
+            self.map[bssid] = (ssid, rssi)
 
     # Used to get string representation to display on tooltip
     def __str__(self):
@@ -40,11 +37,11 @@ class Point:
         ssids = list(self.map.keys())
 
         # get list of rssi
-        rssis = list(self.map.values())
+        tuple_ssid_rssis = list(self.map.values())
 
         ret = []
-        for idx in range(len(ssids)):
-            ret.append([ssids[idx], rssis[idx]])
+        for (ssid, rssi) in tuple_ssid_rssis:
+            ret.append([ssid, rssi])
 
         ret = sorted(ret, key=lambda x: x[0])
 

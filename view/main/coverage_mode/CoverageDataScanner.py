@@ -2,9 +2,10 @@ import copy
 import math
 import tkinter as tk
 import tkinter.ttk as ttk
+from multiprocessing import Pipe
 
 from model.CoverageHandler import CoverageSingleHandler
-from model.WifiScanner import WifiScanner
+from model.WifiHandler import WifiHandler
 from view.main.coverage_mode.sdr_mode.CoverageSdrTab import CoverageSdrTab
 from view.main.coverage_mode.wifi_mode.CoverageWifiTab import CoverageWifiTab
 from view.main.SelectDriverPane import SelectDriverPane
@@ -132,19 +133,24 @@ class CoverageDataScanner(ttk.Frame):
         if len(tracked_list_mac) == 0:
             return []
 
-        wifi_scanner = WifiScanner(filter=tracked_list_mac)
-        wifi_list_json = wifi_scanner.scan()
+        pipe_handler, pipe_here = Pipe(True)
+        WifiHandler(tracked_list_mac, pipe_handler).start()
+        isRun = True
+        while isRun:
+            if pipe_here.poll(timeout=0):
+                wifi_list_json = pipe_here.recv()
+                break
 
         # fill up with fake entry if bssid not found
         for bssid in tracked_list_mac:
             has_entry = False
-
             # check if exists at least 1 json entry for bssid
             for json in wifi_list_json:
                 if bssid == json['bssid']:
                     has_entry = True
                     break
 
+            # TODO: review this
             if not has_entry:
                 wifi_list_json.append({
                     "bssid": bssid,
@@ -172,7 +178,6 @@ class CoverageDataScanner(ttk.Frame):
         max_freq = 0
         for pair in tracked_freq_names:
             name, freq = list(pair.items())[0]
-            # print(f"current freq: {freq}")
 
             names.append(name)
             freqs.append(freq)
@@ -230,10 +235,10 @@ class CoverageDataScanner(ttk.Frame):
 
             temp = {}
             temp['ssid'] = names[idx]
+            temp['bssid'] = names[idx]
             temp['rssi'] = max_dbm_found
             ans.append(temp)
 
-        print(ans)
         return ans
 
     # Returns WIFI or SDR

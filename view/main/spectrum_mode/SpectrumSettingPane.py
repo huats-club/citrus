@@ -16,10 +16,23 @@ class SpectrumSettingPane(tk.Frame):
             side=tk.BOTTOM
         )
 
+        # Calibrate button
+        self.calibrate_button = ttk.Button(
+            self,
+            style="primary.TButton",
+            text="Calibrate",
+            command=self.spectrum.handle_calibrate
+        )
+        self.calibrate_button.pack(
+            side=tk.LEFT,
+            padx=10,
+            pady=(20, 0)
+        )
+
         # Start button
         self.start_button = ttk.Button(
             self,
-            style="primary.Outline.TButton",
+            style="success.TButton",
             text="Start",
             command=self.spectrum.handle_spectrum_start
         )
@@ -32,7 +45,7 @@ class SpectrumSettingPane(tk.Frame):
         # Stop button
         self.stop_button = ttk.Button(
             self,
-            style="primary.Outline.TButton",
+            style="danger.TButton",
             text="Stop",
             command=self.spectrum.handle_spectrum_stop
         )

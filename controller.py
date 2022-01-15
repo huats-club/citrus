@@ -72,6 +72,7 @@ class Controller(tk.Frame):
         is_valid_project_setting = (
             (filepath != "") and type_session == app_parameters.PROJECT_LOAD) or (
             type_session == app_parameters.PROJECT_NEW)
+
         if is_valid_project_setting:
 
             # Wipe out current window
@@ -259,6 +260,7 @@ class Controller(tk.Frame):
     # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
 
+        # TODO: resolve bssid to ssid
         if self.session.is_need_to_save():
 
             # Now, all data is encapsulated in dict: (x,y)->Point objects
@@ -276,15 +278,18 @@ class Controller(tk.Frame):
             # map (ssid)->(path)
             self.map_ssid_path = {}
 
-            for ssid, data in processed_all_data.items():
+            for bssid, data in processed_all_data.items():
+
+                if bssid != "Combined":
+                    ssid = self.resolve_coverage_bssid_2_ssid(bssid)
 
                 # generate name of path
-                rand = ""
-                if self.is_load:
-                    rand = "_" + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
+                suffix = ""
+                if self.is_load or bssid in list(self.map_ssid_path.keys()):
+                    suffix = "_" + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
 
                 output_file_name = \
-                    f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}{rand}.png"
+                    f"{self.session.get_dxf_prefix()}_{ssid}_{bssid.replace(':', '')}_{self.session.get_current_coverage_plot_num()}{suffix}.png"
 
                 # Don't save entire path into coverage, so that easier to handle load session
                 saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"
@@ -292,7 +297,7 @@ class Controller(tk.Frame):
                 self.session.increment_coverage_plot_num()
 
                 # save to map
-                self.map_ssid_path[ssid] = saved_heatmap_path
+                self.map_ssid_path[f"{ssid}_{bssid}"] = saved_heatmap_path
 
                 status = self.save_heatmap_plot(saved_heatmap_path, data, True)
 
@@ -317,6 +322,11 @@ class Controller(tk.Frame):
 
         self.main_page.coverage_page.put_image(first_ssid_to_plot)
 
+    # Wrapper method to resolve bssid to mapped ssid
+    def resolve_coverage_bssid_2_ssid(self, bssid):
+        tracked_ssid = self.main_page.coverage_page.coverage_display_data.wifi_tab.bssid2ssid(bssid)
+        return tracked_ssid
+
     def isValid(self):
         return self.dxf_opened and self.scan_done
 
@@ -334,61 +344,61 @@ class Controller(tk.Frame):
             recording = self.main_page.recording_page
             session = self.main_page.coverage_page.session
 
-            # SAVE COVERAGE DATA
-            workspace_path, private_path = session.get_relative_paths()
-            # print(f"paths: {workspace_path} {private_path}")
-            # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
-            # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
-            # print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
-            if coverage.coverage_display_data.get_current_tab_name() == "WIFI":
-                # print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
-                tracked_data = coverage.coverage_display_data.get_wifi_data_tracked()
-            else:
-                # print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
-                tracked_data = coverage.coverage_display_data.sdr_tab.get_tracked_list()
+            # # SAVE COVERAGE DATA
+            # workspace_path, private_path = session.get_relative_paths()
+            # # print(f"paths: {workspace_path} {private_path}")
+            # # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
+            # # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
+            # # print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
+            # if coverage.coverage_display_data.get_current_tab_name() == "WIFI":
+            #     # print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
+            #     tracked_data = coverage.coverage_display_data.get_wifi_data_tracked()
+            # else:
+            #     # print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
+            #     tracked_data = coverage.coverage_display_data.sdr_tab.get_tracked_list()
 
-            coverage_data = self.config_packer.pack_coverage_config(
-                workspace_path,
-                private_path,
-                coverage.map_ssid_heatmap_path,
-                coverage.recorded_points,
-                coverage.coverage_display_data.get_current_tab_name(),
-                tracked_data
-            )
+            # coverage_data = self.config_packer.pack_coverage_config(
+            #     workspace_path,
+            #     private_path,
+            #     coverage.map_ssid_heatmap_path,
+            #     coverage.recorded_points,
+            #     coverage.coverage_display_data.get_current_tab_name(),
+            #     tracked_data
+            # )
 
-            # SAVE SPECTRUM DATA
-            try:
-                start_freq = spectrum.spectrum_setting_container.get_start_freq()
-                center_freq = spectrum.spectrum_setting_container.get_center_freq()
-                end_freq = spectrum.spectrum_setting_container.get_stop_freq()
-            except ValueError:
-                start_freq = 0
-                center_freq = 0
-                end_freq = 0
-            driver = spectrum.get_driver()
-            spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
+            # # SAVE SPECTRUM DATA
+            # try:
+            #     start_freq = spectrum.spectrum_setting_container.get_start_freq()
+            #     center_freq = spectrum.spectrum_setting_container.get_center_freq()
+            #     end_freq = spectrum.spectrum_setting_container.get_stop_freq()
+            # except ValueError:
+            #     start_freq = 0
+            #     center_freq = 0
+            #     end_freq = 0
+            # driver = spectrum.get_driver()
+            # spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
 
-            # SAVE RECORDING DATA
-            try:
-                start_freq = recording.recording_setting.get_start_freq()
-                center_freq = recording.recording_setting.get_center_freq()
-                end_freq = recording.recording_setting.get_stop_freq()
-            except ValueError:
-                start_freq = 0
-                center_freq = 0
-                end_freq = 0
-            driver = recording.get_driver()
-            recording_data = self.config_packer.pack_recording_config(start_freq, center_freq, end_freq, driver)
+            # # SAVE RECORDING DATA
+            # try:
+            #     start_freq = recording.recording_setting.get_start_freq()
+            #     center_freq = recording.recording_setting.get_center_freq()
+            #     end_freq = recording.recording_setting.get_stop_freq()
+            # except ValueError:
+            #     start_freq = 0
+            #     center_freq = 0
+            #     end_freq = 0
+            # driver = recording.get_driver()
+            # recording_data = self.config_packer.pack_recording_config(start_freq, center_freq, end_freq, driver)
 
-            # Create data to save in yaml file
-            config = {
-                config_parameters.KEY_COVERAGE: coverage_data,
-                config_parameters.KEY_SPECTRUM: spectrum_data,
-                config_parameters.KEY_RECORDING: recording_data,
-                config_parameters.KEY_WORKSPACE_PATH: workspace_path
-            }
-            with open(f"{workspace_path}/config.yaml", 'w') as f:
-                yaml.dump(config, f)
+            # # Create data to save in yaml file
+            # config = {
+            #     config_parameters.KEY_COVERAGE: coverage_data,
+            #     config_parameters.KEY_SPECTRUM: spectrum_data,
+            #     # config_parameters.KEY_RECORDING: recording_data,
+            #     config_parameters.KEY_WORKSPACE_PATH: workspace_path
+            # }
+            # with open(f"{workspace_path}/config.yaml", 'w') as f:
+            #     yaml.dump(config, f)
 
             # Debug
             print("Exiting...")
