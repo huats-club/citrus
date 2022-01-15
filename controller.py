@@ -10,6 +10,7 @@ from app_parameters import app_parameters
 from config_parameters import config_parameters
 from model.ConfigPacker import ConfigParser
 from model.CoverageHandler import CoverageHandler
+# from model.dxf2img import dxf2img
 from model.PointsDataAggregator import PointDataAggregator
 from model.PointsDataConverter import PointsDataConverter
 from model.RecordingHandler import RecordingHandler
@@ -179,6 +180,7 @@ class Controller(tk.Frame):
                 500,
                 lambda: self.main_page.coverage_page.capture_canvas(self.loaded_floorplan_saved_image_path)
             )
+            # dxf2img().convert(self.dxf_filepath, self.loaded_floorplan_saved_image_path)
 
             # Enable plotting of points
             self.main_page.coverage_page.enable_canvas_click()

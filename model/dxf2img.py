@@ -9,7 +9,7 @@ class dxf2img:
     def __init__(self):
         pass
 
-    def convert(self, dxf_file, out_file, image_format=".png", background_color="#FFFFFF", img_res=300) -> bool:
+    def convert(self, dxf_file, out_file, background_color="#FFFFFF", img_res=300) -> bool:
         doc = ezdxf.readfile(dxf_file)
         msp = doc.modelspace()
 
@@ -28,7 +28,7 @@ class dxf2img:
         out = MatplotlibBackend(ax)
         Frontend(ctx, out).draw_layout(msp, finalize=True)
 
-        fig.savefig(out_file + image_format, dpi=img_res)
+        fig.savefig(out_file, dpi=img_res)
         print(dxf_file, " Converted Successfully")
 
 
