@@ -353,8 +353,7 @@ class Controller(tk.Frame):
 
             # SAVE COVERAGE DATA
             workspace_path, private_path = session.get_relative_paths()
-            png_floorplan_name = self.loaded_floorplan_saved_image_path.split("\\")[-1]
-            print(png_floorplan_name)
+            png_floorplan_name = f"{self.dxf_filename}_tkinter.png"
             # print(f"paths: {workspace_path} {private_path}")
             # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
             # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
