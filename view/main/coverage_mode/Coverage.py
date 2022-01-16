@@ -333,7 +333,7 @@ class CoveragePage(ttk.Frame):
                     self.coverage_display_data.sdr_tab.insert(name, freq)
 
         # perform copy of file over
-        print(self.session.get_session_private_folder_path())
+        # print(self.session.get_session_private_folder_path())
         newPath = shutil.copy(private_path + "/" + floorplan_image, self.session.get_session_private_folder_path())
         self.controller.loaded_floorplan_saved_image_path = newPath
 
