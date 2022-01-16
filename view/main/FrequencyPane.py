@@ -269,13 +269,12 @@ class FrequencyPane(ttk.LabelFrame):
         return self.stop_freq_text.get()
 
     def get_center_freq(self):
-
         # validate if are numbers
         try:
             float(self.center_freq_text.get())
         except ValueError:
             # TODO: put some error message
-            print("Invalid frequencies entered")
+            # print("Invalid frequencies entered")
             return ""
 
         if self.units_state == app_parameters.SPECTRUM_PLOT_UNITS_PREFIX_GIGA_X:

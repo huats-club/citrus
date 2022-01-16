@@ -101,10 +101,9 @@ class Controller(tk.Frame):
 
                         # Extract coverage page data
                         coverage_loaded_data = data[config_parameters.KEY_COVERAGE]
-                        print(coverage_loaded_data)
 
                         # extract spectrum page data
-                        # spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
+                        spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
                         # extract recording page data
                         # recording_loaded_data = data[config_parameters.KEY_SPECTRUM]
@@ -113,7 +112,7 @@ class Controller(tk.Frame):
                     self.main_page.setup_coverage_from_config(coverage_loaded_data)
 
                     # Setup spectrum page
-                    # self.main_page.setup_spectrum_from_config(spectrum_loaded_data, filepath)
+                    self.main_page.setup_spectrum_from_config(spectrum_loaded_data, filepath)
 
                     # Setup recording page
                     # self.main_page.setup_recording_from_config(recording_loaded_data, filepath)
@@ -375,36 +374,36 @@ class Controller(tk.Frame):
                 tracked_data
             )
 
-            # # SAVE SPECTRUM DATA
-            # try:
-            #     start_freq = spectrum.spectrum_setting_container.get_start_freq()
-            #     center_freq = spectrum.spectrum_setting_container.get_center_freq()
-            #     end_freq = spectrum.spectrum_setting_container.get_stop_freq()
-            # except ValueError:
-            #     start_freq = 0
-            #     center_freq = 0
-            #     end_freq = 0
-            # driver = spectrum.get_driver()
-            # spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
+            # SAVE SPECTRUM DATA
+            try:
+                start_freq = spectrum.spectrum_setting_container.get_start_freq()
+                center_freq = spectrum.spectrum_setting_container.get_center_freq()
+                end_freq = spectrum.spectrum_setting_container.get_stop_freq()
+            except ValueError:
+                start_freq = 0
+                center_freq = 0
+                end_freq = 0
+            driver = spectrum.get_driver()
+            spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
 
-            # # SAVE RECORDING DATA
-            # try:
-            #     start_freq = recording.recording_setting.get_start_freq()
-            #     center_freq = recording.recording_setting.get_center_freq()
-            #     end_freq = recording.recording_setting.get_stop_freq()
-            # except ValueError:
-            #     start_freq = 0
-            #     center_freq = 0
-            #     end_freq = 0
-            # driver = recording.get_driver()
-            # recording_data = self.config_packer.pack_recording_config(start_freq, center_freq, end_freq, driver)
+            # SAVE RECORDING DATA
+            try:
+                start_freq = recording.recording_setting.get_start_freq()
+                center_freq = recording.recording_setting.get_center_freq()
+                end_freq = recording.recording_setting.get_stop_freq()
+            except ValueError:
+                start_freq = 0
+                center_freq = 0
+                end_freq = 0
+            driver = recording.get_driver()
+            recording_data = self.config_packer.pack_recording_config(start_freq, center_freq, end_freq, driver)
 
             # Create data to save in yaml file
             config = {
-                config_parameters.KEY_COVERAGE: coverage_data
-                # config_parameters.KEY_SPECTRUM: spectrum_data
-                # # config_parameters.KEY_RECORDING: recording_data,
-                # config_parameters.KEY_WORKSPACE_PATH: workspace_path
+                config_parameters.KEY_COVERAGE: coverage_data,
+                config_parameters.KEY_SPECTRUM: spectrum_data,
+                config_parameters.KEY_RECORDING: recording_data,
+                config_parameters.KEY_WORKSPACE_PATH: workspace_path
             }
             with open(f"{workspace_path}/config.yaml", 'w') as f:
                 yaml.dump(config, f)

@@ -232,3 +232,6 @@ class SpectrumPage(ttk.Frame):
 
         self.bottom_container.set_save_path(path)
         self.save_path = path
+
+        # Set save path
+        # self.save_pane.set_filepath(self.session.get_session_workspace_path())

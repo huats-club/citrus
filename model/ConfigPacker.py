@@ -83,7 +83,6 @@ class ConfigParser:
             map_ssid_heatmap_path[self.reconstruct_mac_addr(name)] = path
 
         recorded_points = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS]
-        print(recorded_points)
 
         current_tab = data[config_parameters.KEY_COVERAGE_COVERAGE_CURRENT_TAB]
 
@@ -98,9 +97,14 @@ class ConfigParser:
         base = {}
 
         base[config_parameters.KEY_SPECTRUM_DRIVER] = driver
-        base[config_parameters.KEY_SPECTRUM_START_FREQ] = float(start_freq)
-        base[config_parameters.KEY_SPECTRUM_CENTER_FREQ] = float(center_freq / 1e6)
-        base[config_parameters.KEY_SPECTRUM_END_FREQ] = float(end_freq)
+        try:
+            base[config_parameters.KEY_SPECTRUM_START_FREQ] = float(start_freq)
+            base[config_parameters.KEY_SPECTRUM_CENTER_FREQ] = float(center_freq / 1e6)
+            base[config_parameters.KEY_SPECTRUM_END_FREQ] = float(end_freq)
+        except ValueError:
+            base[config_parameters.KEY_SPECTRUM_START_FREQ] = 0
+            base[config_parameters.KEY_SPECTRUM_CENTER_FREQ] = 0
+            base[config_parameters.KEY_SPECTRUM_END_FREQ] = 0
 
         return base
 
@@ -116,9 +120,14 @@ class ConfigParser:
         base = {}
 
         base[config_parameters.KEY_RECORDING_DRIVER] = driver
-        base[config_parameters.KEY_RECORDING_START_FREQ] = float(start_freq)
-        base[config_parameters.KEY_RECORDING_CENTER_FREQ] = float(center_freq / 1e6)
-        base[config_parameters.KEY_RECORDING_END_FREQ] = float(end_freq)
+        try:
+            base[config_parameters.KEY_RECORDING_START_FREQ] = float(start_freq)
+            base[config_parameters.KEY_RECORDING_CENTER_FREQ] = float(center_freq / 1e6)
+            base[config_parameters.KEY_RECORDING_END_FREQ] = float(end_freq)
+        except ValueError:
+            base[config_parameters.KEY_RECORDING_START_FREQ] = 0
+            base[config_parameters.KEY_RECORDING_CENTER_FREQ] = 0
+            base[config_parameters.KEY_RECORDING_END_FREQ] = 0
 
         return base
 
