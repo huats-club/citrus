@@ -230,6 +230,8 @@ class CoveragePage(ttk.Frame):
             output_file = f"{dir}/{output_file_name}"
             self.capture_canvas(output_file)
             self.session.increment_coverage_save_num()
+        else:
+            print("cannot save")
 
     def get_points(self):
         return self.recorded_points
@@ -266,8 +268,11 @@ class CoveragePage(ttk.Frame):
         return self.coverage_bar.get_current_heatmap_name()
 
     def setup_page_from_config(self, config_dict):
-        workspace_path, private_path, map_ssid_heatmap_path, \
-            recorded_points, current_tab, tab_tracked_data = ConfigParser().parse_coverage_config(config_dict)
+
+        config_parser = ConfigParser()
+
+        workspace_path, private_path, floorplan_image, map_ssid_heatmap_path, \
+            recorded_points, current_tab, tab_tracked_data = config_parser.parse_coverage_config(config_dict)
         # print(f"paths: {workspace_path} {private_path}")
         # print(f"heatmaps created: {map_ssid_heatmap_path}")
         # print(f"recorded points: {recorded_points}")
@@ -286,8 +291,13 @@ class CoveragePage(ttk.Frame):
             y = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS_Y]
             map_data = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS_DATA]
             list_json = []
-            for ssid, rssi in map_data.items():
-                list_json.append({"ssid": ssid, "rssi": rssi})
+            for bssid, dic in map_data.items():
+                list_json.append(
+                    {"bssid": config_parser.reconstruct_mac_addr(bssid),
+                     "ssid": dic['ssid'],
+                     "rssi": int(dic['rssi'])
+                     }
+                )
             self.recorded_points[(x, y)] = Point(x, y, list_json)
         self.has_points = True
         self.coverage_canvas.canvas_put_point_again(self.recorded_points)
@@ -299,6 +309,9 @@ class CoveragePage(ttk.Frame):
 
             if "Combined" in list(map_ssid_heatmap_path.keys()):
                 self.put_image("Combined")  # Put combined image as head
+
+        # Set save path
+        self.coverage_bar.save_pane.set_filepath(self.session.get_session_workspace_path())
 
         # Set tracked data into GUI
         if current_tab == "WIFI":
@@ -317,3 +330,12 @@ class CoveragePage(ttk.Frame):
             for x in tab_tracked_data:
                 for name, freq in x.items():
                     self.coverage_display_data.sdr_tab.insert(name, freq)
+
+        self.controller.loaded_floorplan_saved_image_path = private_path + "/" + floorplan_image
+
+        self.controller.dxf_opened = True
+        self.controller.scan_done = True
+        self.session.set_need_to_save()
+        self.has_points = True
+
+        self.coverage_canvas.enable_click()

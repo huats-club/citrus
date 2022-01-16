@@ -7,8 +7,14 @@ class ConfigParser:
     def __init__(self):
         pass
 
+    def process_mac_addr(self, string):
+        return string.replace(':', '#').replace(" ", "_").replace("(*)", "")
+
+    def reconstruct_mac_addr(self, string):
+        return string.replace('#', ':')
+
     def pack_coverage_config(
-            self, workspace_path, private_path, map_ssid_heatmap_path,
+            self, workspace_path, private_path, floorplan_image_path, map_ssid_heatmap_path,
             recorded_points, current_tab, tab_tracked_data):
 
         base = {}
@@ -17,8 +23,14 @@ class ConfigParser:
         base[config_parameters.KEY_COVERAGE_WORKSPACE] = workspace_path
         base[config_parameters.KEY_COVERAGE_PRIVATE_WORKSPACE] = private_path
 
+        base[config_parameters.KEY_COVERAGE_FLOORPLAN_IMAGE] = floorplan_image_path
+
         # Pack ssid->heatmap path
-        base[config_parameters.KEY_COVERAGE_PRIVATE_HEATMAPS] = copy.deepcopy(map_ssid_heatmap_path)
+        temp = {}
+        for name, path in map_ssid_heatmap_path.items():
+            # fix: replace : in mac address to use in key without interfering with yaml
+            temp[self.process_mac_addr(name)] = path
+        base[config_parameters.KEY_COVERAGE_PRIVATE_HEATMAPS] = temp
 
         # Pack current tab name
         base[config_parameters.KEY_COVERAGE_COVERAGE_CURRENT_TAB] = current_tab
@@ -38,8 +50,8 @@ class ConfigParser:
 
             # Pack all ssid and rssi
             data = {}
-            for ssid, rssi in point.map.items():
-                data[ssid] = rssi
+            for bssid, (ssid, rssi) in point.map.items():
+                data[self.process_mac_addr(bssid)] = {"ssid": ssid, "rssi": rssi}
             temp[config_parameters.KEY_COVERAGE_RECORDED_POINTS_DATA] = copy.deepcopy(data)
 
             packed_recorded_points.append(copy.deepcopy(temp))
@@ -53,15 +65,22 @@ class ConfigParser:
         workspace_path = data[config_parameters.KEY_COVERAGE_WORKSPACE]
         private_path = data[config_parameters.KEY_COVERAGE_PRIVATE_WORKSPACE]
 
-        map_ssid_heatmap_path = data[config_parameters.KEY_COVERAGE_PRIVATE_HEATMAPS]
+        temp = data[config_parameters.KEY_COVERAGE_PRIVATE_HEATMAPS]
+        map_ssid_heatmap_path = {}
+        # process all the names to original mac addr form
+        for name, path in temp.items():
+            map_ssid_heatmap_path[self.reconstruct_mac_addr(name)] = path
 
         recorded_points = data[config_parameters.KEY_COVERAGE_RECORDED_POINTS]
+        print(recorded_points)
 
         current_tab = data[config_parameters.KEY_COVERAGE_COVERAGE_CURRENT_TAB]
 
         tab_tracked_data = data[config_parameters.KEY_COVERAGE_CURRENT_TRACKED_DATA]
 
-        return workspace_path, private_path, map_ssid_heatmap_path, recorded_points, current_tab, tab_tracked_data
+        floorplan_image = data[config_parameters.KEY_COVERAGE_FLOORPLAN_IMAGE]
+
+        return workspace_path, private_path, floorplan_image, map_ssid_heatmap_path, recorded_points, current_tab, tab_tracked_data
 
     def pack_spectrum_config(self, start_freq, center_freq, end_freq, driver):
 

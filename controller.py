@@ -61,6 +61,8 @@ class Controller(tk.Frame):
         # Scan results done
         self.scan_done = False
 
+        self.loaded_floorplan_saved_image_path = ""
+
     # Function to create start (landing) page
     def make_start_page(self):
         self.start = StartPage(self.container, self)
@@ -99,21 +101,22 @@ class Controller(tk.Frame):
 
                         # Extract coverage page data
                         coverage_loaded_data = data[config_parameters.KEY_COVERAGE]
+                        print(coverage_loaded_data)
 
                         # extract spectrum page data
-                        spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
+                        # spectrum_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
                         # extract recording page data
-                        recording_loaded_data = data[config_parameters.KEY_SPECTRUM]
+                        # recording_loaded_data = data[config_parameters.KEY_SPECTRUM]
 
                     # Setup coverage page
                     self.main_page.setup_coverage_from_config(coverage_loaded_data)
 
                     # Setup spectrum page
-                    self.main_page.setup_spectrum_from_config(spectrum_loaded_data, filepath)
+                    # self.main_page.setup_spectrum_from_config(spectrum_loaded_data, filepath)
 
                     # Setup recording page
-                    self.main_page.setup_recording_from_config(recording_loaded_data, filepath)
+                    # self.main_page.setup_recording_from_config(recording_loaded_data, filepath)
 
                 except FileNotFoundError:
                     self.start.display_error_message()
@@ -262,7 +265,6 @@ class Controller(tk.Frame):
     # Generate and display created heatmap on tkinter canvas
     def display_heatmap(self):
 
-        # TODO: resolve bssid to ssid
         if self.session.is_need_to_save():
 
             # Now, all data is encapsulated in dict: (x,y)->Point objects
@@ -283,7 +285,9 @@ class Controller(tk.Frame):
             for bssid, data in processed_all_data.items():
 
                 if bssid != "Combined":
-                    ssid = self.resolve_coverage_bssid_2_ssid(bssid)
+                    ssid = self.resolve_coverage_bssid_2_ssid(bssid) + "_"
+                else:
+                    ssid = ""
 
                 # generate name of path
                 suffix = ""
@@ -295,11 +299,12 @@ class Controller(tk.Frame):
 
                 # Don't save entire path into coverage, so that easier to handle load session
                 saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"
+                saved_heatmap_path.replace(" ", "_")
 
                 self.session.increment_coverage_plot_num()
 
                 # save to map
-                self.map_ssid_path[f"{ssid}_{bssid}"] = saved_heatmap_path
+                self.map_ssid_path[f"{ssid}{bssid}"] = saved_heatmap_path
 
                 status = self.save_heatmap_plot(saved_heatmap_path, data, True)
 
@@ -346,27 +351,30 @@ class Controller(tk.Frame):
             recording = self.main_page.recording_page
             session = self.main_page.coverage_page.session
 
-            # # SAVE COVERAGE DATA
-            # workspace_path, private_path = session.get_relative_paths()
-            # # print(f"paths: {workspace_path} {private_path}")
-            # # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
-            # # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
-            # # print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
-            # if coverage.coverage_display_data.get_current_tab_name() == "WIFI":
-            #     # print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
-            #     tracked_data = coverage.coverage_display_data.get_wifi_data_tracked()
-            # else:
-            #     # print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
-            #     tracked_data = coverage.coverage_display_data.sdr_tab.get_tracked_list()
+            # SAVE COVERAGE DATA
+            workspace_path, private_path = session.get_relative_paths()
+            png_floorplan_name = self.loaded_floorplan_saved_image_path.split("\\")[-1]
+            print(png_floorplan_name)
+            # print(f"paths: {workspace_path} {private_path}")
+            # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
+            # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
+            # print(f"current tab: {coverage.coverage_display_data.get_current_tab_name()}")
+            if coverage.coverage_display_data.get_current_tab_name() == "WIFI":
+                # print(f"tracked: {coverage.coverage_display_data.get_wifi_data_tracked()}")
+                tracked_data = coverage.coverage_display_data.get_wifi_data_tracked()
+            else:
+                # print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
+                tracked_data = coverage.coverage_display_data.sdr_tab.get_tracked_list()
 
-            # coverage_data = self.config_packer.pack_coverage_config(
-            #     workspace_path,
-            #     private_path,
-            #     coverage.map_ssid_heatmap_path,
-            #     coverage.recorded_points,
-            #     coverage.coverage_display_data.get_current_tab_name(),
-            #     tracked_data
-            # )
+            coverage_data = self.config_packer.pack_coverage_config(
+                workspace_path,
+                private_path,
+                png_floorplan_name,
+                coverage.map_ssid_heatmap_path,
+                coverage.recorded_points,
+                coverage.coverage_display_data.get_current_tab_name(),
+                tracked_data
+            )
 
             # # SAVE SPECTRUM DATA
             # try:
@@ -392,15 +400,15 @@ class Controller(tk.Frame):
             # driver = recording.get_driver()
             # recording_data = self.config_packer.pack_recording_config(start_freq, center_freq, end_freq, driver)
 
-            # # Create data to save in yaml file
-            # config = {
-            #     config_parameters.KEY_COVERAGE: coverage_data,
-            #     config_parameters.KEY_SPECTRUM: spectrum_data,
-            #     # config_parameters.KEY_RECORDING: recording_data,
-            #     config_parameters.KEY_WORKSPACE_PATH: workspace_path
-            # }
-            # with open(f"{workspace_path}/config.yaml", 'w') as f:
-            #     yaml.dump(config, f)
+            # Create data to save in yaml file
+            config = {
+                config_parameters.KEY_COVERAGE: coverage_data
+                # config_parameters.KEY_SPECTRUM: spectrum_data,
+                # # config_parameters.KEY_RECORDING: recording_data,
+                # config_parameters.KEY_WORKSPACE_PATH: workspace_path
+            }
+            with open(f"{workspace_path}/config.yaml", 'w') as f:
+                yaml.dump(config, f)
 
             # Debug
             print("Exiting...")
