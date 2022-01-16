@@ -22,7 +22,6 @@ class ConfigParser:
         # Pack workspace and private paths
         base[config_parameters.KEY_COVERAGE_WORKSPACE] = workspace_path
         base[config_parameters.KEY_COVERAGE_PRIVATE_WORKSPACE] = private_path
-
         base[config_parameters.KEY_COVERAGE_FLOORPLAN_IMAGE] = floorplan_image_path
 
         # Pack ssid->heatmap path
@@ -36,7 +35,20 @@ class ConfigParser:
         base[config_parameters.KEY_COVERAGE_COVERAGE_CURRENT_TAB] = current_tab
 
         # Pack tracked item (dependent on current tab name)
-        base[config_parameters.KEY_COVERAGE_CURRENT_TRACKED_DATA] = copy.deepcopy(tab_tracked_data)
+        temp_tracked_data = []
+        for data in tab_tracked_data:
+            temp_tracked_data.append(
+                {
+                    "bssid": data["bssid"],
+                    "channel_frequency": int(data["channel_frequency"]),
+                    "channel_number": int(data["channel_number"]),
+                    "channel_width": int(data["channel_width"]),
+                    "rssi": int(data["rssi"]),
+                    "ssid": data["ssid"]
+                }
+            )
+            temp_tracked_data
+        base[config_parameters.KEY_COVERAGE_CURRENT_TRACKED_DATA] = temp_tracked_data
 
         # Pack recorded points data
         packed_recorded_points = []
@@ -45,15 +57,14 @@ class ConfigParser:
             temp = {}
 
             # Pack coordinates
-            temp[config_parameters.KEY_COVERAGE_RECORDED_POINTS_X] = point.x
-            temp[config_parameters.KEY_COVERAGE_RECORDED_POINTS_Y] = point.y
+            temp[config_parameters.KEY_COVERAGE_RECORDED_POINTS_X] = int(point.x)
+            temp[config_parameters.KEY_COVERAGE_RECORDED_POINTS_Y] = int(point.y)
 
             # Pack all ssid and rssi
             data = {}
             for bssid, (ssid, rssi) in point.map.items():
-                data[self.process_mac_addr(bssid)] = {"ssid": ssid, "rssi": rssi}
+                data[self.process_mac_addr(bssid)] = {"ssid": ssid, "rssi": int(rssi)}
             temp[config_parameters.KEY_COVERAGE_RECORDED_POINTS_DATA] = copy.deepcopy(data)
-
             packed_recorded_points.append(copy.deepcopy(temp))
 
         base[config_parameters.KEY_COVERAGE_RECORDED_POINTS] = copy.deepcopy(packed_recorded_points)

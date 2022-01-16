@@ -63,7 +63,8 @@ class WifiScanner:
         if bss.bssid.connected:
             connected = True
             if not args.json:
-                bss.bssid.value += "(*)"
+                # bss.bssid.value += "(*)"
+                bss.bssid.value += ""
 
         json = {
             # "amendments": sorted(bss.amendments.elements),

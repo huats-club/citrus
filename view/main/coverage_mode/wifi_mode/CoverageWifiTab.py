@@ -272,8 +272,8 @@ class CoverageWifiTab(ttk.Frame):
         # Prepare data
         ssid = json["ssid"]
         bssid = json["bssid"]
-        channel_freq = json["channel_frequency"]
-        channel = json['channel_number'] + "@" + json['channel_width']
+        channel_freq = str(json["channel_frequency"])
+        channel = str(json['channel_number']) + "@" + str(json['channel_width'])
 
         data = (ssid, bssid, channel_freq, channel)
 
