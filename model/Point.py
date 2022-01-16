@@ -19,7 +19,7 @@ class Point:
             ssid = json['ssid']
             rssi = json['rssi']
 
-            print(f"{bssid} {ssid} {rssi}")
+            # print(f"{bssid} {ssid} {rssi}")
 
             # if bssid not in list(self.map.keys()):
             self.map[bssid] = (ssid, rssi)

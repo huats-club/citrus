@@ -260,5 +260,5 @@ class RecordingPage(ttk.Frame):
         self.recording_setting.set_stop_freq(end_freq)
         self.select_driver_pane.set_driver_input(driver)
 
-        self.bottom.set_save_path(path)
-        self.save_path = path
+        # self.bottom.set_save_path(path)
+        # self.save_path = path

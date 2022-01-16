@@ -133,6 +133,8 @@ class RecordingSpecPlot(ttk.Frame):
         for param in ['text.color', 'axes.labelcolor', 'xtick.color', 'ytick.color']:
             plt.rcParams[param] = '0.9'  # very light grey
 
+        plt.rcParams['font.size'] = 12
+
         self.colors = [
             '#08F7FE',  # teal/cyan
             '#FE53BB',  # pink

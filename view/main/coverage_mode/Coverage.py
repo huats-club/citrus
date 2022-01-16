@@ -1,3 +1,4 @@
+import shutil
 import tkinter as tk
 from tkinter import ttk
 
@@ -280,9 +281,9 @@ class CoveragePage(ttk.Frame):
         # print(f"tracked data: {tab_tracked_data}")
 
         # Save session workspace and private cached folder relative paths
-        self.save_dir_path = workspace_path
-        self.session.set_session_workspace_path(workspace_path)
-        self.session.set_session_private_folder_path(private_path)
+        # self.save_dir_path = workspace_path
+        # self.session.set_session_workspace_path(workspace_path)
+        # self.session.set_session_private_folder_path(private_path)
 
         # Plot points onto canvas
         self.recorded_points = {}
@@ -310,8 +311,8 @@ class CoveragePage(ttk.Frame):
             if "Combined" in list(map_ssid_heatmap_path.keys()):
                 self.put_image("Combined")  # Put combined image as head
 
-        # Set save path
-        self.coverage_bar.save_pane.set_filepath(self.session.get_session_workspace_path())
+        # # Set save path
+        # self.coverage_bar.save_pane.set_filepath(self.session.get_session_workspace_path())
 
         # Set tracked data into GUI
         if current_tab == "WIFI":
@@ -331,7 +332,10 @@ class CoveragePage(ttk.Frame):
                 for name, freq in x.items():
                     self.coverage_display_data.sdr_tab.insert(name, freq)
 
-        self.controller.loaded_floorplan_saved_image_path = private_path + "/" + floorplan_image
+        # perform copy of file over
+        print(self.session.get_session_private_folder_path())
+        newPath = shutil.copy(private_path + "/" + floorplan_image, self.session.get_session_private_folder_path())
+        self.controller.loaded_floorplan_saved_image_path = newPath
 
         self.controller.dxf_opened = True
         self.controller.scan_done = True

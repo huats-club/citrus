@@ -230,8 +230,8 @@ class SpectrumPage(ttk.Frame):
         self.spectrum_setting_container.set_stop_freq(end_freq)
         self.spectrum_select_driver_pane.set_driver_input(driver)
 
-        self.bottom_container.set_save_path(path)
-        self.save_path = path
+        # self.bottom_container.set_save_path(path)
+        # self.save_path = path
 
         # Set save path
         # self.save_pane.set_filepath(self.session.get_session_workspace_path())
