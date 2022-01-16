@@ -353,7 +353,7 @@ class Controller(tk.Frame):
 
             # SAVE COVERAGE DATA
             workspace_path, private_path = session.get_relative_paths()
-            png_floorplan_name = f"{self.dxf_filename}_tkinter.png"
+            png_floorplan_name = self.loaded_floorplan_saved_image_path.split("\\")[-1]
             # print(f"paths: {workspace_path} {private_path}")
             # print(f"heatmaps created: {coverage.map_ssid_heatmap_path}")
             # print(f"recorded points: {coverage.recorded_points}")  # (x,y)-> Point object
@@ -375,17 +375,17 @@ class Controller(tk.Frame):
                 tracked_data
             )
 
-            # # SAVE SPECTRUM DATA
-            # try:
-            #     start_freq = spectrum.spectrum_setting_container.get_start_freq()
-            #     center_freq = spectrum.spectrum_setting_container.get_center_freq()
-            #     end_freq = spectrum.spectrum_setting_container.get_stop_freq()
-            # except ValueError:
-            #     start_freq = 0
-            #     center_freq = 0
-            #     end_freq = 0
-            # driver = spectrum.get_driver()
-            # spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
+            # SAVE SPECTRUM DATA
+            try:
+                start_freq = spectrum.spectrum_setting_container.get_start_freq()
+                center_freq = spectrum.spectrum_setting_container.get_center_freq()
+                end_freq = spectrum.spectrum_setting_container.get_stop_freq()
+            except ValueError:
+                start_freq = 0
+                center_freq = 0
+                end_freq = 0
+            driver = spectrum.get_driver()
+            spectrum_data = self.config_packer.pack_spectrum_config(start_freq, center_freq, end_freq, driver)
 
             # # SAVE RECORDING DATA
             # try:
@@ -401,8 +401,8 @@ class Controller(tk.Frame):
 
             # Create data to save in yaml file
             config = {
-                config_parameters.KEY_COVERAGE: coverage_data
-                # config_parameters.KEY_SPECTRUM: spectrum_data,
+                config_parameters.KEY_COVERAGE: coverage_data,
+                config_parameters.KEY_SPECTRUM: spectrum_data
                 # # config_parameters.KEY_RECORDING: recording_data,
                 # config_parameters.KEY_WORKSPACE_PATH: workspace_path
             }
