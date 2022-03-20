@@ -4,6 +4,7 @@ from tkinter import ttk
 
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 from app_parameters import app_parameters
 from matplotlib import cm
@@ -84,8 +85,6 @@ class RecordingWaterfallPlot(ttk.Frame):
             expand=True  # ensures that the panel fill out the the parent
         )
 
-        self.ax.set_autoscaley_on(True)
-
     def do_plot(self, latest_signal_data):
 
         latest_signal_data = [20 * math.log((2*n)/1024, 10) for n in latest_signal_data]
@@ -109,6 +108,7 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         # clear plot
         self.ax.clear()
+        self.ax.set_zlim(-100, -10)
 
         # plot
         self.surf = self.ax.plot_surface(
@@ -123,6 +123,8 @@ class RecordingWaterfallPlot(ttk.Frame):
         if not self.isFirst:
             self.cb.remove()
 
+        label = [-10, -20, -30, -40, -50, -60, -70, -80, -90, -100]
+
         self.cb = self.fig.colorbar(
             self.surf,
             location="left",
@@ -131,6 +133,8 @@ class RecordingWaterfallPlot(ttk.Frame):
             shrink=0.4,
             aspect=30
         )
+        self.cb.set_ticks(label)
+        self.cb.set_ticklabels([str(x) for x in label])
 
         # Recompute ticks for freq label
         bandwidth = self.recording.recording_setting.get_bandwidth()
