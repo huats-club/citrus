@@ -40,7 +40,7 @@ class RecordingSpecPlot(ttk.Frame):
         self.xticks_label = [x/1e6 for x in xticks_exact]
 
         # prepare z signal data store
-        self.signal_datastore_np = np.full((400, 2048), -100)
+        self.signal_datastore_np = np.full((150, 2048), -100)
 
         global first
         first = True
@@ -55,7 +55,7 @@ class RecordingSpecPlot(ttk.Frame):
         # if is first time plot, populate all data with it
         if self.isFirst:
             self.signal_datastore_np = np.zeros((0, 2048))
-            for i in range(400):
+            for i in range(150):
                 self.signal_datastore_np = np.append(self.signal_datastore_np, [self.latest_signal_data], axis=0)
             self.signal_datastore_np = np.asarray(self.signal_datastore_np)
 
@@ -64,11 +64,17 @@ class RecordingSpecPlot(ttk.Frame):
         # else pop oldest data and append latest data
         else:
 
-            curr_len = self.signal_datastore_np.shape[0]-1
+            # Do bulk concat
+            self.signal_datastore_np = np.concatenate(
+                (
+                    np.repeat([np.array(self.latest_signal_data)], 10, axis=0),
+                    self.signal_datastore_np
+                ),
+                axis=0
+            )
 
-            for i in range(12):
-                self.signal_datastore_np = np.insert(self.signal_datastore_np, 0, [self.latest_signal_data], axis=0)
-                self.signal_datastore_np = np.delete(self.signal_datastore_np, curr_len, axis=0)
+            # Do bulk delete
+            self.signal_datastore_np = self.signal_datastore_np[:-10, :]
 
             start_freq = self.recording.recording_setting.get_start_freq()
             end_freq = self.recording.recording_setting.get_stop_freq()
@@ -80,7 +86,9 @@ class RecordingSpecPlot(ttk.Frame):
 
     def draw(self):
         # plot
-        self.waterfall2d = self.ax.imshow(self.signal_datastore_np, cmap=cm.get_cmap("jet"), interpolation='bicubic')
+        self.waterfall2d = self.ax.imshow(
+            self.signal_datastore_np, cmap=cm.get_cmap("jet"),
+            interpolation='bicubic', aspect='auto')
 
         global first
         if first:

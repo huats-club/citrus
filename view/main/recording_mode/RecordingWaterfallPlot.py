@@ -139,7 +139,7 @@ class RecordingWaterfallPlot(ttk.Frame):
         # Recompute ticks for freq label
         bandwidth = self.recording.recording_setting.get_bandwidth()
         center_freq = self.recording.recording_setting.get_center_freq()
-        freq_increment = bandwidth / 2048
+        freq_increment = bandwidth / 9
         freq_bins = []
         start_freq = center_freq - bandwidth/2
         end_freq = center_freq + bandwidth/2
