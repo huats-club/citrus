@@ -14,3 +14,6 @@ build/*
 !assets/test/spectrum_test_data.npy
 app/*
 binary/*
+ui/*
+app/*
+app_old/*
