@@ -281,34 +281,56 @@ class Controller(tk.Frame):
             # map (ssid)->(path)
             self.map_ssid_path = {}
 
-            for bssid, data in processed_all_data.items():
+            # WIFI
+            if self.main_page.coverage_page.get_current_mode() == "WIFI":
+                for bssid, data in processed_all_data.items():
+                    if bssid != "Combined":
+                        ssid = self.resolve_coverage_bssid_2_ssid(bssid) + "_"
+                    else:
+                        ssid = ""
 
-                if bssid != "Combined":
-                    ssid = self.resolve_coverage_bssid_2_ssid(bssid) + "_"
-                else:
-                    ssid = ""
+                    # generate name of path
+                    suffix = ""
+                    if self.is_load or bssid in list(self.map_ssid_path.keys()):
+                        suffix = "_" + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
 
-                # generate name of path
-                suffix = ""
-                if self.is_load or bssid in list(self.map_ssid_path.keys()):
-                    suffix = "_" + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
+                    output_file_name = \
+                        f"{self.session.get_dxf_prefix()}_{ssid}_{bssid.replace(':', '')}_{self.session.get_current_coverage_plot_num()}{suffix}.png"
 
-                output_file_name = \
-                    f"{self.session.get_dxf_prefix()}_{ssid}_{bssid.replace(':', '')}_{self.session.get_current_coverage_plot_num()}{suffix}.png"
+                    # Don't save entire path into coverage, so that easier to handle load session
+                    saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"
+                    saved_heatmap_path.replace(" ", "_")
 
-                # Don't save entire path into coverage, so that easier to handle load session
-                saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"
-                saved_heatmap_path.replace(" ", "_")
+                    self.session.increment_coverage_plot_num()
 
-                self.session.increment_coverage_plot_num()
+                    # save to map
+                    self.map_ssid_path[f"{ssid}{bssid}"] = saved_heatmap_path
 
-                # save to map
-                self.map_ssid_path[f"{ssid}{bssid}"] = saved_heatmap_path
+                    status = self.save_heatmap_plot(saved_heatmap_path, data, True)
 
-                status = self.save_heatmap_plot(saved_heatmap_path, data, True)
+                    if status == False:
+                        return
+            # SDR
+            else:
+                for ssid, data in processed_all_data.items():
+                    # generate name of path
+                    suffix = ""
+                    output_file_name = \
+                        f"{self.session.get_dxf_prefix()}_{ssid}_{self.session.get_current_coverage_plot_num()}{suffix}.png"
 
-                if status == False:
-                    return
+                    # Don't save entire path into coverage, so that easier to handle load session
+                    saved_heatmap_path = f"{self.session.get_session_private_folder_relative_path()}/{output_file_name}"
+                    saved_heatmap_path.replace(" ", "_")
+
+                    self.session.increment_coverage_plot_num()
+
+                    # save to map
+                    self.map_ssid_path[f"{ssid}"] = saved_heatmap_path
+
+                    status = self.save_heatmap_plot(saved_heatmap_path, data, True)
+
+                    if status == False:
+                        return
 
             # Set no need to save
             self.session.set_no_need_to_save()
@@ -364,15 +386,15 @@ class Controller(tk.Frame):
                 # print(f"tracked: {coverage.coverage_display_data.sdr_tab.get_tracked_list()}")
                 tracked_data = coverage.coverage_display_data.sdr_tab.get_tracked_list()
 
-            coverage_data = self.config_packer.pack_coverage_config(
-                workspace_path,
-                private_path,
-                png_floorplan_name,
-                coverage.map_ssid_heatmap_path,
-                coverage.recorded_points,
-                coverage.coverage_display_data.get_current_tab_name(),
-                tracked_data
-            )
+            # coverage_data = self.config_packer.pack_coverage_config(
+            #     workspace_path,
+            #     private_path,
+            #     png_floorplan_name,
+            #     coverage.map_ssid_heatmap_path,
+            #     coverage.recorded_points,
+            #     coverage.coverage_display_data.get_current_tab_name(),
+            #     tracked_data
+            # )
 
             # SAVE SPECTRUM DATA
             try:
@@ -400,7 +422,7 @@ class Controller(tk.Frame):
 
             # Create data to save in yaml file
             config = {
-                config_parameters.KEY_COVERAGE: coverage_data,
+                # config_parameters.KEY_COVERAGE: coverage_data,
                 config_parameters.KEY_SPECTRUM: spectrum_data,
                 config_parameters.KEY_RECORDING: recording_data,
                 config_parameters.KEY_WORKSPACE_PATH: workspace_path

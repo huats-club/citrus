@@ -130,6 +130,9 @@ class CoveragePage(ttk.Frame):
                 arc["extent"]
             )
 
+    def get_current_mode(self):
+        return self.coverage_display_data.get_current_tab_name()
+
     def capture_canvas(self, path=""):
         self.coverage_canvas.capture(path)
 

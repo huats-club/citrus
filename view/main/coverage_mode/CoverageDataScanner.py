@@ -193,7 +193,7 @@ class CoverageDataScanner(ttk.Frame):
 
         # run sdr scan
         if self.is_first_scan:
-            self.sdr_handler = CoverageSingleHandler()
+            self.sdr_handler = CoverageSingleHandler(self.select_driver_pane.get_driver_input())
             self.sdr_handler.start(scan_center_freq, bandwidth)
             dbm_data = self.sdr_handler.get_result()
             self.is_first_scan = False
@@ -229,9 +229,7 @@ class CoverageDataScanner(ttk.Frame):
             for idx2 in range(left_bound_idx, right_bound_idx+1):
                 if idx2 < len(dbm_data) and dbm_data[idx2] > max_dbm_found:
                     max_dbm_found = dbm_data[idx2]
-                else:
-                    max_dbm_found = -100
-            # print(f"found max: {max_dbm_found:.5f}")
+            print(f"found max: {max_dbm_found:.5f}")
 
             temp = {}
             temp['ssid'] = names[idx]
