@@ -110,7 +110,7 @@ class RecordingPage(ttk.Frame):
             driver_name = self.select_driver_pane.get_driver_input()
             c = CalibrateHandler()
             self.pipe_here, pipe_calibrate = Pipe(True)
-            c.start(driver_name, pipe_calibrate, center_freq, bandwidth)
+            c.start(driver_name, pipe_calibrate, center_freq, bandwidth, bandwidth)
 
             self.parent.after(100, self.get_calibrate)
             self.recording_setting.display_calibration_message()
