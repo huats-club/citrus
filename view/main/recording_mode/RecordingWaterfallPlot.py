@@ -112,6 +112,7 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         # plot
         cmap = cm.get_cmap("jet")
+        # https://stackoverflow.com/questions/3373256/set-colorbar-range-in-matplotlib
         # cmap.set_under("b")
         # cmap.set_over("r")
         self.surf = self.ax.plot_surface(
