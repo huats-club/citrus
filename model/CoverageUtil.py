@@ -3,13 +3,13 @@ import time
 import pycitrus
 
 
-def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe, tdelta=0.05):
+def process_spectrum(driver_name, pipe, center_freq, bandwidth, sample_rate, stop_pipe, tdelta=0.05):
 
     # flag to check if run should occur
     isRun = True
 
     # create citrus processor
-    p = pycitrus.CitrusProcessor(center_freq, bandwidth)
+    p = pycitrus.CitrusProcessor(center_freq, bandwidth, sample_rate)
     p.init(driver_name)
 
     # time check
@@ -33,13 +33,13 @@ def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe, tdelt
     return
 
 
-def process_once_spectrum(center_freq, bandwidth, output_queue, get_pipe, stop_pipe):
+def process_once_spectrum(center_freq, bandwidth, sample_rate, output_queue, get_pipe, stop_pipe):
 
     # flag to check if run should occur
     isRun = True
 
     # create citrus processor
-    p = pycitrus.CitrusProcessor(center_freq, bandwidth)
+    p = pycitrus.CitrusProcessor(center_freq, bandwidth, sample_rate)
     p.init("lime")
 
     while isRun:

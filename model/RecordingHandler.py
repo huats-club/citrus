@@ -15,12 +15,12 @@ class RecordingHandler:
         self.driver_name = driver_name
         print(f"set driver: {self.driver_name}")
 
-    def start(self, pipe, center_freq, bandwidth):
+    def start(self, pipe, center_freq, bandwidth, sample_rate):
         if not IS_TESTING:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
                 target=process_spectrum, daemon=True,
-                args=(self.driver_name, pipe, center_freq, bandwidth, self.stop_pipe_process,))
+                args=(self.driver_name, pipe, center_freq, bandwidth, sample_rate, self.stop_pipe_process,))
 
         else:
             # Define mock process

@@ -19,12 +19,12 @@ class CoverageHandler:
 
         self.driver_name = driver_name
 
-    def start(self, pipe, center_freq, bandwidth):
+    def start(self, pipe, center_freq, bandwidth, sample_rate):
         if not IS_TESTING:
             # Define process for spectrum analyzer first
             self.process_spectrum_analyzer = Process(
                 target=process_spectrum, daemon=True,
-                args=(self.driver_name, pipe, center_freq, bandwidth, self.stop_pipe_process,))
+                args=(self.driver_name, pipe, center_freq, bandwidth, sample_rate, self.stop_pipe_process,))
         else:
             # Define mock process
             self.process_spectrum_analyzer = Process(
@@ -44,11 +44,11 @@ class CoverageSingleHandler:
         self.calibrate_data = None
         self.is_calibrating = False
 
-    def start(self, center_freq, bandwidth):
+    def start(self, center_freq, bandwidth, sample_rate):
 
         # Do calibration
         c = CalibrateHandlerBlock()
-        self.calibrate_data = c.start(self.driver_name, center_freq, bandwidth)
+        self.calibrate_data = c.start(self.driver_name, center_freq, bandwidth, sample_rate)
 
         # Create pipes for coverage process
         get_pipe_coverage_data_scanner, get_pipe_process = Pipe(True)
@@ -65,9 +65,8 @@ class CoverageSingleHandler:
 
         if not IS_TESTING:
             # Define process for spectrum analyzer first
-            self.process_spectrum_analyzer = Process(
-                target=process_once_spectrum, daemon=True,
-                args=(center_freq, bandwidth, self.spectrum_queue, self.get_pipe_process, self.stop_pipe_process,))
+            self.process_spectrum_analyzer = Process(target=process_once_spectrum, daemon=True, args=(
+                center_freq, bandwidth, sample_rate, self.spectrum_queue, self.get_pipe_process, self.stop_pipe_process,))
         else:
             # Define mock process
             self.process_spectrum_analyzer = Process(
