@@ -13,14 +13,14 @@ def process_calibrate(driver_name, pipe_out, center_freq, bandwidth):
 
     data = [0 for _ in range(2048)]
 
-    for i in range(30):
+    for _ in range(20):
         out = p.run()
 
         data = np.add(data, out)
 
-        time.sleep(0.2)
+        time.sleep(0.05)
 
-    data = data / 30.0
+    data = data / 20.0
     pipe_out.send(data.tolist())
 
     p.close()
