@@ -138,3 +138,9 @@ class RecordingSettingPane(tk.Frame):
 
     def set_save_path(self, path):
         self.save_pane.set_filepath(path)
+
+    def disable_calibration_button(self):
+        self.calibrate_button.configure(state="disabled")
+
+    def enable_calibration_button(self):
+        self.calibrate_button.configure(state="normal")

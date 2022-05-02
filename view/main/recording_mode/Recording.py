@@ -1,5 +1,5 @@
 import tkinter as tk
-from multiprocessing import Pipe, Value
+from multiprocessing import Pipe
 from tkinter import ttk
 
 import numpy as np
@@ -27,6 +27,7 @@ class RecordingPage(ttk.Frame):
 
         # Calibration data
         self.calibrate_data = None
+        self.is_calibrating = False
 
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
@@ -84,40 +85,44 @@ class RecordingPage(ttk.Frame):
         )
 
     def handle_calibrate(self):
-        print("calibrate")
+        if self.is_calibrating == False:
+            self.bottom.disable_calibration_button()
+            self.is_calibrating = True
+            print("start recording mode calibration")
 
-        # get centre freq
-        center_freq = self.recording_setting.get_center_freq()
+            # get centre freq
+            center_freq = self.recording_setting.get_center_freq()
 
-        # get bandwidth
-        bandwidth = self.recording_setting.get_bandwidth()
+            # get bandwidth
+            bandwidth = self.recording_setting.get_bandwidth()
 
-        # check if calibration can be done
-        if center_freq == "" or bandwidth == "":
-            self.recording_setting.display_error_message(isStarted=False)
-            return
+            # check if calibration can be done
+            if center_freq == "" or bandwidth == "":
+                self.recording_setting.display_error_message(isStarted=False)
+                return
 
-        # Start process
-        driver_name = self.select_driver_pane.get_driver_input()
-        c = CalibrateHandler()
-        self.pipe_here, pipe_calibrate = Pipe(True)
-        c.start(driver_name, pipe_calibrate, center_freq, bandwidth)
+            # Start process
+            driver_name = self.select_driver_pane.get_driver_input()
+            c = CalibrateHandler()
+            self.pipe_here, pipe_calibrate = Pipe(True)
+            c.start(driver_name, pipe_calibrate, center_freq, bandwidth)
 
-        self.isStop = False
-        self.parent.after(500, self.get_calibrate)
-        self.recording_setting.display_calibration_message()
+            self.parent.after(100, self.get_calibrate)
+            self.recording_setting.display_calibration_message()
 
     def get_calibrate(self):
         if self.pipe_here.poll(timeout=0):
             data = self.pipe_here.recv()
             self.calibrate_data = data
+            self.is_calibrating = False
 
-            self.isStop = True
-
-        if self.isStop == False:
-            self.parent.after(500, self.get_calibrate)
+        if self.is_calibrating == True:
+            self.parent.after(50, self.get_calibrate)
         else:
             self.recording_setting.display_calibration_done()
+            self.bottom.enable_calibration_button()
+            self.is_calibrating = False
+            print("complete recording mode calibration")
 
     def handle_switch_spec_plot(self):
         self.recording_plot.destroy()

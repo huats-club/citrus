@@ -66,8 +66,8 @@ class SpectrumSettingPane(tk.Frame):
     def set_save_path(self, path):
         self.save_pane.set_filepath(path)
 
-    def disable_button(self):
+    def disable_calibration_button(self):
         self.calibrate_button.configure(state="disabled")
 
-    def enable_button(self):
+    def enable_calibration_button(self):
         self.calibrate_button.configure(state="normal")
