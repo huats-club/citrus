@@ -29,6 +29,9 @@ class RecordingPage(ttk.Frame):
         self.calibrate_data = None
         self.is_calibrating = False
 
+        # Flag to indicate current 2d/3d
+        self.is_3d = True
+
         super().__init__(self.parent,  *args, **kwargs)
         self.pack(
             padx=10,
@@ -133,6 +136,7 @@ class RecordingPage(ttk.Frame):
             self
         )
         self.recording_plot.draw()
+        self.is_3d = False
 
     def handle_switch_waterfall_plot(self):
         self.recording_plot.destroy()
@@ -142,6 +146,7 @@ class RecordingPage(ttk.Frame):
             self
         )
         self.recording_plot.create_empty_3d_plot()
+        self.is_3d = True
 
     def handle_recording_start(self):
         print("start recording")
@@ -153,6 +158,12 @@ class RecordingPage(ttk.Frame):
 
         # Start spectrum if frequency is valid and not already started
         if self.recording_setting.is_start_stop_freq_valid() and self.controller.is_recording_start == False:
+
+            # Reinitialize
+            if self.is_3d:
+                self.handle_switch_waterfall_plot()
+            else:
+                self.handle_switch_spec_plot()
 
             # Disable toggle to other tab
             self.parent.disable_toggle_tab()
@@ -176,13 +187,13 @@ class RecordingPage(ttk.Frame):
             driver_name = self.select_driver_pane.get_driver_input()
             self.controller.start_recording_process(driver_name, center_freq, bandwidth)
 
+            # Start to retrieve data to plot
+            self.parent.after(50, self.get_process)
+
         # Else display error message
         else:
             # display error
             self.recording_setting.display_error_message(self.controller.is_recording_start)
-
-        # Start to retrieve data to plot
-        self.parent.after(50, self.get_process)
 
     def get_process(self):
         if self.pipe.poll(timeout=0):
@@ -227,19 +238,19 @@ class RecordingPage(ttk.Frame):
             # Enable traversal of tab
             self.parent.enable_toggle_tab()
 
-            # Save data to file and log out freq used
-            output_data_file = fr"{self.save_path}/recording_data_{self.run_count}"
-            np.save(output_data_file, np.array(self.data_store))
-            output_log_file = fr"{self.save_path}/recording_log_{self.run_count}.txt"
-            with open(output_log_file, "w") as f:
-                start_freq = self.recording_setting.get_start_freq()
-                end_freq = self.recording_setting.get_stop_freq()
-                units = self.recording_setting.get_freq_units()
-                f.write(f"Start freq: {start_freq}\n")
-                f.write(f"End freq: {end_freq}\n")
-                f.write(f"Units: {units}")
+            # # Save data to file and log out freq used
+            # output_data_file = fr"{self.save_path}/recording_data_{self.run_count}"
+            # np.save(output_data_file, np.array(self.data_store))
+            # output_log_file = fr"{self.save_path}/recording_log_{self.run_count}.txt"
+            # with open(output_log_file, "w") as f:
+            #     start_freq = self.recording_setting.get_start_freq()
+            #     end_freq = self.recording_setting.get_stop_freq()
+            #     units = self.recording_setting.get_freq_units()
+            #     f.write(f"Start freq: {start_freq}\n")
+            #     f.write(f"End freq: {end_freq}\n")
+            #     f.write(f"Units: {units}")
+            # self.run_count += 1
             self.data_store = []
-            self.run_count += 1
 
     # Provide interface for save pane to call common function
     def update_save_path(self, path):

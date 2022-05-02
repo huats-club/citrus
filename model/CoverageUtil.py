@@ -3,7 +3,7 @@ import time
 import pycitrus
 
 
-def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe, tdelta=0.8):
+def process_spectrum(driver_name, pipe, center_freq, bandwidth, stop_pipe, tdelta=0.05):
 
     # flag to check if run should occur
     isRun = True
