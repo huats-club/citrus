@@ -55,7 +55,7 @@ class RecordingSpecPlot(ttk.Frame):
         # if is first time plot, populate all data with it
         if self.isFirst:
             self.signal_datastore_np = np.zeros((0, 2048))
-            for i in range(150):
+            for i in range(120):
                 self.signal_datastore_np = np.append(self.signal_datastore_np, [self.latest_signal_data], axis=0)
             self.signal_datastore_np = np.asarray(self.signal_datastore_np)
 
@@ -81,6 +81,9 @@ class RecordingSpecPlot(ttk.Frame):
             center_freq = 0.5 * (float(start_freq) + float(end_freq))
             self.xticks_label = [str(start_freq) + " MHz", str(center_freq) + " MHz", str(end_freq) + " MHz"]
             self.ax.xaxis.set_major_formatter(ticker.FixedFormatter((self.xticks_label)))
+
+            # Call the next update
+            self.recording.get_process()
 
         self.draw()
 

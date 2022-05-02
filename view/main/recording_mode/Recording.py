@@ -89,8 +89,6 @@ class RecordingPage(ttk.Frame):
 
     def handle_calibrate(self):
         if self.is_calibrating == False:
-            self.bottom.disable_calibration_button()
-            self.is_calibrating = True
             print("start recording mode calibration")
 
             # get centre freq
@@ -103,6 +101,10 @@ class RecordingPage(ttk.Frame):
             if center_freq == "" or bandwidth == "":
                 self.recording_setting.display_error_message(isStarted=False)
                 return
+
+            self.bottom.disable_calibration_button()
+            print("start recording mode calibration")
+            self.is_calibrating = True
 
             # Start process
             driver_name = self.select_driver_pane.get_driver_input()
@@ -129,13 +131,13 @@ class RecordingPage(ttk.Frame):
 
     def handle_switch_spec_plot(self):
         self.recording_plot.destroy()
-        # spec plot - display in first show
-        self.recording_plot = RecordingSpecPlot(
+        self.recording_plot = RecordingWaterfallPlot(
             self.recording_plot_container,
             self.controller,
             self
         )
-        self.recording_plot.draw()
+        self.recording_plot.create_empty_3d_plot()
+        self.recording_plot.set_2d()
         self.is_3d = False
 
     def handle_switch_waterfall_plot(self):
@@ -196,13 +198,11 @@ class RecordingPage(ttk.Frame):
             self.recording_setting.display_error_message(self.controller.is_recording_start)
 
     def get_process(self):
-        if self.pipe.poll(timeout=0):
+        if self.controller.is_recording_start == True and self.pipe.poll(timeout=0):
             data = self.pipe.recv()
 
             average_of_all_calibrate = np.average(data)
-
             data = np.subtract(data, self.calibrate_data)
-
             data = data + average_of_all_calibrate
 
             # do plot
@@ -214,10 +214,11 @@ class RecordingPage(ttk.Frame):
 
             self.recording_plot.do_plot(x)
 
-            # append data for storage at end of run
-            self.data_store.append(x)
+            # # append data for storage at end of run
+            # self.data_store.append(x)
 
-        self.parent.after(100, self.get_process)
+        else:
+            self.parent.after(500, self.get_process)
 
     def handle_recording_stop(self):
         print("stop recording")

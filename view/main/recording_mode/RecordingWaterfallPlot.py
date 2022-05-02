@@ -48,6 +48,15 @@ class RecordingWaterfallPlot(ttk.Frame):
         # flag to indicate first data
         self.isFirst = True
 
+        self.is_2d = False
+
+    def set_2d(self):
+        self.ax.azim = -90
+        self.ax.elev = -90
+        self.ax.dist = 6
+        self.ax.set_box_aspect([3, 1, 1])
+        self.is_2d = True
+
     def create_empty_3d_plot(self):
         # https://towardsdatascience.com/cyberpunk-style-with-matplotlib-f47404c9d4c5
 
@@ -131,15 +140,26 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         label = [-10, -20, -30, -40, -50, -60, -70, -80, -90, -100]
 
-        # Fix here TODO
-        self.cb = self.fig.colorbar(
-            self.surf,
-            location="left",
-            orientation="vertical",
-            ax=self.ax,
-            shrink=0.4,
-            aspect=30
-        )
+        if self.is_2d == False:
+            pos = "vertical"
+            self.cb = self.fig.colorbar(
+                self.surf,
+                location="left",
+                orientation=pos,
+                ax=self.ax,
+                shrink=0.4,
+                aspect=30
+            )
+        else:
+            pos = "horizontal"
+            self.cb = self.fig.colorbar(
+                self.surf,
+                orientation=pos,
+                ax=self.ax,
+                shrink=0.4,
+                aspect=30,
+                pad=0
+            )
         self.cb.set_ticks(label)
         self.cb.set_ticklabels([str(x) for x in label])
 
@@ -162,6 +182,9 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         self.isFirst = False
         self.canvas.draw()
+
+        # Call the next update
+        self.recording.get_process()
 
     def save(self, filepath):
         self.fig.savefig(filepath)
