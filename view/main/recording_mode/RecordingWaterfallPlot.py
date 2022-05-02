@@ -108,15 +108,20 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         # clear plot
         self.ax.clear()
-        self.ax.set_zlim(-100, -10)
+        self.ax.set_zlim(-100, 10)
 
         # plot
+        cmap = cm.get_cmap("jet")
+        # cmap.set_under("b")
+        # cmap.set_over("r")
         self.surf = self.ax.plot_surface(
             self.freq_bins_np_X,
             self.ts_np_Y,
             self.signal_np,
-            cmap=cm.get_cmap("jet"),
-            antialiased=True
+            cmap=cmap,
+            antialiased=True,
+            vmin=-90,
+            vmax=-30
         )
 
         # remove the previous colorbar
@@ -125,6 +130,7 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         label = [-10, -20, -30, -40, -50, -60, -70, -80, -90, -100]
 
+        # Fix here TODO
         self.cb = self.fig.colorbar(
             self.surf,
             location="left",
