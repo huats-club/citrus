@@ -79,12 +79,15 @@ class WaterfallPlotter:
 
         # plot
         self.generate_figure()
+        self.ax.set_zlim(-100, 10)
         self.surf = self.ax.plot_surface(
             self.freq_bins_np_X,
             self.ts_np_Y,
             self.signal_np,
             cmap=cm.get_cmap("jet"),
-            antialiased=True
+            antialiased=True,
+            vmin=-90,
+            vmax=-30
         )
         self.fig.colorbar(
             self.surf,
@@ -94,6 +97,6 @@ class WaterfallPlotter:
             shrink=0.4,
             aspect=30
         )
-        root = 'C:/Users/65844/Desktop/citrus/exploration/3dplot_data'
-        self.fig.savefig(f"{root}/3d_class_{self.incre}.png", bbox_inches='tight')
-        self.incre += 1
+        # root = 'C:/Users/65844/Desktop/citrus/exploration/3dplot_data'
+        # self.fig.savefig(f"{root}/3d_class_{self.incre}.png", bbox_inches='tight')
+        # self.incre += 1

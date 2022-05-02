@@ -1,7 +1,6 @@
 import random
 from multiprocessing import Pipe, Process, Queue
 
-from model.CalibrateHandler import CalibrateHandlerBlock
 from testing import (IS_TESTING, process_once_spectrum_test,
                      process_test_coverage)
 
@@ -38,18 +37,13 @@ class CoverageHandler:
 
 
 class CoverageSingleHandler:
-    def __init__(self, driver_name):
+    def __init__(self, driver_name, calibrate_data):
         self.driver_name = driver_name
         # Calibrate data
-        self.calibrate_data = None
+        self.calibrate_data = calibrate_data
         self.is_calibrating = False
 
     def start(self, center_freq, bandwidth, sample_rate):
-
-        # Do calibration
-        c = CalibrateHandlerBlock()
-        self.calibrate_data = c.start(self.driver_name, center_freq, bandwidth, sample_rate)
-
         # Create pipes for coverage process
         get_pipe_coverage_data_scanner, get_pipe_process = Pipe(True)
         self.get_pipe_coverage_data_scanner = get_pipe_coverage_data_scanner

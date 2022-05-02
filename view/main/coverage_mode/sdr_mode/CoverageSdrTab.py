@@ -230,6 +230,117 @@ class CoverageSdrTab(ttk.Frame):
             anchor=tk.CENTER
         )
 
+        # ---------------------------------------------
+
+        # Create container for form to calibrate
+        self.calibration_container = ttk.LabelFrame(self, text="Calibration")
+        self.calibration_container.pack(
+            padx=10,
+            pady=10,
+            side=tk.TOP,
+            anchor=tk.NW,
+            fill=tk.BOTH
+        )
+
+        self.calibration_internal_container = ttk.Frame(self.calibration_container)
+        self.calibration_internal_container.pack(
+            padx=10,
+            pady=10,
+            side=tk.TOP,
+            anchor=tk.NW,
+            fill=tk.BOTH
+        )
+
+        # Input tracked freq name label and entry box
+        self.center_freq_calibration_label = tk.Label(
+            self.calibration_internal_container,
+            text="Center Frequency",
+            width=15,
+            anchor=tk.NW
+        )
+        self.center_freq_calibration_label.grid(
+            row=0,
+            column=0,
+            columnspan=4,
+            padx=5,
+            pady=5
+        )
+        self.center_freq_calibration_text = tk.StringVar()
+        self.center_freq_calibration = ttk.Entry(
+            self.calibration_internal_container,
+            textvariable=self.center_freq_calibration_text
+        )
+        self.center_freq_calibration.grid(
+            row=0,
+            column=5,
+            columnspan=2,
+            padx=5,
+            pady=5
+        )
+       # TODO: toggle units?
+        self.calibration_freq_units2 = ttk.Label(
+            self.calibration_internal_container,
+            width=5,
+            text="MHz"
+        )
+        self.calibration_freq_units2.grid(
+            row=0,
+            column=7,
+            columnspan=2,
+            padx=5,
+            pady=5
+        )
+        self.calibration_bandwidth_label = tk.Label(
+            self.calibration_internal_container,
+            text="Bandwidth",
+            width=15,
+            anchor=tk.NW
+        )
+        self.calibration_bandwidth_label.grid(
+            row=1,
+            column=0,
+            columnspan=4,
+            padx=5,
+            pady=5
+        )
+        self.calibration_bandwidth_text = tk.StringVar()
+        self.calibration_bandwidth = ttk.Entry(
+            self.calibration_internal_container,
+            textvariable=self.calibration_bandwidth_text
+        )
+        self.calibration_bandwidth.grid(
+            row=1,
+            column=5,
+            columnspan=2,
+            padx=5,
+            pady=5
+        )
+        # TODO: toggle units?
+        self.calibration_freq_units = ttk.Label(
+            self.calibration_internal_container,
+            width=5,
+            text="MHz"
+        )
+        self.calibration_freq_units.grid(
+            row=1,
+            column=7,
+            columnspan=2,
+            padx=5,
+            pady=5
+        )
+        self.calibration_button = ttk.Button(
+            self.calibration_container,
+            style="success.TButton",
+            text="Calibrate".center(self.STRING_LENGTH, ' '),
+            command=self.calibrate
+        )
+        self.calibration_button.pack(
+            padx=5,
+            pady=(0, 10),
+            side=tk.BOTTOM,
+            anchor=tk.CENTER
+        )
+
     # Get dict of tracked (name->freq)
     # so that the sdr can run scan/extract check against this list
     def get_tracked_list(self):
@@ -321,3 +432,11 @@ class CoverageSdrTab(ttk.Frame):
             values=tuple((name, freq))
         )
         self.iid += 1
+
+    def calibrate(self):
+        self.coverage.coverage_display_data.calibrate()
+
+    def get_calibrate_parameters(self):
+        center_freq = int(self.center_freq_calibration_text.get()) * 1e6
+        bandwidth = int(self.calibration_bandwidth_text.get()) * 1e6
+        return center_freq, bandwidth
