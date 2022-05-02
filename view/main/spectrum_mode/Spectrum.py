@@ -80,7 +80,7 @@ class SpectrumPage(ttk.Frame):
         if self.is_calibrating == False:
             self.bottom_container.disable_button()
             self.is_calibrating = True
-            print("calibrate spectrum")
+            print("start spectrum calibration")
 
             # get centre freq
             center_freq = self.spectrum_setting_container.get_center_freq()
@@ -114,6 +114,7 @@ class SpectrumPage(ttk.Frame):
             self.spectrum_setting_container.display_calibration_done()
             self.bottom_container.enable_button()
             self.is_calibrating = False
+            print("complete spectrum calibration")
 
     def handle_spectrum_start(self):
 
