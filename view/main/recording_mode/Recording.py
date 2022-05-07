@@ -7,7 +7,6 @@ from model.CalibrateHandler import CalibrateHandler
 from model.ConfigPacker import ConfigParser
 from view.main.FrequencyPane import FrequencyPane
 from view.main.recording_mode.RecordingSettingPane import RecordingSettingPane
-from view.main.recording_mode.RecordingSpecPlot import RecordingSpecPlot
 from view.main.recording_mode.RecordingWaterfallPlot import \
     RecordingWaterfallPlot
 from view.main.SelectDriverPane import SelectDriverPane
@@ -90,6 +89,7 @@ class RecordingPage(ttk.Frame):
     def handle_calibrate(self):
         if self.is_calibrating == False:
             print("start recording mode calibration")
+            self.is_calibrating = True
 
             # get centre freq
             center_freq = self.recording_setting.get_center_freq()
@@ -100,17 +100,16 @@ class RecordingPage(ttk.Frame):
             # check if calibration can be done
             if center_freq == "" or bandwidth == "":
                 self.recording_setting.display_error_message(isStarted=False)
+                self.is_calibrating = False
                 return
 
             self.bottom.disable_calibration_button()
-            print("start recording mode calibration")
-            self.is_calibrating = True
 
             # Start process
             driver_name = self.select_driver_pane.get_driver_input()
-            c = CalibrateHandler()
+            self.c = CalibrateHandler()
             self.pipe_here, pipe_calibrate = Pipe(True)
-            c.start(driver_name, pipe_calibrate, center_freq, bandwidth, bandwidth)
+            self.c.start(driver_name, pipe_calibrate, center_freq, bandwidth, bandwidth)
 
             self.parent.after(100, self.get_calibrate)
             self.recording_setting.display_calibration_message()
@@ -221,9 +220,9 @@ class RecordingPage(ttk.Frame):
             self.parent.after(500, self.get_process)
 
     def handle_recording_stop(self):
-        print("stop recording")
 
         if self.controller.is_recording_start == True:
+            print("stop recording")
 
             self.controller.stop_recording_process()
 

@@ -226,10 +226,22 @@ class CoverageSdrTab(ttk.Frame):
         self.clear_button.pack(
             padx=5,
             pady=(0, 10),
-            side=tk.RIGHT,
+            side=tk.LEFT,
             anchor=tk.CENTER
         )
 
+        self.stop_button = ttk.Button(
+            self.button_containers,
+            style="danger.TButton",
+            text="Stop".center(self.STRING_LENGTH, ' '),
+            command=self.coverage.stop_handler
+        )
+        self.stop_button.pack(
+            padx=5,
+            pady=(0, 10),
+            side=tk.RIGHT,
+            anchor=tk.CENTER
+        )
         # ---------------------------------------------
 
         # Create container for form to calibrate

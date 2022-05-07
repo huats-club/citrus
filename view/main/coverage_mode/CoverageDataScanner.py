@@ -286,3 +286,6 @@ class CoverageDataScanner(ttk.Frame):
             self.interfaces_selection.select(self.wifi_tab)
         else:
             self.interfaces_selection.select(self.sdr_tab)
+
+    def stop(self):
+        self.sdr_handler.close()

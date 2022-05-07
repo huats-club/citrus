@@ -346,3 +346,6 @@ class CoveragePage(ttk.Frame):
         self.has_points = True
 
         self.coverage_canvas.enable_click()
+
+    def stop_handler(self):
+        self.coverage_display_data.stop()
