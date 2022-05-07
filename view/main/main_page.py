@@ -62,4 +62,4 @@ class MainPage(ttk.Notebook):
         )
 
         # Temporarily select Coverage as main
-        self.select(self.coverage_page)
+        self.select(self.spectrum_page)

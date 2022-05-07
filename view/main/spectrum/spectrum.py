@@ -29,7 +29,7 @@ class SpectrumPage(ttk.Frame):
             expand=True
         )
 
-        # Create spectrum analyzer plot container
+        # Create spectrum plot
         self.spectrum_plot_container = tk.Frame(
             self.container
         )
@@ -40,7 +40,6 @@ class SpectrumPage(ttk.Frame):
             fill=tk.BOTH,
             expand=True
         )
-
         self.spectrum_plot = SpectrumPlot(
             self.spectrum_plot_container,
             self.controller,
@@ -51,13 +50,39 @@ class SpectrumPage(ttk.Frame):
         self.spectrum_plot.create_empty_plot()
 
         # Create bottom bar for start, stop and save
-        self.bottom_container = SpectrumSettingPane(self.spectrum_plot_container, self, controller)
+        self.operation_settings_pane = SpectrumSettingPane(self.spectrum_plot_container, self, controller)
 
         # Create select driver pane
         self.spectrum_select_driver_pane = SelectDriverPane(self.container, self.controller)
 
         # Create settings pane container
-        self.spectrum_setting_container = FrequencyPane(self.container, self.controller)
+        self.frequency_setting_container = FrequencyPane(self.container, self.controller)
 
-    def get_driver(self):
+    # Required method to get the driver value input
+    def get_driver_input(self):
         return self.spectrum_select_driver_pane.get_driver_input()
+
+    # Required method to get frequency setting pane
+    def get_frequency_setting_pane(self):
+        return self.frequency_setting_container
+
+    # Required method to set the error message that frequency not entered when calibration is done
+    def set_invalid_calibration_message(self):
+        self.enable_calibration()
+        self.frequency_setting_container.display_error_message(isStarted=False)
+
+    # Required method to set calibration in progress error
+    def set_valid_calibration_message(self):
+        self.frequency_setting_container.display_calibration_message()
+
+    # Required method to set calibration completed
+    def set_calibration_complete_message(self):
+        self.frequency_setting_container.display_calibration_done()
+
+    # Required method to disable calibration mode
+    def disable_calibration(self):
+        self.operation_settings_pane.disable_calibration_button()
+
+    # Required method to enable calibration mode
+    def enable_calibration(self):
+        self.operation_settings_pane.enable_calibration_button()

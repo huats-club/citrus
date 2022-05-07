@@ -20,7 +20,8 @@ class SpectrumSettingPane(tk.Frame):
         self.calibrate_button = ttk.Button(
             self,
             style="primary.TButton",
-            text="Calibrate"
+            text="Calibrate",
+            command=lambda: self.controller.on_calibrate(self.spectrum)
         )
         self.calibrate_button.pack(
             side=tk.LEFT,
