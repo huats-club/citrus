@@ -90,6 +90,8 @@ class SpectrumPage(ttk.Frame):
 
             # check if calibration can be done
             if center_freq == "" or bandwidth == "":
+                self.bottom_container.enable_calibration_button()
+                self.is_calibrating = False
                 self.spectrum_setting_container.display_error_message(isStarted=False)
                 return
 
