@@ -1,11 +1,14 @@
 import tkinter as tk
+import warnings
 from tkinter import ttk
 
+import config.app_parameters as app_parameters
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import pandas as pd
-import config.app_parameters as app_parameters
+
+warnings.simplefilter("ignore", UserWarning)
 
 
 class SpectrumPlot(ttk.Frame):

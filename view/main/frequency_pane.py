@@ -201,7 +201,6 @@ class FrequencyPane(ttk.LabelFrame):
 
     # TODO: maybe abstract into another message container/class later
     def display_error_message(self, isStarted):
-
         if isStarted:
             self.error_message.set("Error! Spectrum Analyzer already started.")
         else:

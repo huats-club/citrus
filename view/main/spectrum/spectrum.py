@@ -4,8 +4,8 @@ from tkinter import ttk
 import config.app_parameters as app_parameters
 from view.main.frequency_pane import FrequencyPane
 from view.main.select_driver_pane import SelectDriverPane
-from view.main.spectrum.spectrum_setting_pane import SpectrumSettingPane
 from view.main.spectrum.spectrum_plot import SpectrumPlot
+from view.main.spectrum.spectrum_setting_pane import SpectrumSettingPane
 
 
 class SpectrumPage(ttk.Frame):
@@ -86,3 +86,23 @@ class SpectrumPage(ttk.Frame):
     # Required method to enable calibration mode
     def enable_calibration(self):
         self.operation_settings_pane.enable_calibration_button()
+
+    # Method to invoke display of error message when calibration not done prior to start
+    def set_missing_calibration_on_start_message(self):
+        self.frequency_setting_container.display_calibration_error_message()
+
+    # Method to disable start button
+    def disable_start(self):
+        self.operation_settings_pane.disable_start_button()
+
+    # Method to enable start button
+    def enable_start(self):
+        self.operation_settings_pane.enable_start_button()
+
+    # Method to setup plot axis
+    def setup_plot_axis(self, start_freq, center_freq, end_freq, units):
+        self.spectrum_plot.set_X_axis_freq(start_freq, center_freq, end_freq, units)
+
+    # Method to do plot
+    def do_plot(self, data):
+        self.spectrum_plot.do_plot(data)

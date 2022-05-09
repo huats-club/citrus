@@ -24,6 +24,7 @@ def process_calibrate(driver_name, pipe_out, center_freq, bandwidth, sample_rate
     pipe_out.send(data.tolist())
 
     p.close()
+    print("SDR closed after calibration")
     return
 
 

@@ -1,9 +1,13 @@
 import tkinter as tk
-from view.start.start_page import StartPage
-from view.main.main_page import MainPage
+from multiprocessing import Pipe
+
+import numpy as np
+
 import config.app_parameters as app_parameters
 from model.calibrate_handler import CalibrateHandler
-from multiprocessing import Pipe
+from model.sdr_handler import SDRHandler
+from view.main.main_page import MainPage
+from view.start.start_page import StartPage
 
 
 class Controller:
@@ -17,8 +21,17 @@ class Controller:
         # Create start page
         self.start = StartPage(self.container, self)
 
+        # Main page is None now
+        self.main_page = None
+
         # Flag to indicate if still calibrating
         self.is_calibrating = False
+
+        # Store calibrate data
+        self.calibrate_data = None
+
+        # Flag to indicate if spectrum is start
+        self.is_spectrum_start = False
 
     # Method is invoked when the user clicks on "start" in Start page
     def on_start_button_press(self):
@@ -84,11 +97,13 @@ class Controller:
                 # Re-enable calibration
                 page.enable_calibration()
 
+                self.is_calibrating = False
+
                 return
 
             print(f"Center freq: {center_freq}, bandwidth: {bandwidth}")
 
-            # TODO: do calibration and feed back to page mode
+            # Do calibration
             c = CalibrateHandler()
             self.pipe_here, pipe_calibrate = Pipe(True)
             c.start(driver_name, pipe_calibrate, center_freq, bandwidth, bandwidth)
@@ -119,3 +134,101 @@ class Controller:
             page.enable_calibration()
 
             print("complete spectrum mode calibration")
+
+    # Method is invoked when spectrum starts
+    def on_spectrum_start(self, spectrum_page):
+
+        if self.is_spectrum_start == True:
+
+            frequency_pane = spectrum_page.get_frequency_setting_pane()
+            frequency_pane.display_error_message(True)
+            spectrum_page.disable_start()
+            self.is_spectrum_start = True
+
+        elif self.is_spectrum_start == False:
+
+            self.is_spectrum_start = True
+            spectrum_page.disable_start()
+
+            # If no calibrate data or deleted, display error message
+            if self.calibrate_data == None:
+                spectrum_page.set_missing_calibration_on_start_message()
+                spectrum_page.enable_start()
+                self.is_spectrum_start = False
+                return
+
+            # Retrieve frequency and bandwidth pane
+            frequency_pane = spectrum_page.get_frequency_setting_pane()
+
+            # Get centre freq and bandwidth
+            center_freq, bandwidth = frequency_pane.get_center_freq(), frequency_pane.get_bandwidth()
+            start_freq_string, end_freq_string = frequency_pane.get_start_freq(), frequency_pane.get_stop_freq()
+            units = frequency_pane.get_freq_units()
+
+            # Get driver
+            driver_name = spectrum_page.get_driver_input()
+
+            # Check if spectrum start can be done
+            if center_freq == "" or bandwidth == "" or driver_name == "":
+
+                # Set error message
+                frequency_pane.display_error_message(False)
+
+                # Re-enable spectrum start button
+                spectrum_page.enable_start()
+
+                return
+
+            # Disable toggle to other tab
+            self.main_page.disable_toggle_tab()
+
+            # Disable setting of frequency in frequency pane
+            frequency_pane.disable_frequency_pane()
+
+            print(
+                f"start freq | center freq | end freq | {start_freq_string} {center_freq} {end_freq_string} | {units} | bandwidth: {bandwidth}")
+
+            # Setup x-axis
+            spectrum_page.setup_plot_axis(start_freq_string, center_freq, end_freq_string, units)
+
+            # Begin sdr handler
+            self.sdr_handler = SDRHandler(driver_name)
+            self.sdr_handler.start(center_freq, bandwidth, bandwidth)
+            data_pipe = self.sdr_handler.get_output_pipe()
+
+            # Proceed to polling method for spectrum
+            self.view.after(100, lambda: self.poll_spectrum(spectrum_page, self.sdr_handler, data_pipe))
+
+    def poll_spectrum(self, spectrum_page, sdr_handler, data_pipe):
+
+        # Poll for incoming data and retrieve
+        if self.is_spectrum_start == True and data_pipe.poll(timeout=0):
+            data = data_pipe.recv()
+
+            average_of_all_calibrate = np.average(data)
+            data = np.subtract(data, self.calibrate_data)
+            data = data + average_of_all_calibrate
+
+            # do plot
+            x = data.tolist()
+
+            for idx in range(len(x)):
+                if x[idx] < 0:
+                    x[idx] = average_of_all_calibrate
+
+            # do plot
+            spectrum_page.do_plot(x)
+
+        if self.is_spectrum_start == True:
+            self.view.after(50, lambda: self.poll_spectrum(spectrum_page, sdr_handler, data_pipe))
+
+    # Method is invoked when spectrum starts
+    def on_spectrum_stop(self, spectrum_page):
+
+        if self.is_spectrum_start == True:
+            self.is_spectrum_start = False
+            self.sdr_handler.stop()
+            self.sdr_handler = None
+            spectrum_page.enable_start()
+            # Enable toggle to other tab
+            self.main_page.enable_toggle_tab()

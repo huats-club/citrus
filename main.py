@@ -2,8 +2,8 @@ import multiprocessing
 import tkinter as tk
 
 from ttkbootstrap import Style
-import config.app_parameters as app_parameters
 
+import config.app_parameters as app_parameters
 from controller import Controller
 
 # Start running GUI

@@ -33,7 +33,8 @@ class SpectrumSettingPane(tk.Frame):
         self.start_button = ttk.Button(
             self,
             style="success.TButton",
-            text="Start"
+            text="Start",
+            command=lambda: self.controller.on_spectrum_start(self.spectrum)
         )
         self.start_button.pack(
             side=tk.LEFT,
@@ -45,7 +46,8 @@ class SpectrumSettingPane(tk.Frame):
         self.stop_button = ttk.Button(
             self,
             style="danger.TButton",
-            text="Stop"
+            text="Stop",
+            command=lambda: self.controller.on_spectrum_stop(self.spectrum)
         )
         self.stop_button.pack(
             side=tk.LEFT,
@@ -69,3 +71,9 @@ class SpectrumSettingPane(tk.Frame):
 
     def enable_calibration_button(self):
         self.calibrate_button.configure(state="normal")
+
+    def disable_start_button(self):
+        self.start_button.configure(state="disabled")
+
+    def enable_start_button(self):
+        self.start_button.configure(state="normal")
