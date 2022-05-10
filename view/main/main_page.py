@@ -65,7 +65,7 @@ class MainPage(ttk.Notebook):
         self.select(self.spectrum_page)
 
         # Invoke method in controller when tab changes
-        self.bind('<<NotebookTabChanged>>', lambda: self.controller.on_tab_change)
+        self.bind('<<NotebookTabChanged>>', lambda event: self.controller.on_tab_change(event))
 
     def disable_toggle_tab(self):
         for tab_id in self.tabs():
