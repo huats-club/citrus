@@ -64,6 +64,9 @@ class MainPage(ttk.Notebook):
         # Temporarily select Coverage as main
         self.select(self.spectrum_page)
 
+        # Invoke method in controller when tab changes
+        self.bind('<<NotebookTabChanged>>', lambda: self.controller.on_tab_change)
+
     def disable_toggle_tab(self):
         for tab_id in self.tabs():
             if tab_id != self.select():

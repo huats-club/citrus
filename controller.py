@@ -33,6 +33,11 @@ class Controller:
         # Flag to indicate if spectrum is start
         self.is_spectrum_start = False
 
+    # Method is invoked when main page tab is switched
+    def on_tab_change(self):
+        self.is_calibrating = False
+        self.calibrate_data = None
+
     # Method is invoked when the user clicks on "start" in Start page
     def on_start_button_press(self):
 
