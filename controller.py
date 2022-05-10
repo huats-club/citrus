@@ -34,7 +34,7 @@ class Controller:
         self.is_spectrum_start = False
 
     # Method is invoked when main page tab is switched
-    def on_tab_change(self):
+    def on_tab_change(self, event):
         # NOTE: Need to differentiate and store calibrate data per tab separately?
         self.is_calibrating = False
         self.calibrate_data = None
