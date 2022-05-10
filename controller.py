@@ -85,6 +85,9 @@ class Controller:
             # Indicate that calibrating
             self.is_calibrating = True
 
+            # Disable toggle to other tab
+            self.main_page.disable_toggle_tab()
+
             # Disable calibration first
             page.disable_calibration()
 
@@ -107,6 +110,9 @@ class Controller:
                 page.enable_calibration()
 
                 self.is_calibrating = False
+
+                # Enable toggle to other tab
+                self.main_page.enable_toggle_tab()
 
                 return
 
@@ -141,6 +147,9 @@ class Controller:
 
             # Re-enable calibration
             page.enable_calibration()
+
+            # Disable toggle to other tab
+            self.main_page.enable_toggle_tab()
 
             print("complete spectrum mode calibration")
 
