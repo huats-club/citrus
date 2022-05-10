@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+
 from view.main.frequency_pane import FrequencyPane
 from view.main.recording.recording_setting_pane import RecordingSettingPane
 from view.main.recording.recording_waterfall_plot import RecordingWaterfallPlot
@@ -54,17 +55,17 @@ class RecordingPage(ttk.Frame):
         self.recording_plot.create_empty_3d_plot()
 
         # Create bottom bar of buttons to handle recording mode
-        self.bottom = RecordingSettingPane(
+        self.operation_settings_pane = RecordingSettingPane(
             self.recording_plot_container,
             self,
             self.controller
         )
 
         # Create select driver panel
-        self.select_driver_pane = SelectDriverPane(self.container, self.controller)
+        self.recording_select_driver_pane = SelectDriverPane(self.container, self.controller)
 
         # Create side panel
-        self.recording_setting = FrequencyPane(
+        self.frequency_setting_container = FrequencyPane(
             self.container,
             self.controller
         )
@@ -89,3 +90,48 @@ class RecordingPage(ttk.Frame):
         )
         self.recording_plot.create_empty_3d_plot()
         self.is_3d = True
+
+    # Method is invoked to update the plot
+    def do_plot(self, data):
+        self.recording_plot.do_plot(data)
+
+    # Required method to get the driver value input
+    def get_driver_input(self):
+        return self.recording_select_driver_pane.get_driver_input()
+
+    # Required method to get frequency setting pane
+    def get_frequency_setting_pane(self):
+        return self.frequency_setting_container
+
+    # Required method to set the error message that frequency not entered when calibration is done
+    def set_invalid_calibration_message(self):
+        self.enable_calibration()
+        self.frequency_setting_container.display_error_message(isStarted=False)
+
+    # Required method to set calibration in progress error
+    def set_valid_calibration_message(self):
+        self.frequency_setting_container.display_calibration_message()
+
+    # Required method to set calibration completed
+    def set_calibration_complete_message(self):
+        self.frequency_setting_container.display_calibration_done()
+
+    # Required method to disable calibration mode
+    def disable_calibration(self):
+        self.operation_settings_pane.disable_calibration_button()
+
+    # Required method to enable calibration mode
+    def enable_calibration(self):
+        self.operation_settings_pane.enable_calibration_button()
+
+    # Method to invoke display of error message when calibration not done prior to start
+    def set_missing_calibration_on_start_message(self):
+        self.frequency_setting_container.display_calibration_error_message()
+
+    # Method to disable start button
+    def disable_start(self):
+        self.operation_settings_pane.disable_start_button()
+
+    # Method to enable start button
+    def enable_start(self):
+        self.operation_settings_pane.enable_start_button()

@@ -33,6 +33,9 @@ class Controller:
         # Flag to indicate if spectrum is start
         self.is_spectrum_start = False
 
+        # Flag to indicate if recording is start
+        self.is_recording_start = False
+
     # Method is invoked when main page tab is switched
     def on_tab_change(self, event):
         # NOTE: Need to differentiate and store calibrate data per tab separately?
@@ -236,5 +239,100 @@ class Controller:
             self.sdr_handler.stop()
             self.sdr_handler = None
             spectrum_page.enable_start()
+            # Enable toggle to other tab
+            self.main_page.enable_toggle_tab()
+
+    # Method is invoked when recording starts
+    def on_recording_start(self, recording_page):
+
+        if self.is_recording_start == True:
+
+            frequency_pane = recording_page.get_frequency_setting_pane()
+            frequency_pane.display_error_message(True)
+            recording_page.disable_start()
+            self.is_recording_start = True
+
+        elif self.is_recording_start == False:
+
+            self.is_recording_start = True
+            recording_page.disable_start()
+
+            # If no calibrate data or deleted, display error message
+            if self.calibrate_data == None:
+                recording_page.set_missing_calibration_on_start_message()
+                recording_page.enable_start()
+                self.is_recording_start = False
+                return
+
+            # Retrieve frequency and bandwidth pane
+            frequency_pane = recording_page.get_frequency_setting_pane()
+
+            # Get centre freq and bandwidth
+            center_freq, bandwidth = frequency_pane.get_center_freq(), frequency_pane.get_bandwidth()
+            start_freq_string, end_freq_string = frequency_pane.get_start_freq(), frequency_pane.get_stop_freq()
+            units = frequency_pane.get_freq_units()
+
+            # Get driver
+            driver_name = recording_page.get_driver_input()
+
+            # Check if spectrum start can be done
+            if center_freq == "" or bandwidth == "" or driver_name == "":
+
+                # Set error message
+                frequency_pane.display_error_message(False)
+
+                # Re-enable spectrum start button
+                recording_page.enable_start()
+
+                return
+
+            # Disable toggle to other tab
+            self.main_page.disable_toggle_tab()
+
+            # Disable setting of frequency in frequency pane
+            frequency_pane.disable_frequency_pane()
+
+            print(
+                f"start freq | center freq | end freq | {start_freq_string} {center_freq} {end_freq_string} | {units} | bandwidth: {bandwidth}")
+
+            # Begin sdr handler
+            self.sdr_handler = SDRHandler(driver_name)
+            self.sdr_handler.start(center_freq, bandwidth, bandwidth)
+            data_pipe = self.sdr_handler.get_output_pipe()
+
+            # Proceed to polling method for spectrum
+            self.view.after(100, lambda: self.poll_recording(recording_page, self.sdr_handler, data_pipe))
+
+    def poll_recording(self, recording_page, sdr_handler, data_pipe):
+
+        # Poll for incoming data and retrieve
+        if self.is_recording_start == True and data_pipe.poll(timeout=0):
+            data = data_pipe.recv()
+
+            average_of_all_calibrate = np.average(data)
+            data = np.subtract(data, self.calibrate_data)
+            data = data + average_of_all_calibrate
+
+            # do plot
+            x = data.tolist()
+
+            for idx in range(len(x)):
+                if x[idx] < 0:
+                    x[idx] = average_of_all_calibrate
+
+            # do plot
+            recording_page.do_plot(x)
+
+        if self.is_recording_start == True:
+            self.view.after(50, lambda: self.poll_recording(recording_page, sdr_handler, data_pipe))
+
+    # Method is invoked when recording starts
+    def on_recording_stop(self, recording_page):
+
+        if self.is_recording_start == True:
+            self.is_recording_start = False
+            self.sdr_handler.stop()
+            self.sdr_handler = None
+            recording_page.enable_start()
             # Enable toggle to other tab
             self.main_page.enable_toggle_tab()

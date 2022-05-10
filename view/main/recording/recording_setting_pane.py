@@ -24,7 +24,8 @@ class RecordingSettingPane(tk.Frame):
         self.calibrate_button = ttk.Button(
             self,
             style="primary.TButton",
-            text="Calibrate"
+            text="Calibrate",
+            command=lambda: self.controller.on_calibrate(self.recording)
         )
         self.calibrate_button.pack(
             side=tk.LEFT,
@@ -36,7 +37,8 @@ class RecordingSettingPane(tk.Frame):
         self.start_button = ttk.Button(
             self,
             style="success.TButton",
-            text="Start"
+            text="Start",
+            command=lambda: self.controller.on_recording_start(self.recording)
         )
         self.start_button.pack(
             side=tk.LEFT,
@@ -48,7 +50,8 @@ class RecordingSettingPane(tk.Frame):
         self.stop_button = ttk.Button(
             self,
             style="danger.TButton",
-            text="Stop"
+            text="Stop",
+            command=lambda: self.controller.on_recording_stop(self.recording)
         )
         self.stop_button.pack(
             side=tk.LEFT,
@@ -141,3 +144,9 @@ class RecordingSettingPane(tk.Frame):
 
     def enable_calibration_button(self):
         self.calibrate_button.configure(state="normal")
+
+    def disable_start_button(self):
+        self.start_button.configure(state="disabled")
+
+    def enable_start_button(self):
+        self.start_button.configure(state="normal")

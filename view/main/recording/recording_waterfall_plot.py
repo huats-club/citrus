@@ -2,10 +2,10 @@ import math
 import tkinter as tk
 from tkinter import ttk
 
+import config.app_parameters as app_parameters
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import config.app_parameters as app_parameters
 from matplotlib import cm
 
 
@@ -163,8 +163,8 @@ class RecordingWaterfallPlot(ttk.Frame):
         self.cb.set_ticklabels([str(x) for x in label])
 
         # Recompute ticks for freq label
-        bandwidth = self.recording.recording_setting.get_bandwidth()
-        center_freq = self.recording.recording_setting.get_center_freq()
+        bandwidth = self.recording.get_frequency_setting_pane().get_bandwidth()
+        center_freq = self.recording.get_frequency_setting_pane().get_center_freq()
         freq_increment = bandwidth / 9
         freq_bins = []
         start_freq = center_freq - bandwidth/2

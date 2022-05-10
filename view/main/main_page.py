@@ -62,7 +62,7 @@ class MainPage(ttk.Notebook):
         )
 
         # Temporarily select Coverage as main
-        self.select(self.spectrum_page)
+        self.select(self.recording_page)
 
         # Invoke method in controller when tab changes
         self.bind('<<NotebookTabChanged>>', lambda event: self.controller.on_tab_change(event))
