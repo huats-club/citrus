@@ -35,6 +35,7 @@ class Controller:
 
     # Method is invoked when main page tab is switched
     def on_tab_change(self):
+        # NOTE: Need to differentiate and store calibrate data per tab separately?
         self.is_calibrating = False
         self.calibrate_data = None
 
