@@ -61,7 +61,7 @@ class CoveragePage(ttk.Frame):
         self.coverage_bar = CoverageBar(self.left_container, self.controller, self)
 
         # Create coverage menu to upload file
-        self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller)
+        self.coverage_file_menu = CoverageFileMenu(self.right_container, self.controller, self)
 
         # Create coverage menu bar for right top container
         self.coverage_display_data = CoverageDataScanner(self.right_container, self.controller, self)
@@ -73,3 +73,6 @@ class CoveragePage(ttk.Frame):
     # NOTE: this result set to the pane might be changed by user input
     def set_coverage_save_path(self, path):
         self.coverage_bar.set_save_path(path)
+
+    def set_floorplan_filepath_display(self, path):
+        self.coverage_file_menu.set_dxf_filepath(path)

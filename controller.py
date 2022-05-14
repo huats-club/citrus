@@ -1,5 +1,6 @@
 import tkinter as tk
 from multiprocessing import Pipe
+from tkinter import filedialog as tkfd
 
 import numpy as np
 
@@ -362,3 +363,13 @@ class Controller:
         image_fp = FileNameUtil.createFilepath(dirname, name, self.session.get_uuid())
         print(f"Saving recording image to {image_fp}")
         page.save_plot(image_fp)
+
+    # Method is invoked when Select button is clicked on coverage
+    def on_coverage_floorplan_load(self, coverage):
+        try:
+            path = tkfd.askopenfilename(
+                initialdir="C:/", filetypes=(("dxf files", "*.dxf"),
+                                             ("all files", "*.*")))
+            coverage.set_floorplan_filepath_display(path)
+        except ValueError:
+            coverage.set_floorplan_filepath_display("")

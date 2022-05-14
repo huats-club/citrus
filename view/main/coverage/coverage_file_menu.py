@@ -5,9 +5,10 @@ from tkinter.constants import S
 
 
 class CoverageFileMenu(ttk.LabelFrame):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, coverage, *args, **kwargs):
         self.parent = parent
         self.controller = controller
+        self.coverage = coverage
 
         super().__init__(
             self.parent,
@@ -66,7 +67,8 @@ class CoverageFileMenu(ttk.LabelFrame):
             self.buttons_container,
             style="primary.Outline.TButton",
             text="Select file",
-            state="normal"
+            state="normal",
+            command=lambda: self.controller.on_coverage_floorplan_load(self.coverage)
         )
         self.filepath_entry_button.pack(
             side=tk.LEFT,
@@ -100,14 +102,8 @@ class CoverageFileMenu(ttk.LabelFrame):
             pady=(5, 0)
         )
 
-    def select_dxf_filepath(self):
-        try:
-            self.path = tkfd.askopenfilename(
-                initialdir="C:/", filetypes=(("dxf files", "*.dxf"),
-                                             ("all files", "*.*")))
-            self.filepath_text.set(self.path)
-        except ValueError:
-            self.filepath_text.set("")
+    def set_dxf_filepath(self, path):
+        self.filepath_text.set(path)
 
-    def get_dxf_filepath_selected(self):
+    def get_dxf_filepath(self):
         return self.filepath_text.get(), self.filepath_text.get().split("/")[-1]
