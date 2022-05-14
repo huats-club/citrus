@@ -49,7 +49,7 @@ class CoverageBar(ttk.Frame):
         )
 
         # Create save pane
-        self.save_pane = SavePane(self, self.controller, self.owner, tk.RIGHT, pady=(0, 0))
+        self.save_pane = SavePane(self, self.controller, self.coverage, tk.RIGHT, pady=(0, 0))
 
         # Create toggle button for Create heatmap
         self.create_text = tk.StringVar()

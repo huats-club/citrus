@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from urllib.parse import parse_qs
 
 from view.main.frequency_pane import FrequencyPane
 from view.main.recording.recording_setting_pane import RecordingSettingPane
@@ -65,10 +66,7 @@ class RecordingPage(ttk.Frame):
         self.recording_select_driver_pane = SelectDriverPane(self.container, self.controller)
 
         # Create side panel
-        self.frequency_setting_container = FrequencyPane(
-            self.container,
-            self.controller
-        )
+        self.frequency_setting_container = FrequencyPane(self.container, self.controller)
 
     def handle_switch_spec_plot(self):
         self.recording_plot.destroy()
@@ -140,3 +138,10 @@ class RecordingPage(ttk.Frame):
     # NOTE: this result set to the pane might be changed by user input
     def set_recording_save_path(self, path):
         self.operation_settings_pane.set_save_path(path)
+
+    def get_save_path(self):
+        return self.operation_settings_pane.get_save_path()
+
+    # Method is invoked to save path
+    def save_plot(self, path):
+        self.recording_plot.save(path)

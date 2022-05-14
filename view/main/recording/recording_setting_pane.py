@@ -113,12 +113,7 @@ class RecordingSettingPane(tk.Frame):
         )
 
         # Save button
-        self.save_pane = SavePane(
-            self,
-            self.controller,
-            self.recording,
-            tk.LEFT
-        )
+        self.save_pane = SavePane(self, self.controller, self.recording, tk.LEFT)
 
     def handle_switch_3d_plot(self):
         self.recording.handle_switch_waterfall_plot()
@@ -138,6 +133,9 @@ class RecordingSettingPane(tk.Frame):
 
     def set_save_path(self, path):
         self.save_pane.set_filepath(path)
+
+    def get_save_path(self):
+        return self.save_pane.get_existing_filepath()
 
     def disable_calibration_button(self):
         self.calibrate_button.configure(state="disabled")

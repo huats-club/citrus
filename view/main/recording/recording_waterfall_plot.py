@@ -181,3 +181,6 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         self.isFirst = False
         self.canvas.draw()
+
+    def save(self, filepath):
+        self.fig.savefig(filepath)

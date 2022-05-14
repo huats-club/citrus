@@ -122,5 +122,5 @@ class SpectrumPlot(ttk.Frame):
         # process to string
         self.freq_label_list = [f"{x} {units}Hz" for x in self.freq_label_list]
 
-    def save(self, filepath):
+    def save_plot(self, filepath):
         self.figure.savefig(filepath)

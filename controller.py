@@ -5,8 +5,11 @@ import numpy as np
 
 import config.app_parameters as app_parameters
 from model.calibrate_handler import CalibrateHandler
+from model.file_name_utils import FileNameUtil
 from model.sdr_handler import SDRHandler
 from view.main.main_page import MainPage
+from view.main.recording.recording import RecordingPage
+from view.main.spectrum.spectrum import SpectrumPage
 from view.start.start_page import StartPage
 
 
@@ -338,7 +341,7 @@ class Controller:
         if self.is_recording_start == True:
             self.view.after(50, lambda: self.poll_recording(recording_page, sdr_handler, data_pipe))
 
-    # Method is invoked when recording starts
+    # Method is invoked when recording stops
     def on_recording_stop(self, recording_page):
 
         if self.is_recording_start == True:
@@ -348,3 +351,14 @@ class Controller:
             recording_page.enable_start()
             # Enable toggle to other tab
             self.main_page.enable_toggle_tab()
+
+    # Method is invoked when save button is clicked
+    def on_save(self, page, dirname):
+        name = "citrus"
+        if isinstance(page, RecordingPage):
+            name = "recording"
+        elif isinstance(page, SpectrumPage):
+            name = "spectrum"
+        image_fp = FileNameUtil.createFilepath(dirname, name, self.session.get_uuid())
+        print(f"Saving recording image to {image_fp}")
+        page.save_plot(image_fp)

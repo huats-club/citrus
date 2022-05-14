@@ -107,7 +107,14 @@ class SpectrumPage(ttk.Frame):
     def do_plot(self, data):
         self.spectrum_plot.do_plot(data)
 
+    # Method is invoked to save path
+    def save_plot(self, path):
+        self.spectrum_plot.save_plot(path)
+
     # Method is invoked to set the path of the directory to save plot images
     # NOTE: this result set to the pane might be changed by user input
     def set_spectrum_save_path(self, path):
         self.operation_settings_pane.set_save_path(path)
+
+    def get_save_path(self):
+        return self.operation_settings_pane.get_save_path()

@@ -56,15 +56,13 @@ class SpectrumSettingPane(tk.Frame):
         )
 
         # Save button
-        self.save_pane = SavePane(
-            self,
-            self.controller,
-            self.spectrum,
-            tk.RIGHT
-        )
+        self.save_pane = SavePane( self, self.controller, self.spectrum, tk.RIGHT)
 
     def set_save_path(self, path):
         self.save_pane.set_filepath(path)
+
+    def get_save_path(self):
+        return self.save_pane.get_existing_filepath()
 
     def disable_calibration_button(self):
         self.calibrate_button.configure(state="disabled")

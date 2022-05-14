@@ -4,6 +4,8 @@ class Session:
         self.session_relative_workspace_path = session_relative_workspace_path
         self.session_relative_private_path = session_relative_private_path
 
+        self.uuid = 0
+
     # Method returns the relative path from exe is called
     # e.g. workspace/timestamp
     def get_relative_workspace_path(self):
@@ -13,3 +15,7 @@ class Session:
     # e.g. workspace/timestamp/cache
     def get_relative_private_path(self):
         return self.session_relative_private_path
+
+    def get_uuid(self):
+        self.uuid += 1
+        return self.uuid

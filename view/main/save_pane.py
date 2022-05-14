@@ -7,8 +7,8 @@ class SavePane(ttk.Frame):
     def __init__(self, parent, controller, owner, side, pady=(20, 0), *args, **kwargs):
 
         self.parent = parent
-        self.owner = owner
         self.controller = controller
+        self.owner = owner
 
         super().__init__(
             self.parent,
@@ -64,7 +64,8 @@ class SavePane(ttk.Frame):
         self.save_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
-            text="Save"
+            text="Save",
+            command=lambda: self.controller.on_save(self.owner, self.owner.get_save_path())
         )
         self.save_button.pack(
             side=tk.RIGHT,
@@ -76,9 +77,11 @@ class SavePane(ttk.Frame):
         try:
             self.save_path = tkfd.askdirectory(initialdir="C:/")
             self.filepath_text.set(self.save_path)
-            self.owner.update_save_path(self.save_path)
         except ValueError:
             self.filepath_text.set("")
+
+    def get_existing_filepath(self):
+        return self.filepath_text.get()
 
     def set_filepath(self, path):
         self.path = path
