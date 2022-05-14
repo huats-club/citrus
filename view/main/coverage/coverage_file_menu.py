@@ -68,7 +68,7 @@ class CoverageFileMenu(ttk.LabelFrame):
             style="primary.Outline.TButton",
             text="Select file",
             state="normal",
-            command=lambda: self.controller.on_coverage_floorplan_load(self.coverage)
+            command=lambda: self.controller.on_coverage_floorplan_select(self.coverage)
         )
         self.filepath_entry_button.pack(
             side=tk.LEFT,
@@ -81,7 +81,8 @@ class CoverageFileMenu(ttk.LabelFrame):
             self.buttons_container,
             style="primary.Outline.TButton",
             text="Open file",
-            state="normal"
+            state="normal",
+            command=lambda: self.controller.on_coverage_floorplan_load(self.coverage, self.get_dxf_filepath())
         )
         self.upload_button.pack(
             side=tk.LEFT,
@@ -106,4 +107,5 @@ class CoverageFileMenu(ttk.LabelFrame):
         self.filepath_text.set(path)
 
     def get_dxf_filepath(self):
-        return self.filepath_text.get(), self.filepath_text.get().split("/")[-1]
+        return self.filepath_text.get()
+    # self.filepath_text.get().split("/")[-1]

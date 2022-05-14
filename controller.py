@@ -2,6 +2,7 @@ import tkinter as tk
 from multiprocessing import Pipe
 from tkinter import filedialog as tkfd
 
+import ezdxf
 import numpy as np
 
 import config.app_parameters as app_parameters
@@ -365,7 +366,7 @@ class Controller:
         page.save_plot(image_fp)
 
     # Method is invoked when Select button is clicked on coverage
-    def on_coverage_floorplan_load(self, coverage):
+    def on_coverage_floorplan_select(self, coverage):
         try:
             path = tkfd.askopenfilename(
                 initialdir="C:/", filetypes=(("dxf files", "*.dxf"),
@@ -373,3 +374,19 @@ class Controller:
             coverage.set_floorplan_filepath_display(path)
         except ValueError:
             coverage.set_floorplan_filepath_display("")
+
+    # Method is invoked when Load button is clicked on coverage
+    def on_coverage_floorplan_load(self, coverage, filepath):
+        try:
+            dxf = ezdxf.readfile(filepath)
+            print(f"Opened file: {filepath}")
+
+        except IOError:
+            # self.main_page.coverage_page.set_load_dxf_error_message()
+            return
+
+        except ezdxf.DXFStructureError:
+            # self.main_page.coverage_page.set_load_dxf_error_message()
+            return
+
+        coverage.draw_dxf(dxf)
