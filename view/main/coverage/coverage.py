@@ -120,3 +120,15 @@ class CoveragePage(ttk.Frame):
                 arc["start_angle"],
                 arc["extent"]
             )
+
+    def set_load_dxf_error_message(self):
+        self.coverage_info_panel.set_load_dxf_error_message()
+
+    def enable_canvas_click(self):
+        self.coverage_canvas.enable_click()
+
+    def disable_canvas_click(self):
+        self.coverage_canvas.disable_click()
+
+    def capture_canvas(self, path=""):
+        self.coverage_canvas.capture(path)

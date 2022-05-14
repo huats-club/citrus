@@ -6,6 +6,8 @@ class Session:
 
         self.uuid = 0
 
+        self.cached_floorplan_path = ""
+
     # Method returns the relative path from exe is called
     # e.g. workspace/timestamp
     def get_relative_workspace_path(self):
@@ -19,3 +21,6 @@ class Session:
     def get_uuid(self):
         self.uuid += 1
         return self.uuid
+
+    def set_cached_floorplan_path(self, path):
+        self.cached_floorplan_path = path
