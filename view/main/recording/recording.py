@@ -135,3 +135,8 @@ class RecordingPage(ttk.Frame):
     # Method to enable start button
     def enable_start(self):
         self.operation_settings_pane.enable_start_button()
+
+    # Method is invoked to set the path of the directory to save plot images
+    # NOTE: this result set to the pane might be changed by user input
+    def set_recording_save_path(self, path):
+        self.operation_settings_pane.set_save_path(path)

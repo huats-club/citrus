@@ -8,7 +8,7 @@ from view.main.spectrum.spectrum import SpectrumPage
 
 
 class MainPage(ttk.Notebook):
-    def __init__(self, parent, controller, *args, **kwargs):
+    def __init__(self, parent, controller, session, *args, **kwargs):
         self.parent = parent
         self.controller = controller
         super().__init__(
@@ -66,6 +66,12 @@ class MainPage(ttk.Notebook):
 
         # Invoke method in controller when tab changes
         self.bind('<<NotebookTabChanged>>', lambda event: self.controller.on_tab_change(event))
+
+        # Setup the default save path of the recording page bar
+        self.recording_page.set_recording_save_path(session.get_relative_workspace_path())
+
+        # Setup the default save path of the spectrum page bar
+        self.spectrum_page.set_spectrum_save_path(session.get_relative_workspace_path())
 
     def disable_toggle_tab(self):
         for tab_id in self.tabs():

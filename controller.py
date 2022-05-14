@@ -11,7 +11,7 @@ from view.start.start_page import StartPage
 
 
 class Controller:
-    def __init__(self, root):
+    def __init__(self, root, session):
 
         # Create tkinter container in root
         self.view = root
@@ -23,6 +23,9 @@ class Controller:
 
         # Main page is None now
         self.main_page = None
+
+        # Session object
+        self.session = session
 
         # Flag to indicate if still calibrating
         self.is_calibrating = False
@@ -60,7 +63,7 @@ class Controller:
             self.container.destroy()
 
             # Switch over to main page
-            self.main_page = MainPage(self.view, self)  # parent of main page is root
+            self.main_page = MainPage(self.view, self, self.session)  # parent of main page is root
 
         # If invalid project settings, then indicate error message
         else:

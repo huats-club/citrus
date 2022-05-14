@@ -1,5 +1,8 @@
 from config.app_util import resource_path
 
+WORKSPACE_FOLDER = r'workspace'
+PRIVATE_FOLDER = r'workspace\cached'
+
 ### Main App parameters ###
 APP_HEIGHT = 800
 APP_WIDTH = 1500
