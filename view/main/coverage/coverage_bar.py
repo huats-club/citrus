@@ -84,3 +84,6 @@ class CoverageBar(ttk.Frame):
             *self.ssids
         )
         self.heatmap_menu.pack(side=tk.RIGHT)
+
+    def set_save_path(self, path):
+        self.save_pane.set_filepath(path)

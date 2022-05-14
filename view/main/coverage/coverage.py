@@ -68,3 +68,8 @@ class CoveragePage(ttk.Frame):
 
         # Create error message bar
         self.coverage_info_panel = CoverageInfoPanel(self.right_container, self.controller)
+
+    # Method is invoked to set the path of the directory to save plot images
+    # NOTE: this result set to the pane might be changed by user input
+    def set_coverage_save_path(self, path):
+        self.coverage_bar.set_save_path(path)

@@ -62,7 +62,7 @@ class MainPage(ttk.Notebook):
         )
 
         # Temporarily select Coverage as main
-        self.select(self.recording_page)
+        self.select(self.coverage_page)
 
         # Invoke method in controller when tab changes
         self.bind('<<NotebookTabChanged>>', lambda event: self.controller.on_tab_change(event))
@@ -72,6 +72,9 @@ class MainPage(ttk.Notebook):
 
         # Setup the default save path of the spectrum page bar
         self.spectrum_page.set_spectrum_save_path(session.get_relative_workspace_path())
+
+        # Setup the default save path of the coverage page bar
+        self.coverage_page.set_coverage_save_path(session.get_relative_workspace_path())
 
     def disable_toggle_tab(self):
         for tab_id in self.tabs():
