@@ -5,3 +5,7 @@ class FileNameUtil:
     @staticmethod
     def createFilepath(dirpath, name, uuid, ext="jpg"):
         return f"{dirpath}/{name}_{uuid}.{ext}"
+
+    @staticmethod
+    def createHeatmapFilepath(dirpath, name, uuid, ext="jpg"):
+        return f"{dirpath}/{name}_{uuid}.{ext}"

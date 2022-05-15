@@ -156,3 +156,24 @@ class CoveragePage(ttk.Frame):
     # Method is invoked by controller to get tracked bssid list in Wifi mode
     def get_wifi_tracked_bssid_list(self):
         return self.coverage_display_data.get_wifi_tracked_bssid_list()
+
+    # Method is invoked by controller to set the heatmap allowed to be viewed after generated
+    def set_name_heatmap_path_mapping(self, mapping):
+        # populate ssid name to option menu
+        self.coverage_bar.set_heatmap_selection(list(mapping.keys()))
+
+    # Put up image to canvas, given path to image
+    def put_image(self, path, points, hovertexts):
+        # get path of ssid
+        self.image = tk.PhotoImage(file=path)
+
+        self.coverage_canvas.create_image(
+            -30,
+            -30,
+            image=self.image,
+            anchor=tk.NW
+        )
+
+        for idx in range(len(points)):
+            point = points[idx]
+            self.coverage_canvas.canvas_put_point(point[0], point[1], hovertexts[idx])

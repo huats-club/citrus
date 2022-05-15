@@ -8,6 +8,8 @@ class Session:
 
         self.cached_floorplan_path = ""
 
+        self.dxf_prefix = ""
+
     # Method returns the relative path from exe is called
     # e.g. workspace/timestamp
     def get_relative_workspace_path(self):
@@ -24,3 +26,12 @@ class Session:
 
     def set_cached_floorplan_path(self, path):
         self.cached_floorplan_path = path
+
+    def get_cached_floorplan_path(self):
+        return self.cached_floorplan_path
+
+    def set_dxf_prefix(self, prefix):
+        self.dxf_prefix = prefix
+
+    def get_dxf_prefix(self):
+        return self.dxf_prefix

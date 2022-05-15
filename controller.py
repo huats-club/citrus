@@ -10,6 +10,9 @@ from model.calibrate_handler import CalibrateHandler
 from model.file_name_utils import FileNameUtil
 from model.sdr_handler import SDRHandler
 from model.wifi_handler import WifiHandler
+from model.wifi_heatmap_plotter import WifiHeatmapPlotter
+from model.wifi_result_aggregator import WifiResultAggregator
+from model.wifi_results_converter import WifiResultsConverter
 from model.wifi_scanner import WifiScanner
 from model.wifi_utils import WifiUtils
 from view.main.main_page import MainPage
@@ -53,6 +56,9 @@ class Controller:
 
         # Store wifi and points
         self.map_coord_wifi_entries = {}
+
+        # map (bssid)->(path) for coverage mode
+        self.map_name_path = {}
 
     # Method is invoked when main page tab is switched
     def on_tab_change(self, event):
@@ -403,6 +409,7 @@ class Controller:
 
         # Strip filepath to filename only
         filename = filepath.split("/")[-1].replace(".dxf", "")
+        self.session.set_dxf_prefix(filename)
 
         # Cache the image of display on tkinter canvas after display
         # This is to create an image to etch up to tkinter canvas
@@ -418,6 +425,9 @@ class Controller:
     def on_coverage_floorplan_clear(self, coverage):
         # Clear canvas
         coverage.clear_canvas()
+
+        self.map_coord_wifi_entries.clear()
+        self.bssid_wifi_entry_mapping = {}
 
         # Disable canvas click
         self.main_page.coverage_page.disable_canvas_click()
@@ -449,7 +459,9 @@ class Controller:
     # Method is invoked when clear wifi scanned list
     def on_coverage_wifi_clear(self, coverage):
         coverage.on_coverage_wifi_clear()
+        self.map_coord_wifi_entries.clear()
         self.has_wifi_scanned = False
+        self.bssid_wifi_entry_mapping = {}
 
         # Disable click to add point
         coverage.disable_canvas_click()
@@ -476,7 +488,7 @@ class Controller:
                     wifi_entry_list = pipe_here.recv()
                     break
 
-            print(f"Found: {wifi_entry_list}")
+            print(f"At point ({event.x}, {event.y}): {wifi_entry_list}")
             coverage.add_point(event.x, event.y, WifiUtils.hovertext(wifi_entry_list))
 
             # Store in mapping
@@ -484,3 +496,53 @@ class Controller:
 
         else:
             pass
+
+    # Method is invoked when create heatmap is clicked
+    def on_coverage_create(self, coverage):
+
+        # Get signal (sdr/wifi) from point
+        if coverage.get_current_signal_tab() == "WIFI":
+
+            # If no coordinates, skip
+            if len(self.map_coord_wifi_entries.keys()) == 0:
+                return
+
+            processed_all_data = WifiResultsConverter(self.map_coord_wifi_entries).process()
+            combined_result = WifiResultAggregator(self.map_coord_wifi_entries).process()
+            processed_all_data['Combined'] = combined_result
+
+            # map (ssid)->(path)
+            self.map_name_path = {}
+
+            for name, result in processed_all_data.items():
+                nametemp = name.replace(':', '')
+                filename = f"{self.session.get_dxf_prefix()}_{self.session.get_uuid()}_{nametemp}.png"
+                saved_heatmap_path = f"{self.session.get_relative_private_path()}/{filename}"
+                saved_heatmap_path = saved_heatmap_path.replace(" ", "_")
+
+                # save to map
+                if name != "Combined":
+                    ssid = self.bssid_wifi_entry_mapping[name].ssid
+                    bssid = name
+                    self.map_name_path[f"{ssid}{bssid}"] = saved_heatmap_path
+                else:
+                    self.map_name_path[f"Combined"] = saved_heatmap_path
+
+                WifiHeatmapPlotter(result, self.session.get_cached_floorplan_path()).save(saved_heatmap_path)
+                print(f"Creating {saved_heatmap_path}")
+
+            # Set mapping in option menu for selection
+            coverage.set_name_heatmap_path_mapping(self.map_name_path)
+
+            # Set first image to plot
+            points = list(self.map_coord_wifi_entries.keys())
+            hovertexts = [WifiUtils.hovertext(entry) for entry in list(self.map_coord_wifi_entries.values())]
+            coverage.put_image(list(self.map_name_path.values())[0], points, hovertexts)
+
+    def on_coverage_switch_heatmap(self, coverage, name):
+        path = self.map_name_path[name]
+
+        # Set first image to plot
+        points = list(self.map_coord_wifi_entries.keys())
+        hovertexts = [WifiUtils.hovertext(entry) for entry in list(self.map_coord_wifi_entries.values())]
+        coverage.put_image(path, points, hovertexts)

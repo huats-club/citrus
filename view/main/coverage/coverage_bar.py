@@ -58,7 +58,8 @@ class CoverageBar(ttk.Frame):
         self.create_button = ttk.Button(
             self.plot_container,
             style="primary.Outline.TButton",
-            textvariable=self.create_text
+            textvariable=self.create_text,
+            command=lambda: self.controller.on_coverage_create(self.coverage)
         )
         self.create_button.pack(
             side=tk.LEFT,
@@ -87,3 +88,24 @@ class CoverageBar(ttk.Frame):
 
     def set_save_path(self, path):
         self.save_pane.set_filepath(path)
+
+    # Populate optionmenu with list_ssid
+    def set_heatmap_selection(self, list_ssid):
+        self.ssids = list_ssid
+
+        # update option menu listings
+        self.heatmap_menu.pack_forget()
+
+        # set first value
+        self.heatmap_value_menu.set(list_ssid[0])
+
+        # recreated optionmenu
+        self.heatmap_menu = ttk.OptionMenu(
+            self.plot_container,
+            self.selected_ssid_value,
+            self.ssids[0],
+            *self.ssids,
+            command=lambda a: self.controller.on_coverage_switch_heatmap(self.coverage, self.selected_ssid_value.get())
+        )
+        self.heatmap_menu.configure(width=20)
+        self.heatmap_menu.pack(side=tk.RIGHT)
