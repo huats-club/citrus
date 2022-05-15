@@ -402,3 +402,34 @@ class CoverageSdrTab(ttk.Frame):
 
     def clear_all_sdr_panel(self):
         self.tracking_panel.delete(*self.tracking_panel.get_children())
+
+    # Get dict of tracked (name->freq)
+    # so that the sdr can run scan/extract check against this list
+    def get_tracked_map_name_freq(self):
+
+        tracked = []
+        temp_keys = []
+
+        for child in self.tracking_panel.get_children():
+            all_data = self.tracking_panel.item(child)["values"]
+
+            name = all_data[0]
+            try:
+                freq = float(all_data[1]) * 1e6  # convert to mhz
+            except ValueError:
+                continue
+
+            # print(name, freq)
+
+            # temp
+            temp = {}
+
+            temp[name] = freq
+
+            # record
+            temp_keys.append(name)
+
+            # append
+            tracked.append(temp)
+
+        return tracked
