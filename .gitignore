@@ -17,3 +17,4 @@ binary/*
 ui/*
 app/*
 app_old/*
+!*.exe
