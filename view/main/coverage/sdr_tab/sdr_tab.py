@@ -23,13 +23,6 @@ class CoverageSdrTab(ttk.Frame):
         # uuid for selected
         self.iid = 0
 
-        # Currently selected row of data from list of tracked freq
-        # map (col_name->val)
-        self.current_selected = {}
-
-        # for clearing purposes
-        self.current_selected_focus = ""
-
         # Create column name list to show tracked freq
         self.column_names = [
             'name',
@@ -220,9 +213,6 @@ class CoverageSdrTab(ttk.Frame):
                 anchor=tk.CENTER
             )
 
-        # # Allow clicking of treeview items
-        # self.tracking_panel.bind('<ButtonRelease-1>', self.select_item)
-
         # ---------------------------------------------
 
         # Create container for form to input tracked freq
@@ -331,7 +321,8 @@ class CoverageSdrTab(ttk.Frame):
         self.untrack_button = ttk.Button(
             self.button_containers,
             style="secondary.TButton",
-            text="Untrack".center(self.STRING_LENGTH, ' ')
+            text="Untrack".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.remove_item_from_selected()
         )
         self.untrack_button.pack(
             padx=5,
@@ -351,6 +342,9 @@ class CoverageSdrTab(ttk.Frame):
             side=tk.LEFT,
             anchor=tk.CENTER
         )
+
+    def select_item(self, a):
+        self.current_selected_focus = self.tracking_panel.focus()
 
     def get_bandwidth(self):
         try:
@@ -393,5 +387,14 @@ class CoverageSdrTab(ttk.Frame):
     # Move the selected item in the Display ALL panel to selected panel
     def move_item_to_selected(self):
         data = (self.tracked_name_text.get(), self.tracked_freq_text.get())
+        self.tracked_name_text.set("")
+        self.tracked_freq_text.set("")
         self.tracking_panel.insert(parent='', index=self.iid, iid=self.iid, values=data)
         self.iid += 1
+
+    def remove_item_from_selected(self):
+        # If no items clicked, ignore
+        if not self.tracking_panel.focus():
+            return
+
+        self.tracking_panel.delete(self.tracking_panel.focus())
