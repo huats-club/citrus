@@ -532,6 +532,9 @@ class Controller:
                 print(f"Creating {saved_heatmap_path}")
 
             # Set mapping in option menu for selection
+            print("Storing map:")
+            for name, path in self.map_name_path.items():
+                print(f"\t{name} -> {path}")
             coverage.set_name_heatmap_path_mapping(self.map_name_path)
 
             # Set first image to plot
