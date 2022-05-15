@@ -5,6 +5,7 @@ from tkinter import ttk
 import config.app_parameters as app_parameters
 import matplotlib.backends.backend_tkagg as tkmatplotlib
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 from matplotlib import cm
 
@@ -137,7 +138,7 @@ class RecordingWaterfallPlot(ttk.Frame):
         if not self.isFirst:
             self.cb.remove()
 
-        label = [-10, -20, -30, -40, -50, -60, -70, -80, -90, -100]
+        label = [-10, -20, -30, -40, -50, -60, -70, -80, -90, -100, -110]
 
         if self.is_2d == False:
             pos = "vertical"
@@ -167,11 +168,12 @@ class RecordingWaterfallPlot(ttk.Frame):
         center_freq = self.recording.get_frequency_setting_pane().get_center_freq()
         freq_increment = bandwidth / 9
         freq_bins = []
-        start_freq = center_freq - bandwidth/2
-        end_freq = center_freq + bandwidth/2
+        start_freq = center_freq - bandwidth/2 - freq_increment
+        end_freq = center_freq + bandwidth/2 + freq_increment
         while start_freq < end_freq:
             freq_bins.append("{:.2f}".format(start_freq / 1e6))
             start_freq += freq_increment
+        self.ax.xaxis.set_major_locator(ticker.MaxNLocator(11))
         self.ax.set_xticklabels(freq_bins)
 
         # set axis label
