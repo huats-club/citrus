@@ -1,4 +1,5 @@
 import tkinter as tk
+from re import S
 from tkinter import ttk
 
 from model.dxf2tk import dxf2tk
@@ -7,6 +8,7 @@ from view.main.coverage.coverage_canvas import CoverageCanvas
 from view.main.coverage.coverage_data_scanner import CoverageDataScanner
 from view.main.coverage.coverage_file_menu import CoverageFileMenu
 from view.main.coverage.coverage_info_panel import CoverageInfoPanel
+from view.main.coverage.sdr_tab.sdr_tab import CoverageSdrTab
 
 
 class CoveragePage(ttk.Frame):
@@ -121,6 +123,10 @@ class CoveragePage(ttk.Frame):
                 arc["extent"]
             )
 
+    # Required method to get the driver value input
+    def get_driver_input(self):
+        return self.coverage_display_data.get_driver_input()
+
     def set_load_dxf_error_message(self):
         self.coverage_info_panel.set_load_dxf_error_message()
 
@@ -183,3 +189,27 @@ class CoveragePage(ttk.Frame):
         if path == "":
             return
         self.coverage_canvas.save_plot(path)
+
+    def get_sdr_tab(self):
+        return self.coverage_display_data.sdr_tab
+
+    # Required method to disable calibration mode
+    def disable_calibration(self):
+        self.coverage_display_data.disable_calibration()
+
+    # Required method to enable calibration mode
+    def enable_calibration(self):
+        self.coverage_display_data.enable_calibration()
+
+    # Required method to set calibration in progress error
+    def set_valid_calibration_message(self):
+        self.coverage_display_data.display_calibration_message()
+
+    # Required method to set calibration completed
+    def set_calibration_complete_message(self):
+        self.coverage_display_data.display_calibration_done()
+
+    # Required method to set the error message that frequency not entered when calibration is done
+    def set_invalid_calibration_message(self):
+        self.enable_calibration()
+        self.coverage_display_data.display_calibration_error_message()

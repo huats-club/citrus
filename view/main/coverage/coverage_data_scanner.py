@@ -76,11 +76,12 @@ class CoverageDataScanner(ttk.Frame):
         # Select wifi as main tab
         self.interfaces_selection.select(self.wifi_tab)
 
-        # note when notebook tab change
-        self.interfaces_selection.bind('<<NotebookTabChanged>>', self.switch_SDR_2_wifi_tab)
+        # # note when notebook tab change
+        # self.interfaces_selection.bind('<<NotebookTabChanged>>', self.switch_SDR_2_wifi_tab)
 
-    def switch_SDR_2_wifi_tab(self, a):
-        pass
+    # Required method to get the driver value input
+    def get_driver_input(self):
+        return self.select_driver_pane.get_driver_input()
 
     # Returns WIFI or SDR
     def get_current_tab_name(self):
@@ -100,3 +101,22 @@ class CoverageDataScanner(ttk.Frame):
     # Method is invoked by controller to get wifi bssid entry
     def get_wifi_tracked_bssid_list(self):
         return self.wifi_tab.get_wifi_tracked_bssid_list()
+
+    # Required method to disable calibration mode
+    def disable_calibration(self):
+        self.sdr_tab.disable_calibration_button()
+
+    # Required method to enable calibration mode
+    def enable_calibration(self):
+        self.sdr_tab.enable_calibration_button()
+
+    # TODO: maybe abstract into another message container/class later
+    def display_calibration_message(self):
+        self.sdr_tab.display_calibration_message()
+
+    def display_calibration_done(self):
+        self.sdr_tab.display_calibration_done()
+
+    # TODO: maybe abstract into another message container/class later
+    def display_calibration_error_message(self):
+        self.sdr_tab.display_calibration_error_message()

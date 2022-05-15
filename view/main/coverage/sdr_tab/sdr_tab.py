@@ -151,14 +151,28 @@ class CoverageSdrTab(ttk.Frame):
             pady=5
         )
         self.calibration_button = ttk.Button(
-            self.calibration_container,
+            self.calibration_internal_container,
             style="success.TButton",
-            text="Calibrate".center(self.STRING_LENGTH, ' ')
+            text="Calibrate".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.controller.on_coverage_calibrate(self.coverage)
         )
-        self.calibration_button.pack(
+        self.calibration_button.grid(
+            row=0,
+            column=9,
+            # columnspan=4,
             padx=5,
-            pady=(0, 10),
-            side=tk.BOTTOM,
+            pady=5
+        )
+
+        self.error_message = tk.StringVar()
+        self.error_message_label = ttk.Label(
+            self.calibration_container,
+            style="danger.TLabel",
+            textvariable=self.error_message
+        )
+        self.error_message_label.pack(
+            padx=10,
+            pady=10,
             anchor=tk.CENTER
         )
 
@@ -336,3 +350,41 @@ class CoverageSdrTab(ttk.Frame):
             side=tk.LEFT,
             anchor=tk.CENTER
         )
+
+    def get_bandwidth(self):
+        try:
+            bandwidth = int(self.calibration_bandwidth_text.get()) * 1e6
+        except ValueError:
+            return ""
+        return bandwidth
+
+    def get_center_freq(self):
+        try:
+            center_freq = int(self.center_freq_calibration_text.get()) * 1e6
+        except ValueError:
+            return ""
+        return center_freq
+
+    def disable_calibration_button(self):
+        self.calibration_button.configure(state="disabled")
+
+    def enable_calibration_button(self):
+        self.calibration_button.configure(state="normal")
+
+    # TODO: maybe abstract into another message container/class later
+    def display_calibration_message(self):
+        self.error_message.set("Calibration in progress.")
+
+    def display_calibration_done(self):
+        self.clear_error_message()
+        self.error_message.set("Calibration done.")
+        self.after(3000, self.clear_error_message)
+
+    # TODO: maybe abstract into another message container/class later
+    def display_calibration_error_message(self):
+        self.error_message.set("Error! Calibration not done.")
+        self.after(3000, self.clear_error_message)
+
+    # TODO: maybe abstract into another message container/class later
+    def clear_error_message(self):
+        self.error_message.set("")

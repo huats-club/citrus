@@ -549,3 +549,80 @@ class Controller:
         points = list(self.map_coord_wifi_entries.keys())
         hovertexts = [WifiUtils.hovertext(entry) for entry in list(self.map_coord_wifi_entries.values())]
         coverage.put_image(path, points, hovertexts)
+
+    # Method is called when any calibrate button is pressed
+    # and stores the data in controller
+    def on_coverage_calibrate(self, coverage):
+
+        # Flag required to prevent double clicking
+        if self.is_calibrating == False:
+
+            # Indicate that calibrating
+            self.is_calibrating = True
+
+            # Disable toggle to other tab
+            self.main_page.disable_toggle_tab()
+
+            # Disable calibration first
+            coverage.disable_calibration()
+
+            sdr_tab = coverage.get_sdr_tab()
+
+            # Get centre freq and bandwidth
+            center_freq, bandwidth = sdr_tab.get_center_freq(), sdr_tab.get_bandwidth()
+
+            # Get driver
+            driver_name = coverage.get_driver_input()
+
+            # Check if calibration can be done
+            if center_freq == "" or bandwidth == "" or driver_name == "":
+
+                # Set error message
+                coverage.set_invalid_calibration_message()
+
+                # Re-enable calibration
+                coverage.enable_calibration()
+
+                self.is_calibrating = False
+
+                # Enable toggle to other tab
+                self.main_page.enable_toggle_tab()
+
+                return
+
+            print(f"Center freq: {center_freq}, bandwidth: {bandwidth}")
+
+            # Do calibration
+            c = CalibrateHandler()
+            self.pipe_here, pipe_calibrate = Pipe(True)
+            c.start(driver_name, pipe_calibrate, center_freq, bandwidth, bandwidth)
+
+            # Proceed to calibration polling method
+            self.view.after(100, lambda: self.poll_coverage_calibrate(coverage))
+            coverage.set_valid_calibration_message()
+
+    def poll_coverage_calibrate(self, coverage):
+
+        # Poll for incoming data and retrieve
+        if self.pipe_here.poll(timeout=0):
+            data = self.pipe_here.recv()
+            self.calibrate_data = data
+            self.is_calibrating = False
+
+        if self.is_calibrating == True:
+            self.view.after(50, lambda: self.poll_calibrate(coverage))
+
+        else:
+            # Display completed calibration message
+            coverage.set_calibration_complete_message()
+
+            # Indicate that calibrating stopped at the <END>
+            self.is_calibrating = False
+
+            # Re-enable calibration
+            coverage.enable_calibration()
+
+            # Disable toggle to other tab
+            self.main_page.enable_toggle_tab()
+
+            print("complete coverage mode calibration")
