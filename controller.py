@@ -1,3 +1,4 @@
+import math
 import tkinter as tk
 from multiprocessing import Pipe
 from tkinter import filedialog as tkfd
@@ -7,8 +8,13 @@ import numpy as np
 
 import config.app_parameters as app_parameters
 from model.calibrate_handler import CalibrateHandler
+from model.coverage_handler import CoverageSingleHandler
 from model.file_name_utils import FileNameUtil
+from model.sdr_entry import SdrEntry
 from model.sdr_handler import SDRHandler
+from model.sdr_result_aggregator import SdrResultAggregator
+from model.sdr_results_converter import SdrResultsConverter
+from model.sdr_utils import SdrUtils
 from model.wifi_handler import WifiHandler
 from model.wifi_heatmap_plotter import WifiHeatmapPlotter
 from model.wifi_result_aggregator import WifiResultAggregator
@@ -56,6 +62,9 @@ class Controller:
 
         # Store wifi and points
         self.map_coord_wifi_entries = {}
+
+        # Store sdr and points
+        self.map_coord_sdr_entries = {}
 
         # map (bssid)->(path) for coverage mode
         self.map_name_path = {}
@@ -469,12 +478,12 @@ class Controller:
     # Method is invoked when point is clicked and added to canvas
     def on_coverage_put_point(self, event, coverage):
 
-        # If false, skip add point
-        if self.has_wifi_scanned == False:
-            return
-
         # Get signal (sdr/wifi) from point
         if coverage.get_current_signal_tab() == "WIFI":
+
+            # If false, skip add point
+            if self.has_wifi_scanned == False:
+                return
 
             # Get list of bssid to track
             tracked_list_bssid = coverage.get_wifi_tracked_bssid_list()
@@ -495,7 +504,77 @@ class Controller:
             self.map_coord_wifi_entries[(event.x, event.y)] = wifi_entry_list
 
         else:
-            pass
+
+            if self.calibrate_data == None:
+                coverage.set_invalid_calibration_message()
+                return
+
+            sdr_tab = coverage.get_sdr_tab()
+            tracked_freq_names = sdr_tab.get_tracked_map_name_freq()
+
+            # store names and freqs
+            names = []
+            freqs = []
+
+            # calculate best range
+            bandwidth = 20e6
+            min_freq = 100e9
+            max_freq = 0
+
+            for pair in tracked_freq_names:
+                name, freq = list(pair.items())[0]
+                names.append(name)
+                freqs.append(freq)
+
+                if freq > max_freq:
+                    max_freq = freq
+
+                if freq < min_freq:
+                    min_freq = freq
+
+            print(f"min freq: {min_freq}, max_freq: {max_freq}")
+            scan_center_freq = (min_freq + max_freq) / 2
+            driver = coverage.get_driver_input()
+            c = CoverageSingleHandler(driver, self.calibrate_data)
+            c.start(scan_center_freq, bandwidth, bandwidth)
+            dbm_data = c.get_result()
+            c.close()
+
+            # track if each has freq to be tracked
+            scan_freq_inc = bandwidth / len(dbm_data)
+            start_freq = scan_center_freq - 0.5*bandwidth
+            end_freq = scan_center_freq + 0.5*bandwidth
+            print(f"start freq: {start_freq}, center_freq: {scan_center_freq}, end_freq: {end_freq}")
+            print(f"freq increment: {scan_freq_inc:.5f}")
+
+            # Pack into sdr result object
+            sdr_entry_list = []
+            for idx in range(len(freqs)):
+                # compute idx to search
+                located_center_idx = math.ceil((freqs[idx] - start_freq) / scan_freq_inc)
+                left_bound_idx = located_center_idx - 1
+                right_bound_idx = located_center_idx + 1
+
+                # prevent out of bounds
+                if left_bound_idx < 0:
+                    left_bound_idx = 0
+                if right_bound_idx > len(dbm_data):
+                    right_bound_idx = len(dbm_data)
+
+                print(f"searching: {left_bound_idx} -> {right_bound_idx}")
+
+                # find the max dbm
+                max_dbm_found = -100
+                for idx2 in range(left_bound_idx, right_bound_idx+1):
+                    if idx2 < len(dbm_data) and dbm_data[idx2] > max_dbm_found:
+                        max_dbm_found = dbm_data[idx2]
+                print(f"found max: {max_dbm_found:.5f}")
+
+                sdr_entry_list.append(SdrEntry(names[idx], freqs[idx]/1e6, max_dbm_found))
+
+            print(f"At point ({event.x}, {event.y}): {sdr_entry_list}")
+            coverage.add_point(event.x, event.y, SdrUtils.hovertext(sdr_entry_list))
+            self.map_coord_sdr_entries[(event.x, event.y)] = sdr_entry_list
 
     # Method is invoked when create heatmap is clicked
     def on_coverage_create(self, coverage):
@@ -507,12 +586,12 @@ class Controller:
             if len(self.map_coord_wifi_entries.keys()) == 0:
                 return
 
+            # map (ssid)->(path)
+            self.map_name_path = {}
+
             processed_all_data = WifiResultsConverter(self.map_coord_wifi_entries).process()
             combined_result = WifiResultAggregator(self.map_coord_wifi_entries).process()
             processed_all_data['Combined'] = combined_result
-
-            # map (ssid)->(path)
-            self.map_name_path = {}
 
             for name, result in processed_all_data.items():
                 nametemp = name.replace(':', '')
@@ -542,18 +621,68 @@ class Controller:
             hovertexts = [WifiUtils.hovertext(entry) for entry in list(self.map_coord_wifi_entries.values())]
             coverage.put_image(list(self.map_name_path.values())[0], points, hovertexts)
 
+        else:
+
+            if self.calibrate_data == None:
+                coverage.set_invalid_calibration_message()
+                return
+
+            # If no coordinates, skip
+            if len(self.map_coord_sdr_entries.keys()) == 0:
+                return
+
+            # map (name)->(path)
+            self.map_name_path = {}
+
+            processed_all_data = SdrResultsConverter(self.map_coord_sdr_entries).process()
+            combined_result = SdrResultAggregator(self.map_coord_sdr_entries).process()
+            processed_all_data['Combined'] = combined_result
+
+            for name, result in processed_all_data.items():
+                nametemp = name.replace(':', '')
+                filename = f"{self.session.get_dxf_prefix()}_{self.session.get_uuid()}_{nametemp}.png"
+                saved_heatmap_path = f"{self.session.get_relative_private_path()}/{filename}"
+                saved_heatmap_path = saved_heatmap_path.replace(" ", "_")
+
+                # save to map
+                if name != "Combined":
+                    self.map_name_path[f"{name}"] = saved_heatmap_path
+                else:
+                    self.map_name_path[f"Combined"] = saved_heatmap_path
+
+                WifiHeatmapPlotter(result, self.session.get_cached_floorplan_path()).save(saved_heatmap_path)
+                print(f"Creating {saved_heatmap_path}")
+
+            # Set mapping in option menu for selection
+            print("Storing map:")
+            for name, path in self.map_name_path.items():
+                print(f"\t{name} -> {path}")
+            coverage.set_name_heatmap_path_mapping(self.map_name_path)
+
+            # Set first image to plot
+            points = list(self.map_coord_sdr_entries.keys())
+            hovertexts = [SdrUtils.hovertext(entry) for entry in list(self.map_coord_sdr_entries.values())]
+            coverage.put_image(list(self.map_name_path.values())[0], points, hovertexts)
+
     def on_coverage_switch_heatmap(self, coverage, name):
         path = self.map_name_path[name]
 
-        # Set first image to plot
-        points = list(self.map_coord_wifi_entries.keys())
-        hovertexts = [WifiUtils.hovertext(entry) for entry in list(self.map_coord_wifi_entries.values())]
-        coverage.put_image(path, points, hovertexts)
+        # Get signal (sdr/wifi) from point
+        if coverage.get_current_signal_tab() == "WIFI":
+            # Set first image to plot
+            points = list(self.map_coord_wifi_entries.keys())
+            hovertexts = [WifiUtils.hovertext(entry) for entry in list(self.map_coord_wifi_entries.values())]
+            coverage.put_image(path, points, hovertexts)
+
+        else:
+            # Set first image to plot
+            points = list(self.map_coord_sdr_entries.keys())
+            hovertexts = [SdrUtils.hovertext(entry) for entry in list(self.map_coord_sdr_entries.values())]
+            coverage.put_image(path, points, hovertexts)
 
     # Method is called when any calibrate button is pressed
     # and stores the data in controller
     def on_coverage_calibrate(self, coverage):
-
         # Flag required to prevent double clicking
         if self.is_calibrating == False:
 
