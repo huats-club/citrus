@@ -15,3 +15,6 @@ class WifiEntry:
 
     def values(self):
         return (self.ssid, self.bssid, self.channel_frequency, f"{self.channel_number}@{self.channel_width}")
+
+    def format(self):
+        pass

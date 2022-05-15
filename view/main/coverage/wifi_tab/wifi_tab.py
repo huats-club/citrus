@@ -283,9 +283,17 @@ class CoverageWifiTab(ttk.Frame):
         self.current_selected_from_display_all = None
         self.current_selected_iid_from_display_all = 0
 
-
     # Clear display tracked pane
     def clear_display_tracked_pane(self):
         self.display_tracked_panel.delete(*self.display_tracked_panel.get_children())
         self.current_selected_from_display_tracked = None
         self.current_selected_iid_from_display_tracked = 0
+
+    # Method is invoked by controller to get wifi bssid entry
+    def get_wifi_tracked_bssid_list(self):
+        bssid_list = []
+        idx = 1
+        for child in self.display_tracked_panel.get_children():
+            all_data = self.display_tracked_panel.item(child)["values"]
+            bssid_list.append(all_data[idx])  # assumes first item is bssid
+        return bssid_list

@@ -96,3 +96,7 @@ class CoverageDataScanner(ttk.Frame):
     def coverage_wifi_clear(self):
         self.wifi_tab.clear_display_tracked_pane()
         self.wifi_tab.clear_display_all_pane()
+
+    # Method is invoked by controller to get wifi bssid entry
+    def get_wifi_tracked_bssid_list(self):
+        return self.wifi_tab.get_wifi_tracked_bssid_list()

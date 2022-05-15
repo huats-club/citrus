@@ -11,6 +11,7 @@ from model.file_name_utils import FileNameUtil
 from model.sdr_handler import SDRHandler
 from model.wifi_handler import WifiHandler
 from model.wifi_scanner import WifiScanner
+from model.wifi_utils import WifiUtils
 from view.main.main_page import MainPage
 from view.main.recording.recording import RecordingPage
 from view.main.spectrum.spectrum import SpectrumPage
@@ -439,30 +440,41 @@ class Controller:
             print(f"Scanned: {results}")
             coverage.populate_scanned_wifi_list(results)
 
+            # Enable click to add point
+            coverage.enable_canvas_click()
+
     # Method is invoked when clear wifi scanned list
     def on_coverage_wifi_clear(self, coverage):
         coverage.on_coverage_wifi_clear()
         self.has_wifi_scanned = False
 
+        # Disable click to add point
+        coverage.disable_canvas_click()
+
     # Method is invoked when point is clicked and added to canvas
     def on_coverage_put_point(self, event, coverage):
+
+        # If false, skip add point
+        if self.has_wifi_scanned == False:
+            return
+
         # Get signal (sdr/wifi) from point
         if coverage.get_current_signal_tab() == "WIFI":
-            # Get list of ssid tracked
-            tracked_list_mac = coverage.get_tracked_list()
-            print(tracked_list_mac)
+
+            # Get list of bssid to track
+            tracked_list_bssid = coverage.get_wifi_tracked_bssid_list()
+            print(f"Tracking bssids: {tracked_list_bssid}")
 
             pipe_handler, pipe_here = Pipe(True)
-            WifiHandler(tracked_list_mac, pipe_handler).start()
+            WifiHandler(tracked_list_bssid, pipe_handler).start()
             isRun = True
             while isRun:
                 if pipe_here.poll(timeout=0):
-                    wifi_list_json = pipe_here.recv()
+                    wifi_entry_list = pipe_here.recv()
                     break
 
-            print(wifi_list_json)
+            print(f"Found: {wifi_entry_list}")
+            coverage.add_point(event.x, event.y, WifiUtils.hovertext(wifi_entry_list))
 
         else:
             pass
-
-        # coverage.add_point(event.x, event.y, hovertext)
