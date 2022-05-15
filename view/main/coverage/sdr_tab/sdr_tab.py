@@ -318,7 +318,8 @@ class CoverageSdrTab(ttk.Frame):
         self.track_button = ttk.Button(
             self.button_containers,
             style="success.TButton",
-            text="Track".center(self.STRING_LENGTH, ' ')
+            text="Track".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.move_item_to_selected()
         )
         self.track_button.pack(
             padx=5,
@@ -388,3 +389,9 @@ class CoverageSdrTab(ttk.Frame):
     # TODO: maybe abstract into another message container/class later
     def clear_error_message(self):
         self.error_message.set("")
+
+    # Move the selected item in the Display ALL panel to selected panel
+    def move_item_to_selected(self):
+        data = (self.tracked_name_text.get(), self.tracked_freq_text.get())
+        self.tracking_panel.insert(parent='', index=self.iid, iid=self.iid, values=data)
+        self.iid += 1
