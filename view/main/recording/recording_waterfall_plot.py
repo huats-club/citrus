@@ -54,7 +54,7 @@ class RecordingWaterfallPlot(ttk.Frame):
         self.ax.azim = -90
         self.ax.elev = -90
         self.ax.dist = 6
-        self.ax.set_box_aspect([3, 1, 1])
+        self.ax.set_box_aspect([1, 0.9, 0.9])
         self.is_2d = True
 
     def create_empty_3d_plot(self):
@@ -100,7 +100,6 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         # if is first time plot, populate all data with it
         if self.isFirst:
-
             num_ts = self.ts_np_Y.shape[0]
 
             for i in range(num_ts):
@@ -154,6 +153,7 @@ class RecordingWaterfallPlot(ttk.Frame):
             pos = "horizontal"
             self.cb = self.fig.colorbar(
                 self.surf,
+                location="top",
                 orientation=pos,
                 ax=self.ax,
                 shrink=0.4,
