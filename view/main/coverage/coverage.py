@@ -132,3 +132,27 @@ class CoveragePage(ttk.Frame):
 
     def capture_canvas(self, path=""):
         self.coverage_canvas.capture(path)
+
+    # Clear canvas of all drawing
+    def clear_canvas(self):
+        self.coverage_canvas.delete("all")
+
+    # Add point to (x, y) of canvas with attached hovertext when hover ontop point
+    def add_point(self, x, y, hovertext):
+        self.coverage_canvas.canvas_put_point(x, y, hovertext)
+
+    # Checks which tab is currently tracked, e.g. "WIFI" or "SDR"
+    def get_current_signal_tab(self):
+        return self.coverage_display_data.get_current_tab_name()
+
+    def get_wifi_tracked_list(self):
+        pass
+        # return self.coverage_display_data.get_tracked_list()
+
+    # Method is invoked by controller to update the list of scanned wifi ssids/bssids
+    def populate_scanned_wifi_list(self, entries):
+        self.coverage_display_data.populate_scanned_wifi_list(entries)
+
+    # Method is invoked by controller to clear coverage in wifi mode
+    def on_coverage_wifi_clear(self):
+        self.coverage_display_data.coverage_wifi_clear()

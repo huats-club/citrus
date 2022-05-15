@@ -23,7 +23,7 @@ class CoverageCanvas(tk.Canvas):
 
     def enable_click(self):
         # Bind button click to out point
-        self.bind("<Button-1>", self.canvas_put_point)
+        self.bind("<Button-1>", lambda event: self.controller.on_coverage_put_point(event, self.coverage))
 
     def disable_click(self):
         self.unbind("<Button-1>")
@@ -45,27 +45,16 @@ class CoverageCanvas(tk.Canvas):
                          end_y
                          )
 
-    def canvas_put_point(self, event):
+    def canvas_put_point(self, x, y, hovertext):
         python_green = "#476042"
 
         # Get points from button click
-        x1, y1 = (event.x - 5), (event.y - 5)
-        x2, y2 = (event.x + 5), (event.y + 5)
-
-        # Record point and associated signal
-        # Returns created Point object
-        point = self.coverage.add_point_data(event.x, event.y)
-
-        # If no wifi tracked
-        if point == None:
-            return
+        x1, y1 = (x - 5), (y - 5)
+        x2, y2 = (x + 5), (y + 5)
 
         # Display oval drawing
         oval_ui = self.create_oval(x1, y1, x2, y2, fill=python_green)
-        CanvasTooltip(self, oval_ui, text=point)
-
-        # Set that new wifi heatmap needs to be regenerated
-        self.controller.session.set_need_to_save()
+        CanvasTooltip(self, oval_ui, text=hovertext)
 
     def canvas_put_point_again(self, map_points):
         python_green = "#476042"

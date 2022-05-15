@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from model.wifi_entry import WifiEntry
+
 
 class CoverageWifiTab(ttk.Frame):
     def __init__(self, parent, controller, coverage, *args, **kwargs):
@@ -16,12 +18,6 @@ class CoverageWifiTab(ttk.Frame):
             side=tk.BOTTOM,
             fill=tk.X
         )
-
-        # Currently selected row of data from list of all wifi
-        self.current_selected_from_display_all = {}
-
-        # Currently selected row of data from list of selected
-        self.current_item_in_selected_panel = ""
 
         # String length for button
         self.STRING_LENGTH = 10
@@ -53,9 +49,6 @@ class CoverageWifiTab(ttk.Frame):
             anchor=tk.NW,
             fill=tk.BOTH
         )
-
-        # # Create coverage value menu for rssi filtering
-        # self.coverage_value_menu = CoverageValuesMenu(self.container, self.controller)
 
         # Label to inform display ALL ssid scanned
         self.display_all_panel_label = ttk.Label(
@@ -152,7 +145,8 @@ class CoverageWifiTab(ttk.Frame):
         self.scan_button = ttk.Button(
             self.button_container,
             style="primary.TButton",
-            text="Scan".center(self.STRING_LENGTH, ' ')
+            text="Scan".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.controller.on_coverage_wifi_scan(self.coverage)
         )
         self.scan_button.pack(
             side=tk.LEFT,
@@ -164,7 +158,8 @@ class CoverageWifiTab(ttk.Frame):
         self.clear_button = ttk.Button(
             self.button_container,
             style="secondary.TButton",
-            text="Clear".center(self.STRING_LENGTH, ' ')
+            text="Clear".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.controller.on_coverage_wifi_clear(self.coverage)
         )
         self.clear_button.pack(
             side=tk.LEFT,
@@ -176,7 +171,8 @@ class CoverageWifiTab(ttk.Frame):
         self.track_button = ttk.Button(
             self.button_container,
             style="success.TButton",
-            text="Track".center(self.STRING_LENGTH, ' ')
+            text="Track".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.move_item_to_selected()
         )
         self.track_button.pack(
             side=tk.LEFT,
@@ -188,7 +184,8 @@ class CoverageWifiTab(ttk.Frame):
         self.untrack_button = ttk.Button(
             self.button_container,
             style="danger.TButton",
-            text="Untrack".center(self.STRING_LENGTH, ' ')
+            text="Untrack".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.move_item_to_all()
         )
         self.untrack_button.pack(
             side=tk.RIGHT,
@@ -196,29 +193,69 @@ class CoverageWifiTab(ttk.Frame):
             pady=(0, 10)
         )
 
-        # # Allow clicking of treeview items
-        # self.display_all_panel.bind('<ButtonRelease-1>', self.select_item_from_display_all)
+        # Currently selected row of data from list of all wifi
+        self.current_selected_from_display_all = None
+        self.current_selected_iid_from_display_all = 0
 
-        # # Allow clicking of treeview items
-        # self.display_tracked_panel.bind('<ButtonRelease-1>', self.select_item_from_display_tracked)
+        # Currently selected row of data from list of tracked wifi
+        self.current_selected_from_display_tracked = None
+        self.current_selected_iid_from_display_tracked = 0
+
+        # Allow clicking of treeview items
+        self.display_all_panel.bind('<ButtonRelease-1>', self.select_item_from_display_all)
+
+        # Allow clicking of treeview items
+        self.display_tracked_panel.bind('<ButtonRelease-1>', self.select_item_from_display_tracked)
+
+    # Insert data to display all
+    def insert_to_scanned_panel(self, ssid, bssid, channel_freq, channel_width, channel_num):
+        # Prepare data
+        channel = str(channel_num) + "@" + str(channel_width)
+
+        data = (ssid, bssid, channel_freq, channel)
+
+        self.display_all_panel.insert(
+            parent='', index=self.iid, iid=self.iid,
+            values=tuple(data)
+        )
+        self.iid += 1
 
     # Store clicked item in the ALL pane corresponding to click action
     def select_item_from_display_all(self, a):
         curItem = self.display_all_panel.focus()
         data = self.display_all_panel.item(curItem)['values']
+        self.current_selected_iid_from_display_all = curItem
 
+        temp = {}
         try:
             idx = 0
             for name in self.column_names:
-                self.current_selected_from_display_all[name] = data[idx]
+                temp[name] = data[idx]
                 idx += 1
         except IndexError:
             return
 
-    # Store clicked item in the Selected pane corresponding to click action
-    def select_item_from_display_tracked(self, a):
-        self.current_item_in_selected_panel = self.display_tracked_panel.focus()
+        self.current_selected_from_display_all = WifiEntry(temp["ssid"], temp["bssid"], "", temp["freq"], "", "")
 
+    # Store clicked item from the tracked pane to click action
+    def select_item_from_display_tracked(self, a):
+        curItem = self.display_tracked_panel.focus()
+        data = self.display_tracked_panel.item(curItem)['values']
+        self.current_selected_iid_from_display_tracked = curItem
+
+        temp = {}
+        try:
+            idx = 0
+            for name in self.column_names:
+                temp[name] = data[idx]
+                idx += 1
+        except IndexError:
+            return
+
+        self.current_selected_from_display_tracked = WifiEntry(
+            temp["ssid"], temp["bssid"], "", temp["freq"], "", "")
+
+    # Move the selected item in the Display ALL panel to selected panel
     def move_item_to_selected(self):
         self.display_tracked_panel.insert(
             parent='', index=self.iid, iid=self.iid,
@@ -226,55 +263,29 @@ class CoverageWifiTab(ttk.Frame):
         )
         self.iid += 1
 
-    def clear_all_wifi_panel(self):
-        self.display_all_panel.delete(*self.display_all_panel.get_children())
+        # delete away from all tracked
+        self.display_all_panel.delete(self.current_selected_iid_from_display_all)
 
-    def remove_item_from_selected(self):
-        # If no items clicked, ignore
-        if not self.display_tracked_panel.focus():
-            return
-
-        self.display_tracked_panel.delete(self.display_tracked_panel.focus())
-
-    # Get list of selected MAC/bssid addr in SELECTED panel
-    def get_tracked_list(self, isBSSID=True, isSSID=False):
-
-        ssid_list = []
-
-        idx = 1
-        if isBSSID:
-            idx = 1
-        elif isSSID:
-            idx = 0
-
-        for child in self.display_tracked_panel.get_children():
-            all_data = self.display_tracked_panel.item(child)["values"]
-            ssid_list.append(all_data[idx])  # assumes first item is bssid
-
-        return ssid_list
-
-    def bssid2ssid(self, bssid):
-
-        mapping = {}
-
-        for child in self.display_tracked_panel.get_children():
-            all_data = self.display_tracked_panel.item(child)["values"]
-            mapping[all_data[1]] = all_data[0]
-
-        return mapping[bssid]
-
-    def insert(self, json):
-
-        # Prepare data
-        ssid = json["ssid"]
-        bssid = json["bssid"]
-        channel_freq = str(json["channel_frequency"])
-        channel = str(json['channel_number']) + "@" + str(json['channel_width'])
-
-        data = (ssid, bssid, channel_freq, channel)
-
-        self.display_tracked_panel.insert(
+    # Move the selected item from the Display tracked panel to all panel
+    def move_item_to_all(self):
+        self.display_all_panel.insert(
             parent='', index=self.iid, iid=self.iid,
-            values=tuple(data)
+            values=tuple(self.current_selected_from_display_tracked.values())
         )
         self.iid += 1
+
+        # delete away from all tracked
+        self.display_tracked_panel.delete(self.current_selected_iid_from_display_tracked)
+
+    # Clear display all pane
+    def clear_display_all_pane(self):
+        self.display_all_panel.delete(*self.display_all_panel.get_children())
+        self.current_selected_from_display_all = None
+        self.current_selected_iid_from_display_all = 0
+
+
+    # Clear display tracked pane
+    def clear_display_tracked_pane(self):
+        self.display_tracked_panel.delete(*self.display_tracked_panel.get_children())
+        self.current_selected_from_display_tracked = None
+        self.current_selected_iid_from_display_tracked = 0

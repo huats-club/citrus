@@ -95,7 +95,8 @@ class CoverageFileMenu(ttk.LabelFrame):
             self.buttons_container,
             style="primary.Outline.TButton",
             text="Clear file",
-            state="normal"
+            state="normal",
+            command=lambda: self.controller.on_coverage_floorplan_clear(self.coverage)
         )
         self.clear_button.pack(
             side=tk.RIGHT,
@@ -108,4 +109,3 @@ class CoverageFileMenu(ttk.LabelFrame):
 
     def get_dxf_filepath(self):
         return self.filepath_text.get()
-    # self.filepath_text.get().split("/")[-1]

@@ -9,6 +9,8 @@ import config.app_parameters as app_parameters
 from model.calibrate_handler import CalibrateHandler
 from model.file_name_utils import FileNameUtil
 from model.sdr_handler import SDRHandler
+from model.wifi_handler import WifiHandler
+from model.wifi_scanner import WifiScanner
 from view.main.main_page import MainPage
 from view.main.recording.recording import RecordingPage
 from view.main.spectrum.spectrum import SpectrumPage
@@ -43,6 +45,10 @@ class Controller:
 
         # Flag to indicate if recording is start
         self.is_recording_start = False
+
+        # Mapping of bssid to Wifi entry object
+        self.bssid_wifi_entry_mapping = {}
+        self.has_wifi_scanned = False
 
     # Method is invoked when main page tab is switched
     def on_tab_change(self, event):
@@ -400,3 +406,63 @@ class Controller:
         print(f"Saving cached floorplan to {loaded_floorplan_saved_image_path}")
         coverage.after(500, lambda: coverage.capture_canvas(loaded_floorplan_saved_image_path))
         self.session.set_cached_floorplan_path(loaded_floorplan_saved_image_path)
+
+        # Enable canvas click
+        coverage.enable_canvas_click()
+
+    # Method is invoked when clear button is clicked on coverage
+    def on_coverage_floorplan_clear(self, coverage):
+        # Clear canvas
+        coverage.clear_canvas()
+
+        # Disable canvas click
+        self.main_page.coverage_page.disable_canvas_click()
+
+    # Method is invoked when scan for available wifi
+    def on_coverage_wifi_scan(self, coverage):
+        if self.has_wifi_scanned == False:
+            self.has_wifi_scanned = True
+
+            wifi_scanner = WifiScanner()
+            results = wifi_scanner.scan()
+
+            # if only one or none wifi then scan again
+            if len(results) == 1 or len(results) == 2 or len(results) == 0:
+                results = wifi_scanner.scan()
+                results = wifi_scanner.scan()
+
+            # Populate mapping
+            for entry in results:
+                self.bssid_wifi_entry_mapping[entry.bssid] = entry
+
+            # Populate to list of wifi
+            print(f"Scanned: {results}")
+            coverage.populate_scanned_wifi_list(results)
+
+    # Method is invoked when clear wifi scanned list
+    def on_coverage_wifi_clear(self, coverage):
+        coverage.on_coverage_wifi_clear()
+        self.has_wifi_scanned = False
+
+    # Method is invoked when point is clicked and added to canvas
+    def on_coverage_put_point(self, event, coverage):
+        # Get signal (sdr/wifi) from point
+        if coverage.get_current_signal_tab() == "WIFI":
+            # Get list of ssid tracked
+            tracked_list_mac = coverage.get_tracked_list()
+            print(tracked_list_mac)
+
+            pipe_handler, pipe_here = Pipe(True)
+            WifiHandler(tracked_list_mac, pipe_handler).start()
+            isRun = True
+            while isRun:
+                if pipe_here.poll(timeout=0):
+                    wifi_list_json = pipe_here.recv()
+                    break
+
+            print(wifi_list_json)
+
+        else:
+            pass
+
+        # coverage.add_point(event.x, event.y, hovertext)

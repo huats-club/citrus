@@ -15,12 +15,6 @@ class CoverageDataScanner(ttk.Frame):
         # iid for entries
         self.idx = 0
 
-        # is first run
-        self.is_first_scan = True
-        self.sdr_handler = None
-
-        self.calibrate_data = None
-
         super().__init__(
             self.parent,
             # text="Data Scanner",
@@ -87,3 +81,18 @@ class CoverageDataScanner(ttk.Frame):
 
     def switch_SDR_2_wifi_tab(self, a):
         pass
+
+    # Returns WIFI or SDR
+    def get_current_tab_name(self):
+        return self.interfaces_selection.tab(self.interfaces_selection.select(), 'text')
+
+    # Method is invoked by controller to update the list of scanned wifi ssids/bssids
+    def populate_scanned_wifi_list(self, entries):
+        for entry in entries:
+            self.wifi_tab.insert_to_scanned_panel(entry.ssid, entry.bssid, entry.channel_frequency,
+                                                  entry.channel_width, entry.channel_number)
+
+    # Method is invoked by controller to clear coverage in wifi mode
+    def coverage_wifi_clear(self):
+        self.wifi_tab.clear_display_tracked_pane()
+        self.wifi_tab.clear_display_all_pane()
