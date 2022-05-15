@@ -52,7 +52,8 @@ class SavePane(ttk.Frame):
         self.search_button = ttk.Button(
             self,
             style="primary.Outline.TButton",
-            text="Search"
+            text="Search",
+            command=lambda: self.get_filepath()
         )
         self.search_button.pack(
             side=tk.LEFT,
