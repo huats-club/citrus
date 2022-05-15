@@ -89,6 +89,9 @@ class CoverageBar(ttk.Frame):
     def set_save_path(self, path):
         self.save_pane.set_filepath(path)
 
+    def get_save_path(self):
+        return self.save_pane.get_existing_filepath()
+
     # Populate optionmenu with list_ssid
     def set_heatmap_selection(self, list_ssid):
         self.ssids = list_ssid

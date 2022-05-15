@@ -130,9 +130,6 @@ class CoveragePage(ttk.Frame):
     def disable_canvas_click(self):
         self.coverage_canvas.disable_click()
 
-    def capture_canvas(self, path=""):
-        self.coverage_canvas.capture(path)
-
     # Clear canvas of all drawing
     def clear_canvas(self):
         self.coverage_canvas.delete("all")
@@ -177,3 +174,12 @@ class CoveragePage(ttk.Frame):
         for idx in range(len(points)):
             point = points[idx]
             self.coverage_canvas.canvas_put_point(point[0], point[1], hovertexts[idx])
+
+    def get_save_path(self):
+        return self.coverage_bar.get_save_path()
+
+    # Method is invoked to save path
+    def save_plot(self, path=""):
+        if path == "":
+            return
+        self.coverage_canvas.save_plot(path)

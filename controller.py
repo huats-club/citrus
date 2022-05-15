@@ -415,7 +415,7 @@ class Controller:
         # This is to create an image to etch up to tkinter canvas
         loaded_floorplan_saved_image_path = fr"{self.session.get_relative_private_path()}\{filename}_tkinter.png"
         print(f"Saving cached floorplan to {loaded_floorplan_saved_image_path}")
-        coverage.after(500, lambda: coverage.capture_canvas(loaded_floorplan_saved_image_path))
+        coverage.after(500, lambda: coverage.save_plot(loaded_floorplan_saved_image_path))
         self.session.set_cached_floorplan_path(loaded_floorplan_saved_image_path)
 
         # Enable canvas click
