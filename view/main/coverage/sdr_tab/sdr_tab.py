@@ -334,7 +334,8 @@ class CoverageSdrTab(ttk.Frame):
         self.clear_button = ttk.Button(
             self.button_containers,
             style="danger.TButton",
-            text="Clear".center(self.STRING_LENGTH, ' ')
+            text="Clear".center(self.STRING_LENGTH, ' '),
+            command=lambda: self.clear_all_sdr_panel()
         )
         self.clear_button.pack(
             padx=5,
@@ -398,3 +399,6 @@ class CoverageSdrTab(ttk.Frame):
             return
 
         self.tracking_panel.delete(self.tracking_panel.focus())
+
+    def clear_all_sdr_panel(self):
+        self.tracking_panel.delete(*self.tracking_panel.get_children())
