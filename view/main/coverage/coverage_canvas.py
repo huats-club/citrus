@@ -56,17 +56,6 @@ class CoverageCanvas(tk.Canvas):
         oval_ui = self.create_oval(x1, y1, x2, y2, fill=python_green)
         CanvasTooltip(self, oval_ui, text=hovertext)
 
-    def canvas_put_point_again(self, map_points):
-        python_green = "#476042"
-
-        for point in list(map_points.values()):
-            # Get points from button click
-            x1, y1 = (point.x - 5), (point.y - 5)
-            x2, y2 = (point.x + 5), (point.y + 5)
-
-            oval_ui = self.create_oval(x1, y1, x2, y2, fill=python_green)
-            CanvasTooltip(self, oval_ui, text=point)
-
     # Create image to save canvas to
     # Reason: wifi heatmap plotter needed this to etch the heatmap onto it
     def capture(self, path=""):

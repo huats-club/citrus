@@ -51,6 +51,9 @@ class Controller:
         self.bssid_wifi_entry_mapping = {}
         self.has_wifi_scanned = False
 
+        # Store wifi and points
+        self.map_coord_wifi_entries = {}
+
     # Method is invoked when main page tab is switched
     def on_tab_change(self, event):
         # NOTE: Need to differentiate and store calibrate data per tab separately?
@@ -475,6 +478,9 @@ class Controller:
 
             print(f"Found: {wifi_entry_list}")
             coverage.add_point(event.x, event.y, WifiUtils.hovertext(wifi_entry_list))
+
+            # Store in mapping
+            self.map_coord_wifi_entries[(event.x, event.y)] = wifi_entry_list
 
         else:
             pass
