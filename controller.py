@@ -283,6 +283,10 @@ class Controller:
             spectrum_page.enable_start()
             # Enable toggle to other tab
             self.main_page.enable_toggle_tab()
+            # Retrieve frequency and bandwidth pane
+            frequency_pane = spectrum_page.get_frequency_setting_pane()
+            # Disable setting of frequency in frequency pane
+            frequency_pane.enable_frequency_pane()
 
     # Method is invoked when recording starts
     def on_recording_start(self, recording_page):
