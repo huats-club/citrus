@@ -378,6 +378,10 @@ class Controller:
             recording_page.enable_start()
             # Enable toggle to other tab
             self.main_page.enable_toggle_tab()
+            # Retrieve frequency and bandwidth pane
+            frequency_pane = recording_page.get_frequency_setting_pane()
+            # Disable setting of frequency in frequency pane
+            frequency_pane.enable_frequency_pane()
 
     # Method is invoked when save button is clicked
     def on_save(self, page, dirname):
