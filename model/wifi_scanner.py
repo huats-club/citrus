@@ -24,6 +24,7 @@ class WifiScanner:
             try:
                 self.interfaces = WLAN.get_wireless_interfaces()
             except ValueError:
+                print("Can't find wireless interfaces from WLAN")
                 return
 
             # for all interface, scan for wlan
@@ -46,6 +47,7 @@ class WifiScanner:
                         self.entries += [entry]
 
         except Exception as e:
+            print(e)
             return
 
         return self.entries
