@@ -179,7 +179,9 @@ class RecordingWaterfallPlot(ttk.Frame):
         # set axis label
         self.ax.set_xlabel(app_parameters.WATERFALL_PLOT_LEGEND_X)
         self.ax.set_ylabel(app_parameters.WATERFALL_PLOT_LEGEND_Y)
-        self.ax.set_zlabel(app_parameters.WATERFALL_PLOT_LEGEND_Z)
+
+        if self.is_2d == False:
+            self.ax.set_zlabel(app_parameters.WATERFALL_PLOT_LEGEND_Z)
 
         self.isFirst = False
         self.canvas.draw()
