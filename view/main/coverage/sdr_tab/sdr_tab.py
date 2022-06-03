@@ -349,14 +349,15 @@ class CoverageSdrTab(ttk.Frame):
 
     def get_bandwidth(self):
         try:
-            bandwidth = int(self.calibration_bandwidth_text.get()) * 1e6
+            bandwidth = float(self.calibration_bandwidth_text.get()) * 1e6
+            print(f"bandwidth: {bandwidth}")
         except ValueError:
             return ""
         return bandwidth
 
     def get_center_freq(self):
         try:
-            center_freq = int(self.center_freq_calibration_text.get()) * 1e6
+            center_freq = float(self.center_freq_calibration_text.get()) * 1e6
         except ValueError:
             return ""
         return center_freq
