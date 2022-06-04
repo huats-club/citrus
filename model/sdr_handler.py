@@ -24,13 +24,14 @@ class SDRHandler:
         self.stop_pipe_handler.send("stop")
 
 
-def process_spectrum(driver_name, center_freq, bandwidth, sample_rate, stop_pipe, data_out_pipe, tdelta=0.05):
+def process_spectrum(
+        driver_name, center_freq, bandwidth, sample_rate, stop_pipe, data_out_pipe, extensions=0.5 * 1e6, tdelta=0.05):
 
     # flag to check if run should occur
     isRun = True
 
     # create citrus processor
-    p = pycitrus.CitrusProcessor(center_freq, bandwidth, sample_rate)
+    p = pycitrus.CitrusProcessor(center_freq, bandwidth + extensions, sample_rate)
     p.init(driver_name)
 
     # time check
