@@ -90,8 +90,8 @@ class RecordingPage(ttk.Frame):
         self.is_3d = True
 
     # Method is invoked to update the plot
-    def do_plot(self, data):
-        self.recording_plot.do_plot(data)
+    def do_plot(self, data, start_freq, center_freq, end_freq, bandwidth):
+        self.recording_plot.do_plot(data, start_freq, center_freq, end_freq, bandwidth)
 
     # Required method to get the driver value input
     def get_driver_input(self):

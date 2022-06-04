@@ -348,9 +348,13 @@ class Controller:
             data_pipe = self.sdr_handler.get_output_pipe()
 
             # Proceed to polling method for spectrum
-            self.view.after(100, lambda: self.poll_recording(recording_page, self.sdr_handler, data_pipe))
+            self.view.after(
+                100, lambda: self.poll_recording(
+                    recording_page, self.sdr_handler, data_pipe, int(start_freq_string),
+                    center_freq, int(end_freq_string),
+                    bandwidth))
 
-    def poll_recording(self, recording_page, sdr_handler, data_pipe):
+    def poll_recording(self, recording_page, sdr_handler, data_pipe, start_freq, center_freq, end_freq, bandwidth):
 
         # Poll for incoming data and retrieve
         if self.is_recording_start == True and data_pipe.poll(timeout=0):
@@ -368,10 +372,11 @@ class Controller:
                     x[idx] = average_of_all_calibrate
 
             # do plot
-            recording_page.do_plot(x)
+            recording_page.do_plot(x, start_freq, center_freq, end_freq, bandwidth)
 
         if self.is_recording_start == True:
-            self.view.after(50, lambda: self.poll_recording(recording_page, sdr_handler, data_pipe))
+            self.view.after(50, lambda: self.poll_recording(
+                recording_page, sdr_handler, data_pipe, start_freq, center_freq, end_freq, bandwidth))
 
     # Method is invoked when recording stops
     def on_recording_stop(self, recording_page):
