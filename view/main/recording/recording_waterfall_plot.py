@@ -99,7 +99,8 @@ class RecordingWaterfallPlot(ttk.Frame):
         latest_signal_data = [20 * math.log((2*n)/1024, 10) for n in latest_signal_data]
 
         # Reverse back to original data
-        self.signal_np = self.signal_np[::-1]
+        if self.is_2d == True:
+            self.signal_np = self.signal_np[::-1]
 
         # if is first time plot, populate all data with it
         if self.isFirst:
@@ -118,7 +119,8 @@ class RecordingWaterfallPlot(ttk.Frame):
                 self.signal_np = np.append(self.signal_np, [latest_signal_data], axis=0)
 
         # Reverse to display from new to old down
-        self.signal_np = self.signal_np[::-1]
+        if self.is_2d == True:
+            self.signal_np = self.signal_np[::-1]
 
         # clear plot
         self.ax.clear()
@@ -145,27 +147,15 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         label = [-10, -20, -30, -40, -50, -60, -70, -80, -90, -100, -110]
 
-        if self.is_2d == False:
-            pos = "vertical"
-            self.cb = self.fig.colorbar(
-                self.surf,
-                location="left",
-                orientation=pos,
-                ax=self.ax,
-                shrink=0.4,
-                aspect=30
-            )
-        else:
-            pos = "horizontal"
-            self.cb = self.fig.colorbar(
-                self.surf,
-                location="top",
-                orientation=pos,
-                ax=self.ax,
-                shrink=0.4,
-                aspect=30,
-                pad=0
-            )
+        pos = "vertical"
+        self.cb = self.fig.colorbar(
+            self.surf,
+            location="left",
+            orientation=pos,
+            ax=self.ax,
+            shrink=0.4,
+            aspect=30
+        )
         self.cb.set_ticks(label)
         self.cb.set_ticklabels([str(x) for x in label])
 
