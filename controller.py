@@ -27,6 +27,7 @@ from view.main.spectrum.spectrum import SpectrumPage
 from view.start.start_page import StartPage
 
 
+# This is a controller for Citrus app
 class Controller:
     def __init__(self, root, session):
 
