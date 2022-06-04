@@ -503,13 +503,19 @@ class Controller:
             tracked_list_bssid = coverage.get_wifi_tracked_bssid_list()
             print(f"Tracking bssids: {tracked_list_bssid}")
 
-            pipe_handler, pipe_here = Pipe(True)
-            WifiHandler(tracked_list_bssid, pipe_handler).start()
-            isRun = True
-            while isRun:
-                if pipe_here.poll(timeout=0):
-                    wifi_entry_list = pipe_here.recv()
-                    break
+            wifi_scanner = WifiScanner(tracked_list_bssid)
+            wifi_entry_list = wifi_scanner.scan()
+            # pipe_handler, pipe_here = Pipe(True)
+            # WifiHandler(tracked_list_bssid, pipe_handler).start()
+            # isRun = True
+            # while isRun:
+            #     if pipe_here.poll(timeout=0):
+            #         wifi_entry_list = pipe_here.recv()
+            #         break
+
+            if wifi_entry_list == [] or wifi_entry_list == None:
+                print("Empty scanned list! Drop data point")
+                return
 
             print(f"At point ({event.x}, {event.y}): {wifi_entry_list}")
             coverage.add_point(event.x, event.y, WifiUtils.hovertext(wifi_entry_list))
