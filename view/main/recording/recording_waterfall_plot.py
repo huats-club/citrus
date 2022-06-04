@@ -98,6 +98,9 @@ class RecordingWaterfallPlot(ttk.Frame):
 
         latest_signal_data = [20 * math.log((2*n)/1024, 10) for n in latest_signal_data]
 
+        # Reverse back to original data
+        self.signal_np = self.signal_np[::-1]
+
         # if is first time plot, populate all data with it
         if self.isFirst:
             num_ts = self.ts_np_Y.shape[0]
@@ -113,6 +116,9 @@ class RecordingWaterfallPlot(ttk.Frame):
 
             for _ in range(25):
                 self.signal_np = np.append(self.signal_np, [latest_signal_data], axis=0)
+
+        # Reverse to display from new to old down
+        self.signal_np = self.signal_np[::-1]
 
         # clear plot
         self.ax.clear()
