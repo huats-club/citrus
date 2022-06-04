@@ -31,7 +31,6 @@ class WifiScanner:
             for interface in self.interfaces:
                 client = Client(self.args, interface)
                 WLAN.scan(client.iface.guid)
-                print(f"interface: {interface}")
 
                 # process bss list
                 wireless_network_bss_list = WLAN.get_wireless_network_bss_list(interface=interface)
@@ -51,7 +50,7 @@ class WifiScanner:
 
         except Exception as e:
             print(e)
-            return
+            return []
 
         # If not all detected, drop also
         if len(self.entries) != len(self.filter) and self.hasFilter == True:
