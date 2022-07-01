@@ -1,0 +1,10 @@
+ezdxf==0.17.2
+lswifi==0.1.23
+matplotlib==3.5.2
+numpy==1.21.6
+pandas==1.4.2
+Pillow==9.1.1
+PyYAML==6.0
+scipy==1.7.3
+tabulate==0.8.9
+ttkbootstrap==1.8.0
