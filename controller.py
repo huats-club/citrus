@@ -15,6 +15,7 @@ from model.sdr_handler import SDRHandler
 from model.sdr_result_aggregator import SdrResultAggregator
 from model.sdr_results_converter import SdrResultsConverter
 from model.sdr_utils import SdrUtils
+from model.wifi_entry import WifiEntry
 from model.wifi_handler import WifiHandler
 from model.wifi_heatmap_plotter import WifiHeatmapPlotter
 from model.wifi_result_aggregator import WifiResultAggregator
@@ -474,6 +475,7 @@ class Controller:
 
             # Populate to list of wifi
             print(f"Scanned: {results}")
+            self.results_scan = results  # store results for querying later for lost signals
             coverage.populate_scanned_wifi_list(results)
 
             # Enable click to add point
@@ -496,6 +498,7 @@ class Controller:
         if coverage.get_current_signal_tab() == "WIFI":
 
             tracked_list_bssid = coverage.get_wifi_tracked_bssid_list()
+            print(f"tracked_list_bssid: {tracked_list_bssid}")
 
             # If no wifi scanned or no wifi entry chosen, skip add point
             if self.has_wifi_scanned == False or len(tracked_list_bssid) == 0:
@@ -518,6 +521,28 @@ class Controller:
             if wifi_entry_list == [] or wifi_entry_list == None:
                 print("Empty scanned list! Drop data point")
                 return
+
+            ##############################
+
+            # Check if all wifi bssid entries
+            for bssid in tracked_list_bssid:
+                found = False
+                for entry in wifi_entry_list:
+                    # If scanned and found the strength, check the next
+                    if bssid == entry.bssid:
+                        found = True
+                        break
+
+                # Not found, add the entry
+                if not found:
+                    for x in self.results_scan:
+                        if x.bssid == bssid:
+                            print(f"Not found: {x.ssid}")
+                            print(f"x: {x}")
+                            wifi_entry_list += [WifiEntry(x.ssid, x.bssid, -100,  x.channel_frequency,
+                                                          x.channel_number, x.channel_width)]
+
+            ##############################
 
             print(f"At point ({event.x}, {event.y}): {wifi_entry_list}")
             coverage.add_point(event.x, event.y, WifiUtils.hovertext(wifi_entry_list))

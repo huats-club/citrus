@@ -15,11 +15,15 @@ class WifiResultAggregator:
             self.y_list.append(y)
 
             temp_max = -1000
+
             for entry in entries:
+                print(f"now {entry}: { int(entry.rssi)}")
                 if int(entry.rssi) > temp_max:
                     temp_max = int(entry.rssi)
+                    print(f"temp max: {temp_max}")
 
             self.aggregated_rssi.append(temp_max)
 
     def process(self):
+        print(f"self.aggregated_rssi: {self.aggregated_rssi}")
         return {'x': self.x_list, 'y': self.y_list, 'rssi': self.aggregated_rssi}

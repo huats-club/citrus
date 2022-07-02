@@ -23,8 +23,8 @@ class WifiScanner:
             # get all interfaces
             try:
                 self.interfaces = WLAN.get_wireless_interfaces()
-            except ValueError:
-                print("Can't find wireless interfaces from WLAN")
+            except Exception as e:
+                print(e)
                 return
 
             # for all interface, scan for wlan
@@ -38,7 +38,7 @@ class WifiScanner:
 
                 for bss in wireless_network_bss_list:
                     entry = self.pack_wifi_entry(bss)
-                    print(f"entry: {entry}")
+                    # print(f"entry: {entry}")
 
                     # append to json list only if bssid matches
                     if self.hasFilter:
