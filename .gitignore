@@ -20,3 +20,4 @@ app_old/*
 dist/*.exe
 .vscode
 *.7z
+*.log
