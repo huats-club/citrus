@@ -1,4 +1,5 @@
 import math
+import os
 import tkinter as tk
 from multiprocessing import Pipe
 from tkinter import filedialog as tkfd
@@ -800,5 +801,8 @@ class Controller:
 
             # Disable toggle to other tab
             self.main_page.enable_toggle_tab()
+
+            # remove temp file
+            os.remove("lswifi1.log")
 
             print("complete coverage mode calibration")

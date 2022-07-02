@@ -1,7 +1,7 @@
 import subprocess
 
 f = open('lswifi1.log', 'w')
-subprocess.run(["C:\\Users\\65844\miniconda3\\Scripts\\lswifi"], stdout=f)
+subprocess.run(["lswifi"], stdout=f)
 f.close()
 
 f = open('lswifi1.log', 'r')
@@ -29,18 +29,18 @@ for i in range(ind+1):
 final = []
 for line in lines:
     tmp = line.split()
-    print(tmp)
+    # print(tmp)
     for word in tmp:
         if(word.find(':') != -1 and len(word) > 15):
-            print(word)
+            # print(word)
             ind = (tmp.index(word))
     if(ind == 0):
         tmp.insert(0, 'FUB')
-        print(tmp)
+        # print(tmp)
     else:
         tmp.insert(0, " ".join(tmp[0:ind]))
         del tmp[1:ind+1]
-        print(tmp)
+        # print(tmp)
     final.append(tmp)
 
-    print(final)
+print(final)
