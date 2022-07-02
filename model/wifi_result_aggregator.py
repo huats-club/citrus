@@ -17,10 +17,10 @@ class WifiResultAggregator:
             temp_max = -1000
 
             for entry in entries:
-                print(f"now {entry}: { int(entry.rssi)}")
+                # print(f"now {entry}: { int(entry.rssi)}")
                 if int(entry.rssi) > temp_max:
                     temp_max = int(entry.rssi)
-                    print(f"temp max: {temp_max}")
+                    # print(f"temp max: {temp_max}")
 
             self.aggregated_rssi.append(temp_max)
 
