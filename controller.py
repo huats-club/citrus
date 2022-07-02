@@ -495,12 +495,14 @@ class Controller:
         # Get signal (sdr/wifi) from point
         if coverage.get_current_signal_tab() == "WIFI":
 
-            # If false, skip add point
-            if self.has_wifi_scanned == False:
+            tracked_list_bssid = coverage.get_wifi_tracked_bssid_list()
+
+            # If no wifi scanned or no wifi entry chosen, skip add point
+            if self.has_wifi_scanned == False or len(tracked_list_bssid) == 0:
+                print("returning!")
                 return
 
             # Get list of bssid to track
-            tracked_list_bssid = coverage.get_wifi_tracked_bssid_list()
             print(f"Tracking bssids: {tracked_list_bssid}")
 
             wifi_scanner = WifiScanner(tracked_list_bssid)
