@@ -2,6 +2,10 @@
 
 Citrus is a visualization tool for analyzing Wireless and RF signals using Software Defined Radio (SDR).
 
+[![GitHub release](https://img.shields.io/github/release/huats-club/citrus.svg)](https://GitHub.com/huats-club/citrus/releases/)
+[![Github all releases](https://img.shields.io/github/downloads/huats-club/citrus/total.svg)](https://GitHub.com/huats-club/citrus/releases/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/huats-club/citrus/graphs/commit-activity)
+
 ## Getting Started
 
 There are three modes in Citrus: **Coverage**, **Spectrum** and **Recording** mode.
