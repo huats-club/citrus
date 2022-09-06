@@ -6,14 +6,14 @@ There are three modes in Citrus: **Coverage**, **Spectrum** and **Recording** mo
 
 The **Coverage** mode allows users to upload a floorplan and analyze WiFi or RF signals.
 
-![Coverage Mode](docs/assets/citrus_coverage.jpg)
+![Coverage Mode](assets/citrus_coverage.jpg)
 
 The **Spectrum** mode shows a snapshot of RF signals.
 
-![Spectrum Mode](docs/assets/citrus_spectrum.jpg)
+![Spectrum Mode](assets/citrus_spectrum.jpg)
 
 The **Recording** mode shows RF signals over time, in both 2D and 3D modes.
 
-![Recording Mode 2D](docs/assets/citrus_recording_2d.jpg)
+![Recording Mode 2D](assets/citrus_recording_2d.jpg)
 
-![Recording Mode 3D](docs/assets/citrus_recording_3d.jpg)
+![Recording Mode 3D](assets/citrus_recording_3d.jpg)
