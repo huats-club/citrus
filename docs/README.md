@@ -2,6 +2,8 @@
 
 Citrus is a visualization tool for analyzing Wireless and RF signals using Software Defined Radio (SDR).
 
+## Getting Started
+
 There are three modes in Citrus: **Coverage**, **Spectrum** and **Recording** mode.
 
 The **Coverage** mode allows users to upload a floorplan and analyze WiFi or RF signals.
